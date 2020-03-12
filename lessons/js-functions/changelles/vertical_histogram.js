@@ -32,25 +32,42 @@
 
 const _ = require('lodash');
 
-const randomInt = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
-const getRoll = () => randomInt(1, 6);
+const getHistogramArr = (digits, sum, max) => {
+    const getPercent = (count) => `${Math.round((count / sum) * 100)}%`;
+
+    const getRow = ([digit, count]) => {
+        const row = [];
+        _.times(max - count, () => row.push('   '));
+        row.push(count > 0 ? getPercent(count).padEnd(3, ' ') : '   ');
+        _.times(count, () => row.push('###'));
+        row.push('---');
+        row.push(` ${digit} `);
+
+        return row;
+    };
+
+    const horizontal = Object.entries(digits).map(getRow);
+    const vertical = _.unzip(horizontal);
+    return vertical;
+};
 
 const play = (rollsCount, rollDie) => {
     const rolls = _.times(rollsCount, rollDie);
-    const digitsCount = {
+    const digits = {
         ...{ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
         ..._.countBy(rolls),
     };
 
-    const rows = Object.entries(digitsCount).map(([digit, count]) => {
-        const row = `---\n ${digit} `;
-        const percent = `${Math.round((count / rollsCount) * 100)}%`.padEnd(3, ' ');
-        return count === 0 ? row : `${percent}\n${'###\n'.repeat(count)}${row}`;
-    });
+    const max = Math.max(...Object.values(digits));
 
-    return rows;
+    const histogram = getHistogramArr(digits, rollsCount, max)
+        .map((row, i) => row.join(i === max + 1 ? '-' : ' ').trimRight())
+        .join('\n');
+
+    console.log(histogram);
 };
-console.log(play(32, getRoll));
+
+console.log(play(14, () => _.random(1, 6)));
 
 `
                 28%
@@ -66,7 +83,3 @@ console.log(play(32, getRoll));
 -----------------------
  1   2   3   4   5   6
 `;
-
-// const flipMatrix = (matrix) =>
-//     matrix[0].map((column, index) => matrix.map((row) => row[index]));
-// const rotateMatrix = (matrix) => flipMatrix(matrix).reverse();
