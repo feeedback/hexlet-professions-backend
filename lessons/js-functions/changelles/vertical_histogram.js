@@ -33,21 +33,18 @@
 const _ = require('lodash');
 
 const getHistogramArr = (digits, sum) => {
-    const max = _.max(Object.values(digits));
+    const max = _.max(digits);
     const getPercent = (count) => `${Math.round((count / sum) * 100)}%`;
 
-    const getRow = ([digit, count]) => {
+    const getRow = (count) => {
         const row = [];
         _.times(max - count, () => row.push('   '));
         row.push(count > 0 ? getPercent(count).padEnd(3, ' ') : '   ');
         _.times(count, () => row.push('###'));
-        row.push('---');
-        row.push(` ${digit} `);
-
         return row;
     };
 
-    const horizontal = Object.entries(digits).map(getRow);
+    const horizontal = digits.map(getRow);
     const vertical = _.unzip(horizontal);
     return vertical;
 };
@@ -57,20 +54,17 @@ const play = (rollsCount, rollDie) => {
     const rolls = _.times(rollsCount, rollDie);
     const sides = _.range(1, SIDES_NUMBER + 1);
     const digits = {
-        ..._.mapValues(sides, () => 0),
+        ..._.fromPairs(sides.map((e) => [e, 0])),
         ..._.countBy(rolls),
     };
-    console.log(_.mapKeys(sides));
-    const histogram = getHistogramArr(digits, rollsCount).map((row) =>
-        row.join(' ').trimRight()
-    );
+    const histogram = x.map((row) => row.join(' ').trimRight());
 
     const lineDash = '-'.repeat((3 + 1) * SIDES_NUMBER).slice(0, -1);
-    histogram.push(lineDash);
     const lineDigits = sides
         .map((side) => ` ${side} `)
         .join(' ')
         .trimRight();
+    histogram.push(lineDash);
     histogram.push(lineDigits);
 
     console.log(histogram.join('\n'));
