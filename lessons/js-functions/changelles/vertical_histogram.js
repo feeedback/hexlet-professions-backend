@@ -32,45 +32,51 @@
 
 const _ = require('lodash');
 
-const getHistogramArr = (digits, sum) => {
-    const max = _.max(digits);
+const getHistogramArr = (sides, counts, sum, COL_WIDTH) => {
+    const max = _.max(Object.values(counts));
     const getPercent = (count) => `${Math.round((count / sum) * 100)}%`;
 
-    const getRow = (count) => {
+    const getRow = (side) => {
         const row = [];
-        _.times(max - count, () => row.push('   '));
-        row.push(count > 0 ? getPercent(count).padEnd(3, ' ') : '   ');
-        _.times(count, () => row.push('###'));
+        const count = _.get(counts, side, 0);
+        const percent = getPercent(count).padEnd(COL_WIDTH, ' ');
+
+        _.times(max - count, () => row.push(' '.repeat(COL_WIDTH)));
+        row.push(count > 0 ? percent : ' '.repeat(COL_WIDTH));
+        _.times(count, () => row.push('#'.repeat(COL_WIDTH)));
+
         return row;
     };
 
-    const horizontal = digits.map(getRow);
+    const horizontal = sides.map(getRow);
     const vertical = _.unzip(horizontal);
     return vertical;
 };
 
 const play = (rollsCount, rollDie) => {
-    const SIDES_NUMBER = 6;
+    const SIDES_NUMBER = 10;
+    const COL_WIDTH = 3;
     const rolls = _.times(rollsCount, rollDie);
     const sides = _.range(1, SIDES_NUMBER + 1);
-    const digits = {
-        ..._.fromPairs(sides.map((e) => [e, 0])),
-        ..._.countBy(rolls),
-    };
-    const histogram = x.map((row) => row.join(' ').trimRight());
+    const counts = _.countBy(rolls);
 
-    const lineDash = '-'.repeat((3 + 1) * SIDES_NUMBER).slice(0, -1);
+    const histogramArr = getHistogramArr(sides, counts, rollsCount, COL_WIDTH);
+
+    const lineDash = '-'.repeat((COL_WIDTH + 1) * SIDES_NUMBER).slice(0, -1);
     const lineDigits = sides
-        .map((side) => ` ${side} `)
+        .map((side) => _.pad(side, COL_WIDTH, ' '))
         .join(' ')
         .trimRight();
-    histogram.push(lineDash);
-    histogram.push(lineDigits);
 
-    console.log(histogram.join('\n'));
+    const histogram = histogramArr
+        .map((row) => row.join(' ').trimRight())
+        .concat(lineDash, lineDigits)
+        .join('\n');
+
+    console.log(histogram);
 };
 
-console.log(play(16, () => _.random(1, 6)));
+console.log(play(50, () => _.random(1, 10)));
 
 `
                 28%
