@@ -24,7 +24,7 @@ export default (signal) => {
     const binary = signal.replace(/\|(¯|_)/g, 1).replace(/¯|_/g, 0);
     return /^[01]*$/g.test(binary) ? binary : '';
 };
-export default (str) =>
+export const nrzi = (str) =>
     str
         .split('')
         .map((e, i, arr) => {

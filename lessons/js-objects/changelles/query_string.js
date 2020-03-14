@@ -14,7 +14,7 @@ export default (data) =>
         .map(([key, value]) => `${key}=${value}`)
         .join('&');
 
-export default (data) => {
+export const buildQueryString = (data) => {
     const entries = Object.entries(data).sort();
     const query = entries.map(([key, value]) => `${key}=${value}`).join('&');
     return query;

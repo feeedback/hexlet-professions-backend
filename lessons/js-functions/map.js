@@ -10,4 +10,4 @@
 // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
 
 export default (users) => users.map(({ children }) => children).flat();
-export default (users) => users.flatMap(({ children }) => children);
+export const map = (users) => users.flatMap(({ children }) => children);

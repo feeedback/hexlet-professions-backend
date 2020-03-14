@@ -21,7 +21,7 @@ export default (nums, wanted) => {
     return nums.length ? minIndex : null;
 };
 
-export default (nums, wanted) => {
+export const findIndexOfNearest = (nums, wanted) => {
     if (nums.length === 0) {
         return null;
     }

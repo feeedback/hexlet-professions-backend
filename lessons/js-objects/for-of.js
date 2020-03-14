@@ -9,9 +9,9 @@
 // исходного объекта, и на основе выбранных данных сформировать новый объект Экспортируйте функцию
 // по умолчанию.
 const isHas = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
-const pick = (obj, keys) =>
+
+export const pick = (obj, keys) =>
     keys.reduce((res, key) => (isHas(obj, key) ? { ...res, [key]: obj[key] } : res), {});
-export default pick;
 
 export default (obj, keys) => {
     const result = {};

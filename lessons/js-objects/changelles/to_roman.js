@@ -10,9 +10,6 @@
 // записи в число, записанное арабскими цифрами.
 // Подробнее о римской записи — https://ru.wikipedia.org/wiki/Римские_цифры
 
-const toRoman = (dec) => {};
-const toArabic = (roman) => {};
-
 const mapRoman = [
     ['M', 1000],
     ['CM', 900],
