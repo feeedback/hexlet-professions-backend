@@ -28,10 +28,6 @@
 // Подсказки
 // Средняя точка вычисляется по формуле x = (x1 + x2) / 2 и y = (y1 + y2) / 2.
 
-// @ts-check
-
-import { makeDecartPoint, getX, getY } from './points.js';
-
 // BEGIN (write your solution here)
 const makeSegment = (beginPoint, endPoint) => {
     const segment = { beginPoint, endPoint };
