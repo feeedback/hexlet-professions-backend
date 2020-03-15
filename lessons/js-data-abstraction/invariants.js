@@ -48,22 +48,18 @@ const getNumer = (rat) => rat.numer;
 const getDenom = (rat) => rat.denom;
 
 const twoRatToCommonDenom = (rat1, rat2) => {
-    const denom1 = getDenom(rat1);
-    const denom2 = getDenom(rat2);
-    const lcm = getLcm(denom1, denom2);
-    const newNumer1 = (lcm / denom1) * getNumer(rat1);
-    const newNumer2 = (lcm / denom2) * getNumer(rat2);
+    const lcm = getLcm(getDenom(rat1), getDenom(rat2));
+    const newNumer1 = (lcm / getDenom(rat1)) * getNumer(rat1);
+    const newNumer2 = (lcm / getDenom(rat2)) * getNumer(rat2);
     return [newNumer1, newNumer2, lcm];
 };
 const add = (rat1, rat2) => {
     const [newNumer1, newNumer2, lcm] = twoRatToCommonDenom(rat1, rat2);
-    const sumNumer = newNumer1 + newNumer2;
-    return makeRational(sumNumer, lcm);
+    return makeRational(newNumer1 + newNumer2, lcm);
 };
 const sub = (rat1, rat2) => {
     const [newNumer1, newNumer2, lcm] = twoRatToCommonDenom(rat1, rat2);
-    const diffNumer = newNumer1 - newNumer2;
-    return makeRational(diffNumer, lcm);
+    return makeRational(newNumer1 - newNumer2, lcm);
 };
 
 const add2 = (rat1, rat2) => {
