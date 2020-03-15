@@ -38,7 +38,6 @@
 const URL = require('url');
 
 // BEGIN (write your solution here)
-
 const make = (url) => new URL(url);
 const setProtocol = (data, protocol) => (data.protocol = protocol);
 const getProtocol = (data) => data.protocol;
