@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
@@ -40,219 +41,175 @@
 // import BellState from 'BellState.js';
 // import ClockState from 'ClockState.js';
 
-class AlarmClock {
-    constructor() {
-        this._hours = 12;
-        this._minutes = 0;
-        this._alarmHours = 6;
-        this._alarmMinutes = 0;
-        this._isAlarmOn = false;
-        this.setState('clock');
-    }
+export default class AlarmClock {
+    mapClassNameToClass = {
+        ClockState,
+        AlarmState,
+        BellState,
+    };
 
-    setState(className) {
-        const mapStates = {
-            clock: ClockState,
-            alarm: AlarmState,
-            bell: BellState,
-        };
-        this.state = new mapStates[className](this);
+    time = {
+        clock: { hours: 12, minutes: 0 },
+        alarm: { hours: 6, minutes: 0 },
+    };
+
+    alarmOn = false;
+
+    constructor() {
+        this.setState('ClockState');
     }
 
     clickMode() {
-        // нажатие на кнопку Mode
-        this.state.clickMode();
+        this.state.changeState();
     }
 
     longClickMode() {
-        // долгое нажатие на кнопку Mode
-        this.state.longClickMode();
+        // this.clickMode(); - test bad for this
+        this.alarmOn = !this.alarmOn;
     }
 
     clickH() {
-        // нажатие на кнопку H
-        this.state.clickH();
+        this.state.incrementH();
     }
 
     clickM() {
-        // нажатие на кнопку M
-        this.state.clickM();
+        this.state.incrementM();
     }
 
     tick() {
-        // при вызове увеличивает время на одну минуту и, если нужно, активирует звонок
-        // будильника
+        this.incrementM('clock');
+        if (this.minutes() === 0) {
+            this.incrementH('clock');
+        }
         this.state.tick();
     }
 
     isAlarmOn() {
-        // показывает включен ли режим будильника
-        return this._isAlarmOn;
+        return this.alarmOn;
     }
 
     isAlarmTime() {
-        // возвращает true, если время на часах совпадает со временем на будильнике
-        return this._hours === this._alarmHours && this._minutes === this._alarmMinutes;
+        return (
+            this.time.clock.hours === this.time.alarm.hours &&
+            this.time.clock.minutes === this.time.alarm.minutes
+        );
     }
 
     minutes() {
-        // возвращает минуты, установленные на часах
-        return this._minutes;
+        return this.time.clock.minutes;
     }
 
     hours() {
-        // возвращает часы, установленные на часах
-        return this._hours;
+        return this.time.clock.hours;
     }
 
     alarmMinutes() {
-        // возвращает минуты, установленные на будильнике
-        return this._alarmMinutes;
+        return this.time.alarm.minutes;
     }
 
     alarmHours() {
-        // возвращает часы, установленные на будильнике
-        return this._alarmHours;
+        return this.time.alarm.hours;
     }
 
     getCurrentMode() {
-        // возвращает текущий режим (alarm | clock | bell)
-        return `${this.state}`;
+        return this.state.getModeName();
+    }
+
+    setState(className) {
+        const ClassState = this.mapClassNameToClass[className];
+        this.state = new ClassState(this);
+    }
+
+    incrementH(mode) {
+        const data = this.time[mode];
+        data.hours = (data.hours + 1) % 24;
+    }
+
+    incrementM(mode) {
+        const data = this.time[mode];
+        data.minutes = (data.minutes + 1) % 60;
     }
 }
 
 // State.js
 
+// export default
 class State {
     constructor(clockThis) {
         this.clock = clockThis;
     }
 
-    clickMode() {
-        // нажатие на кнопку Mode
-        this.clock.setState('alarm');
+    changeState(stateClassName = this.nextState) {
+        this.clock.setState(stateClassName);
     }
 
-    longClickMode() {
-        // долгое нажатие на кнопку Mode
-        this.clock._isAlarmOn = !this.clock.isAlarmOn();
-    }
-
-    clickH() {
-        // нажатие на кнопку H
-        this.clock._hours = (this.clock.hours() + 1) % 24;
-    }
-
-    clickM() {
-        // нажатие на кнопку M
-        this.clock._minutes = (this.clock.minutes() + 1) % 60;
-        if (this.clock.minutes() === 0) {
-            this.clock._hours = (this.clock.hours() + 1) % 24;
-        }
-    }
-
-    tick() {
-        // при вызове увеличивает время на одну минуту и, если нужно, активирует
-        // звонок будильника
-        this.clock._minutes = (this.clock.minutes() + 1) % 60;
-        if (this.clock.minutes() === 0) {
-            this.clock._hours = (this.clock.hours() + 1) % 24;
-        }
+    getModeName() {
+        return this.mode;
     }
 }
 
 // AlarmState.js
 // import State from 'State.js';
 
+// export default
 class AlarmState extends State {
-    clickMode() {
-        // нажатие на кнопку Mode
-        this.clock.setState('clock');
+    mode = 'alarm';
+
+    nextState = 'ClockState';
+
+    incrementH() {
+        this.clock.incrementH(this.mode);
     }
 
-    longClickMode() {
-        // долгое нажатие на кнопку Mode
-        super.longClickMode();
-
-        this.clickMode();
-    }
-
-    clickH() {
-        // нажатие на кнопку H
-        this.clock._alarmHours = (this.clock._alarmHours + 1) % 24;
-    }
-
-    clickM() {
-        // нажатие на кнопку M
-        this.clock._alarmMinutes = (this.clock.alarmMinutes() + 1) % 60;
+    incrementM() {
+        this.clock.incrementM(this.mode);
     }
 
     tick() {
-        // при вызове увеличивает время на одну минуту и, если нужно, активирует
-        // звонок будильника
-        super.tick();
         if (this.clock.isAlarmTime() && this.clock.isAlarmOn()) {
-            this.clock.setState('bell');
+            this.changeState('BellState');
         }
-    }
-
-    toString() {
-        return 'alarm';
     }
 }
 
 // BellState.js
 // import State from 'State.js';
 
+// export default
 class BellState extends State {
-    clickMode() {
-        // нажатие на кнопку Mode
-        this.clock.setState('clock');
-    }
+    mode = 'bell';
 
-    longClickMode() {
-        // долгое нажатие на кнопку Mode
-        super.longClickMode();
+    nextState = 'ClockState';
 
-        this.clickMode();
-    }
+    incrementH() {}
 
-    clickH() {
-        // нажатие на кнопку H
-    }
-
-    clickM() {
-        // нажатие на кнопку M
-    }
+    incrementM() {}
 
     tick() {
-        // при вызове увеличивает время на одну минуту и, если нужно, активирует
-        // звонок будильника
-        super.tick();
-        if (this.clock.isAlarmTime() === false) {
-            this.clock.setState('clock');
-        }
-    }
-
-    toString() {
-        return 'bell';
+        this.changeState();
     }
 }
 
 // ClockState.js
 // import State from 'State.js';
 
+// export default
 class ClockState extends State {
-    tick() {
-        // при вызове увеличивает время на одну минуту и, если нужно, активирует
-        // звонок будильника
-        super.tick();
-        if (this.clock.isAlarmTime() && this.clock.isAlarmOn()) {
-            this.clock.setState('bell');
-        }
+    mode = 'clock';
+
+    nextState = 'AlarmState';
+
+    incrementH() {
+        this.clock.incrementH(this.mode);
     }
 
-    toString() {
-        return 'clock';
+    incrementM() {
+        this.clock.incrementM(this.mode);
+    }
+
+    tick() {
+        if (this.clock.isAlarmTime() && this.clock.isAlarmOn()) {
+            this.changeState('BellState');
+        }
     }
 }
