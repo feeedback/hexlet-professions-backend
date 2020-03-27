@@ -36,11 +36,11 @@
 export default () => {
     const closeModal = (modal) => {
         modal.classList.remove('show');
-        modal.style.display = 'none';
+        modal.style.display = 'none'; // eslint-disable-line
     };
     const showModal = (modal) => {
         modal.classList.add('show');
-        modal.style.display = 'block';
+        modal.style.display = 'block'; // eslint-disable-line
     };
 
     const modalsButton = document.querySelectorAll('button[data-toggle=modal]');
