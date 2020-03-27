@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // sc: https://ru.hexlet.io/courses/js-dom/lessons/dom-hierarchy/exercise_unit
 
 // src/search.js
