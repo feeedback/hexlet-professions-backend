@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // sc: https://ru.hexlet.io/courses/js-frontend-architecture/lessons/shape-of-state/exercise_unit
 
 // Эта задача не сложная алгоритмически, но довольно объемная. На решение
@@ -98,13 +97,8 @@
 // src/application.js
 // Экспортируйте функцию по умолчанию, которая реализует всю необходимую логику.
 
-/* eslint-disable no-param-reassign */
-import _ from 'lodash';
-
-// const mapStateFabric = {};
-
 // BEGIN (write your solution here)
-const mapStateView = {
+const mapElementView = {
     list: (name, state) => {
         const listState = {
             current: `<b>${name}</b>`,
@@ -115,9 +109,8 @@ const mapStateView = {
     task: (name) => `${name}`,
 };
 
-const renderNew = (type, newName, state) => {
-    const wrapper = document.querySelector(`[data-container="${type}s"]`);
-
+const renderNew = (elements, type, newName, state) => {
+    const wrapper = elements[`${type}sContainer`];
     let ul = wrapper.querySelector('ul');
     if (!ul) {
         wrapper.append(document.createElement('ul'));
@@ -125,44 +118,68 @@ const renderNew = (type, newName, state) => {
     }
 
     const li = document.createElement('li');
-
-    li.innerHTML = mapStateView[type](newName, state);
+    li.innerHTML = mapElementView[type](newName, state);
     ul.append(li);
 };
 
-export default () => {
-    const state = {
-        lists: [
-            { name: 'General' },
-            { name: 'Today task' },
-            { name: 'AnyRandomSomething' },
-        ],
-        currentList: 'General',
-        tasks: [
-            { listName: 'General', name: 'Открой редактор!' },
-            { listName: 'General', name: 'Открой!' },
-            { listName: 'Any', name: 'Открой редактор!' },
-        ],
-    };
+const renderAll = (elements, state) => {
+    elements.listsContainer.innerHTML = '';
+    elements.tasksContainer.innerHTML = '';
 
-    const currentTasks = state.tasks.filter(
+    state.lists.forEach((list) => renderNew(elements, 'list', list.name, state));
+    const currentListTasks = state.tasks.filter(
         (task) => task.listName === state.currentList
     );
-
-    const formList = document.querySelector('[data-container="new-list-form"]');
-    const formTask = document.querySelector('[data-container="new-task-form"]');
-    formList.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const newListName = new FormData(formList).get('name');
-        state.lists.push({ name: newListName });
-        renderNew('list', newListName, state);
-    });
-    formTask.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const newTaskName = new FormData(formTask).get('name');
-        state.tasks.push({ name: newTaskName, listName: state.currentList });
-        renderNew('task', newTaskName, state);
-    });
+    currentListTasks.forEach((task) => renderNew(elements, 'task', task.name, state));
 };
 
+export default () => {
+    const elements = {
+        listsContainer: document.querySelector('[data-container="lists"]'),
+        tasksContainer: document.querySelector('[data-container="tasks"]'),
+        listAddForm: document.querySelector('[data-container="new-list-form"]'),
+        taskAddForm: document.querySelector('[data-container="new-task-form"]'),
+    };
+
+    const state = {
+        lists: [{ name: 'General' }],
+        currentList: 'General',
+        tasks: [],
+    };
+
+    const fabric = {
+        createList: (name) => ({ name }),
+        createTask: (name, currentList) => ({ name, listName: currentList }),
+    };
+
+    elements.listAddForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const newListName = new FormData(event.target).get('name');
+        if (newListName === '') {
+            return;
+        }
+        state.lists.push(fabric.createList(newListName));
+        renderNew(elements, 'list', newListName, state);
+    });
+    elements.taskAddForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const newTaskName = new FormData(event.target).get('name');
+        if (newTaskName === '') {
+            return;
+        }
+        state.tasks.push(fabric.createTask(newTaskName, state.currentList));
+        renderNew(elements, 'task', newTaskName, state);
+    });
+
+    elements.listsContainer.addEventListener('click', (event) => {
+        const element = event.target;
+        if (element.nodeName !== 'A') {
+            return;
+        }
+        event.preventDefault();
+        state.currentList = element.textContent;
+        renderAll(elements, state);
+    });
+    renderAll(elements, state);
+};
 // END
