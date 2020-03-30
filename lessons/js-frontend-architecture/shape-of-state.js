@@ -99,25 +99,37 @@
 // Экспортируйте функцию по умолчанию, которая реализует всю необходимую логику.
 
 /* eslint-disable no-param-reassign */
-
 import _ from 'lodash';
+
+// const mapStateFabric = {};
 
 // BEGIN (write your solution here)
 const mapStateView = {
     list: (name, state) => {
-        if (name === state.currentList) {
-            return `<ul><li><b>${name}</b></li></ul>`;
-        }
-        return `<li><a href="#${name.lowercase()}">${name}</a></li></ul>`;
+        const listState = {
+            current: `<b>${name}</b>`,
+            inactive: `<a href="#${name.toLowerCase()}">${name}</a>`,
+        };
+        return name === state.currentList ? listState.current : listState.inactive;
     },
-    task: (name) => `<ul><li>${name}</li></ul>`,
-    // <div data-container="tasks">
+    task: (name) => `${name}`,
 };
-const render = (type, newName, state) => {
+
+const renderNew = (type, newName, state) => {
     const wrapper = document.querySelector(`[data-container="${type}s"]`);
-    const html = mapStateView[type](newName, state);
-    wrapper.innerHTML += html;
+
+    let ul = wrapper.querySelector('ul');
+    if (!ul) {
+        wrapper.append(document.createElement('ul'));
+        ul = wrapper.querySelector('ul');
+    }
+
+    const li = document.createElement('li');
+
+    li.innerHTML = mapStateView[type](newName, state);
+    ul.append(li);
 };
+
 export default () => {
     const state = {
         lists: [
@@ -132,20 +144,25 @@ export default () => {
             { listName: 'Any', name: 'Открой редактор!' },
         ],
     };
+
     const currentTasks = state.tasks.filter(
         (task) => task.listName === state.currentList
     );
 
     const formList = document.querySelector('[data-container="new-list-form"]');
     const formTask = document.querySelector('[data-container="new-task-form"]');
-
     formList.addEventListener('submit', (event) => {
         event.preventDefault();
         const newListName = new FormData(formList).get('name');
         state.lists.push({ name: newListName });
-        render(newListName, state);
+        renderNew('list', newListName, state);
     });
-    formTask.addEventListener('submit', '');
+    formTask.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const newTaskName = new FormData(formTask).get('name');
+        state.tasks.push({ name: newTaskName, listName: state.currentList });
+        renderNew('task', newTaskName, state);
+    });
 };
 
 // END
