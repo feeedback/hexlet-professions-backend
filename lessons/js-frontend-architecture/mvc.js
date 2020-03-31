@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // sc:  https://ru.hexlet.io/courses/js-frontend-architecture/lessons/mvc/exercise_unit
 
 // src/application.js
@@ -11,6 +12,7 @@
 
 // import { watch } from 'melanke-watchjs';
 
+// eslint-disable-next-line no-unused-vars
 const variableWithQuerySelectorAndParent = () => {
     const elements = {
         boxTabs: document.querySelector('#list-tab'),
