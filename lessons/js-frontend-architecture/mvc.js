@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 // sc:  https://ru.hexlet.io/courses/js-frontend-architecture/lessons/mvc/exercise_unit
 
 // src/application.js
@@ -12,41 +11,72 @@
 
 // import { watch } from 'melanke-watchjs';
 
-// BEGIN (write your solution here)
-export default () => {
-    const elems = {
-        tabsContainer: document.querySelector('#list-tab'),
+const variableWithQuerySelectorAndParent = () => {
+    const elements = {
+        boxTabs: document.querySelector('#list-tab'),
         tabLinks: document.querySelectorAll('#list-tab [data-toggle="list"]'),
-        tabsContentContainer: document.querySelector('#nav-tabContent'),
+        boxTabsContent: document.querySelector('#nav-tabContent'),
     };
-
-    const linkFirstTab = elems.tabLinks[0];
     const state = {
-        prev: { id: linkFirstTab.id, contentId: linkFirstTab.hash.slice(1) },
-        current: null,
+        current: elements.tabLinks[0].id,
+        prev: null,
     };
 
     watch(state, 'current', () => {
-        if (state.current.id === state.prev.id) {
+        if (state.current === state.prev) {
             return;
         }
-        const prevTab = elems.tabsContainer.getElementById(state.prev.id);
-        const tab = elems.tabsContainer.getElementById(state.current.id);
+        const prevTab = elements.boxTabs.querySelector(`#${state.prev}`);
+        const tab = elements.boxTabs.querySelector(`#${state.current}`);
         prevTab.classList.remove('active');
         tab.classList.add('active');
 
-        const prevContent = elems.tabsContentContainer.getElementById(prevTabEl.hash);
-        const tabContent = elems.tabsContentContainer.getElementById(tabEl.hash);
-        prevContent.classList.remove('active', 'show');
+        const prevTabContent = elements.boxTabsContent.querySelector(prevTab.hash);
+        const tabContent = elements.boxTabsContent.querySelector(tab.hash);
+        prevTabContent.classList.remove('active', 'show');
         tabContent.classList.add('active', 'show');
     });
 
-    elems.tabLinks.forEach((link) =>
+    elements.tabLinks.forEach((link) =>
         link.addEventListener('click', (event) => {
             event.preventDefault();
-            state.prev = { ...state.current };
-            state.current.id = event.target.id;
-            state.current.contentId = event.target.hash.slice(1);
+            state.prev = state.current;
+            state.current = event.target.id;
+        })
+    );
+};
+
+// BEGIN (write your solution here)
+export default () => {
+    const elements = {
+        tabLinks: document.querySelectorAll('[data-toggle="list"]'),
+    };
+
+    const state = {
+        current: elements.tabLinks[0].id,
+        prev: null,
+    };
+
+    watch(state, 'current', () => {
+        if (state.current === state.prev) {
+            return;
+        }
+        const prevTab = document.getElementById(state.prev);
+        const tab = document.getElementById(state.current);
+        prevTab.classList.remove('active');
+        tab.classList.add('active');
+
+        const prevTabContent = document.getElementById(prevTab.hash.slice(1));
+        const tabContent = document.getElementById(tab.hash.slice(1));
+        prevTabContent.classList.remove('active', 'show');
+        tabContent.classList.add('active', 'show');
+    });
+
+    elements.tabLinks.forEach((link) =>
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            state.prev = state.current;
+            state.current = event.target.id;
         })
     );
 };
