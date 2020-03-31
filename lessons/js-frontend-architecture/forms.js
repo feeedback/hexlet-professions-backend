@@ -84,7 +84,19 @@ const errorMessages = {
 // BEGIN (write your solution here)
 export default () => {
     const form = document.querySelector('form[data-form="sign-up"]');
-    const state = {};
+    const state = {
+        registrationForm: {
+            email: {
+                isValid: (el) => !el.validity.typeMismatch,
+            },
+            password: {
+                isValid: (el) => el.value.length >= 6,
+            },
+            passwordConfirmation: {
+                isValid: (el) => el.value === state.password.value,
+            },
+        },
+    };
 
     form.elements.name.addEventListener('input', (e) => {
         state.registrationForm.data.name = e.target.value;
@@ -95,7 +107,6 @@ export default () => {
         // Действия: валидация, запросы, ...
     });
 
-    // https://github.com/melanke/Watch.JS/
     watch(state.registrationForm, () => {
         if (state.registrationForm.state === 'invalid') {
             // Отрисовка ошибок, хранящихся где-то в состоянии
@@ -107,21 +118,22 @@ export default () => {
         // Обработка данных, например, отправка на сервер
         // state.registrationForm.data
     });
+    const isValid = (formEl) => {};
 
     form.addEventListener('change', (event) => {
         const el = event.target;
         if (el.value === '' || el.validity.valid) {
-            event.target.classList.remove('is-invalid');
+            el.classList.remove('is-invalid');
+            if (isValid(form)) {
+                form.querySelector('input[type="submit"]').disabled = false;
+            }
+            return;
         }
-        form.reportValidity();
+        el.classList.add('is-invalid');
+        form.querySelector('input[type="submit"]').disabled = true;
     });
-    const renderInvalid = (event) => {
-        event.target.classList.add('is-invalid');
-    };
-    form.elements.email.addEventListener('invalid', renderInvalid);
-    form.elements.password.addEventListener('invalid', renderInvalid);
-    form.elements.passwordConfirmation.addEventListener('invalid', renderInvalid);
 
+    // form.reportValidity();
     //  el.setCustomValidity('Value is not a valid email');
     // el.checkValidity();
 };
