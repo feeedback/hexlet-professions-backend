@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 // sc: https://ru.hexlet.io/courses/regexp/lessons/character_classes/exercise_unit
 
 // solution
