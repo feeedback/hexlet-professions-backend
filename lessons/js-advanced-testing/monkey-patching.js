@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // sc: https://ru.hexlet.io/courses/js-advanced-testing/lessons/monkey-patching/exercise_unit
 
 // tests/getUserMainLanguage.test.js
@@ -9,12 +10,12 @@
 // котором выполняется реальный запрос, nock его перехватит и выведет на экран.
 // Так можно узнать адреса по которым @octokit/rest выполняет свои запросы.
 
-const nock = require('nock');
-const getFunction = require('../functions');
+// const nock = require('nock');
+// const getFunction = require('../functions');
 
-const getUserMainLanguage = getFunction();
+// const getUserMainLanguage = getFunction();
 
-nock.disableNetConnect();
+// nock.disableNetConnect();
 
 // BEGIN (write your solution here)
 test('getUserMainLanguage', async () => {
