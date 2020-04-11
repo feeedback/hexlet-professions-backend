@@ -5,3 +5,6 @@
 // three.
 
 /(one|two|three)/;
+
+// вариант быстрее
+/one|two|three/;
