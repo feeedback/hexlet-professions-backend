@@ -49,18 +49,7 @@ export default () => {
         counter.value = DEFAULT_VALUE;
         res.sendStatus(204);
     });
-    app.get('*', (req, res) => {
-        res.sendStatus(204);
-    });
     // END
 
     return app;
 };
-
-// app.get('/', (req, res) => {
-//     res.send('Hello World!');
-// });
-
-// app.listen(3000, () => {
-//     console.log('Example app listening on port 3000!');
-// });
