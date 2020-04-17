@@ -1,0 +1,21 @@
+extends ../layouts/app.pug
+
+block content
+  // BEGIN (write your solution here)
+  div
+    a(href='/') Main page
+  if posts.length > 0
+    table.table
+      tr
+        th Title
+      for post in posts
+        tr
+          td
+            a(href=`/posts/${post.id}`)= post.title
+            div
+              a.btn.btn-primary(href=`/posts/${post.id}/edit`) Edit post
+              form.d-inline-block(action=`/posts/${post.id}?_method=DELETE` method='post')              
+                button.btn.btn-danger(type='submit') Delete post
+  else
+    p Пусто
+  // END
