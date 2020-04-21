@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // sc:  https://ru.hexlet.io/courses/js-express/lessons/middlewares/exercise_unit
 
 // Часто приложению нужно анализировать клиентов, которые приходят. Например, для
