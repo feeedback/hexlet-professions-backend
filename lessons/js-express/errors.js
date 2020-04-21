@@ -38,14 +38,19 @@ export default () => {
     });
 
     // BEGIN (write your solution here)
-    app.use((req, res, next) => {
-        next(new Error('404'));
+    app.use((_req, _res, next) => {
+        next(new NotFoundError());
     });
 
-    app.use((err, req, res, next) => {
-        res.status(404);
-        res.render('404.pug', { err });
-        next();
+    app.use((err, _req, res, next) => {
+        res.status(err.status);
+        switch (err.status) {
+            case 404:
+                res.render(err.status.toString());
+                break;
+            default:
+                next(new Error('Unexpected error'));
+        }
     });
     // END
 
