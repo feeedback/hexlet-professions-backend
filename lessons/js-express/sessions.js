@@ -121,12 +121,12 @@ export default () => {
     });
 
     // BEGIN (write your solution here)
-    app.get('/session/new', (_req, res) => {
-        res.render('session/new', { form: res.locals.currentUser, errors: {} });
+    app.get('/users/new', (_req, res) => {
+        res.render('users/new', { form: {}, errors: {} });
     });
 
-    app.get('/users/new', (_req, res) => {
-        res.render('users/new', { form: res.locals.currentUser, errors: {} });
+    app.get('/session/new', (_req, res) => {
+        res.render('session/new', { form: {} });
     });
 
     app.post('/users', (req, res) => {
@@ -136,6 +136,11 @@ export default () => {
         const errors = {};
         if (!nickname) {
             errors.nickname = "Nickname can't be blank";
+        } else {
+            const isUniq = !users.some((user) => user.nickname === nickname);
+            if (!isUniq) {
+                errors.nickname = 'Already exist';
+            }
         }
 
         if (!password) {
@@ -159,14 +164,10 @@ export default () => {
 
         const user = users.find((u) => u.nickname === nickname);
         if (!user || user.passHash !== encrypt(password)) {
-            const errors = {};
-            errors.sign = 'Invalid nickname or password';
+            const error = 'Invalid nickname or password';
 
             res.status(422);
-            res.render('session/new', {
-                form: req.body,
-                errors,
-            });
+            res.render('session/new', { form: req.body, error });
             return;
         }
 
@@ -175,8 +176,9 @@ export default () => {
     });
 
     app.delete('/session', (req, res) => {
-        req.session.destroy();
-        res.redirect('/');
+        req.session.destroy(() => {
+            res.redirect('/');
+        });
     });
     // END
 
