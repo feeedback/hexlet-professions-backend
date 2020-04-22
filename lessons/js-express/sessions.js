@@ -46,16 +46,16 @@
 
 // BEGIN (write your solution here)
 // export default class User {
-//     guest = false;
+//   guest = false;
 
 //     constructor(nickname, passHash) {
 //         this.nickname = nickname;
 //         this.passHash = passHash;
 //     }
 
-//     isGuest() {
-//         return this.guest;
-//     }
+//   isGuest() {
+//     return this.guest;
+//   }
 // }
 // END
 
@@ -124,11 +124,13 @@ export default () => {
     app.get('/session/new', (_req, res) => {
         res.render('session/new', { form: res.locals.currentUser, errors: {} });
     });
+
     app.get('/users/new', (_req, res) => {
         res.render('users/new', { form: res.locals.currentUser, errors: {} });
     });
 
     app.post('/users', (req, res) => {
+        // регистрация
         const { nickname, password } = req.body;
 
         const errors = {};
@@ -146,17 +148,35 @@ export default () => {
             return;
         }
 
-        const user = new User(nickname, password);
+        const user = new User(nickname, encrypt(password));
         users.push(user);
-        res.status(302);
-        res.render('index');
-        // res.redirect(302, '/');
+        res.redirect('/');
     });
+
     app.post('/session', (req, res) => {
-        res.end();
+        // авторизация / аутентификация
+        const { nickname, password } = req.body;
+
+        const user = users.find((u) => u.nickname === nickname);
+        if (!user || user.passHash !== encrypt(password)) {
+            const errors = {};
+            errors.sign = 'Invalid nickname or password';
+
+            res.status(422);
+            res.render('session/new', {
+                form: req.body,
+                errors,
+            });
+            return;
+        }
+
+        req.session.nickname = nickname;
+        res.redirect('/');
     });
+
     app.delete('/session', (req, res) => {
-        res.end();
+        req.session.destroy();
+        res.redirect('/');
     });
     // END
 
