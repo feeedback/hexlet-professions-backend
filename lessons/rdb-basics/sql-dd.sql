@@ -1,3 +1,5 @@
+-- sc: https://ru.hexlet.io/courses/rdb-basics/lessons/sql-ddl/exercise_unit
+
 CREATE TABLE courses (
     name varchar(255),
     body text,
