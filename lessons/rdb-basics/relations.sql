@@ -21,7 +21,7 @@ INSERT INTO users VALUES ('User1', 'User1', '1832-10-10');
 INSERT INTO users VALUES ('User2', 'User2', '1832-10-11');
 
 INSERT INTO cars VALUES
-    ('User1', 'car1', '-'),rdb-basics / lesson №3
+    ('User1', 'car1', '-'),
     ('User1', 'car2', '-');
 INSERT INTO cars VALUES
     ('User2', 'car1', '-'),
