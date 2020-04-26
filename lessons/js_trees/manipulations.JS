@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // sc: https://ru.hexlet.io/courses/js-trees/lessons/manipulations/exercise_unit
 
 // tree.js
@@ -23,14 +24,14 @@
 /* eslint-disable import/prefer-default-export */
 
 import _ from 'lodash';
-import {
-    mkdir,
-    mkfile,
-    isFile,
-    getChildren,
-    getName,
-    getMeta,
-} from '@hexlet/immutable-fs-trees';
+// import {
+//     mkdir,
+//     mkfile,
+//     isFile,
+//     getChildren,
+//     getName,
+//     getMeta,
+// } from '@hexlet/immutable-fs-trees';
 
 // BEGIN (write your solution here)
 export const compressImages = (tree) => {
