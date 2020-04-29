@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-unused-vars */
 // sc: https://ru.hexlet.io/courses/js-frontend-architecture/lessons/forms/exercise_unit
 
 // В этой задаче вам предстоит реализовать форму регистрации. Форма состоит из 4
