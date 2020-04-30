@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-undef */
 // sc: https://ru.hexlet.io/courses/js-frontend-architecture/lessons/i18n/exercise_unit
 
 // В этой задаче вам предстоит реализовать грид. В интерфейсах так называется
@@ -75,108 +77,128 @@
 // import resources from './locales';
 
 // BEGIN (write your solution here)
-export default () => {
-    const container = document.querySelector('div.container');
-    const startStateData = [
-        ...Object.entries(document.location)
-            .filter(
-                ([, value]) =>
-                    typeof value !== 'function' &&
-                    typeof value !== 'object' &&
-                    value !== ''
-            )
-            .map(([name, value]) => ({ name, value })),
-    ];
+const getOrderDirection = (name, { by, desc }) => {
+    if (name !== by) {
+        return i18next.t('unsorted');
+    }
+    return i18next.t(desc ? 'desc' : 'asc');
+};
+const generateTrClickHandler = (name, order) => (e) => {
+    e.preventDefault();
+    order.desc = order.by === name ? !order.desc : false;
+    order.by = name;
+};
+
+const startStateData = [
+    ...Object.entries(document.location)
+        .filter(
+            ([, value]) =>
+                typeof value !== 'function' && typeof value !== 'object' && value !== ''
+        )
+        .map(([name, value]) => ({ name, value })),
+];
+
+export default async () => {
+    await i18next.init({
+        lng: 'en',
+        debug: true,
+        resources,
+    });
 
     const state = {
-        data: startStateData,
-        sort: {
-            column: 'name',
-            order: 'Unsorted',
-            next: {
-                Unsorted: 'Asc',
-                Asc: 'Desc',
-                Desc: 'Asc',
+        grid: {
+            order: {
+                by: 'name',
+                desc: false,
             },
         },
-        // Unsorted, Asc, Desc
     };
 
-    const createTable = () => {
+    const renderTable = (container) => {
         const table = document.createElement('table');
         table.className = 'table';
         const tbody = document.createElement('tbody');
         table.append(tbody);
 
         const thName = document.createElement('th');
+        const nameLink = document.createElement('a');
+        nameLink.setAttribute('href', '');
+        thName.append(nameLink);
+
         const thValue = document.createElement('th');
-        thName.innerHTML = `<a href="">Name (${state.sort.order})</a>`;
-        thValue.innerHTML = `<a href="">Value (Unsorted)</a>`;
+        const valueLink = document.createElement('a');
+        valueLink.setAttribute('href', '');
+        thValue.append(valueLink);
+
         const tr = table.insertRow();
         tr.append(thName, thValue);
         container.append(table);
+        return table;
     };
-    createTable();
 
-    const [linkThName, linkThValue] = container.querySelectorAll('table th');
-    const table = container.querySelector('table');
+    const container = document.querySelector('div.container');
+    const table = renderTable(container);
+    const [nameLink, valueLink] = container.querySelectorAll('table th a');
 
-    const createDataTable = () => {
+    const renderTableData = (tableEl, data) => {
         const createNewRow = (value1, value2) => {
-            const newTr = table.insertRow();
+            const newTr = tableEl.insertRow();
             const tdName = newTr.insertCell();
             const tdValue = newTr.insertCell();
             tdName.textContent = value1;
             tdValue.textContent = value2;
         };
-        state.data.forEach(({ name, value }) => createNewRow(name, value));
+        data.forEach(({ name, value }) => createNewRow(name, value));
     };
-    const deleteTable = () => {
-        [...table.rows].slice(1).forEach((row) => row.remove());
+    const deleteTableData = (tableEl) => {
+        [...tableEl.rows].slice(1).forEach((row) => row.remove());
     };
-    const sortRows = (column) => {
-        if (column !== state.sort.column) {
-            state.sort.order = 'Unsorted';
-        }
 
-        state.sort.order = state.sort.next[state.sort.order];
+    const renderSortedRows = (stateGrid) => {
+        const { by, desc } = stateGrid.order;
 
-        if (column === 'name') {
-            linkThName.querySelector('a').textContent = `Name (${state.sort.order})`;
-            linkThValue.querySelector('a').textContent = `Value (Unsorted)`;
-        } else {
-            linkThName.querySelector('a').textContent = `Name (Unsorted)`;
-            linkThValue.querySelector('a').textContent = `Value (${state.sort.order})`;
-        }
+        nameLink.innerHTML = i18next.t('grid.cols.name', {
+            direction: getOrderDirection('name', state.grid.order),
+        });
+        valueLink.innerHTML = i18next.t('grid.cols.value', {
+            direction: getOrderDirection('value', state.grid.order),
+        });
 
-        state.sort.column = column;
-
-        deleteTable();
-        const sortOrder = state.sort.order === 'Desc' ? -1 : 1;
-
-        state.data = startStateData
+        deleteTableData(table);
+        const data = startStateData
             .slice()
             .sort(
                 (a, b) =>
-                    a[column].localeCompare(b[column], 'en', { kn: true }) * sortOrder
+                    a[by].localeCompare(b[by], i18next.language, { numeric: true }) *
+                    (desc ? -1 : 1)
             );
-        createDataTable();
+        renderTableData(table, data);
     };
 
-    linkThName.addEventListener('click', (e) => {
-        e.preventDefault();
-        sortRows('name');
-    });
-    linkThValue.addEventListener('click', (e) => {
-        e.preventDefault();
-        sortRows('value');
-    });
+    nameLink.addEventListener('click', generateTrClickHandler('name', state.grid.order));
+    valueLink.addEventListener(
+        'click',
+        generateTrClickHandler('value', state.grid.order)
+    );
 
-    sortRows(state.sort.column);
+    watch(state.grid, 'order', () => renderSortedRows(state.grid));
+    renderSortedRows(state.grid);
 };
 // END
 
 // locales/en.js
 // BEGIN (write your solution here)
-
+// export default {
+//     translation: {
+//         unsorted: 'Unsorted',
+//         asc: 'Asc',
+//         desc: 'Desc',
+//         grid: {
+//             cols: {
+//                 name: 'Name ({{ direction }})',
+//                 value: 'Value ({{ direction }})',
+//             },
+//         },
+//     },
+// };
 // END
