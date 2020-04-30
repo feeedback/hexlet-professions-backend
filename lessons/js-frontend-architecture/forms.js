@@ -99,12 +99,24 @@ const errorMessages = {
 };
 
 // BEGIN (write your solution here)
-export default () => {
-    const form = document.querySelector('form[data-form="sign-up"]');
-    const button = form.querySelector('input[type="submit"]');
+const updateValidationState = (state) => {
+    try {
+        schema.validateSync(state.form.fields, { abortEarly: false });
 
+        state.form.errors = {};
+        state.form.isValid = true;
+    } catch (error) {
+        const errors = Object.fromEntries(
+            error.inner.map(({ path, message }) => [path, message])
+        );
+        state.form.errors = errors;
+        state.form.isValid = false;
+    }
+};
+
+export default () => {
     const state = {
-        registrationForm: {
+        form: {
             fields: {
                 name: '',
                 email: '',
@@ -117,12 +129,19 @@ export default () => {
         },
     };
 
+    const form = document.querySelector('form[data-form="sign-up"]');
+    const submitButton = form.querySelector('input[type="submit"]');
+    const container = form.closest('div[data-container="sign-up"]');
+    const fieldElements = Object.keys(state.form.fields).map((fieldName) =>
+        form.querySelector(`[name="${fieldName}"]`)
+    );
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        state.registrationForm.isSubmitProcess = true;
+        state.form.isSubmitProcess = true;
 
         try {
-            await axios.post(routes.usersPath(), state.registrationForm.fields);
+            await axios.post(routes.usersPath(), state.form.fields);
         } catch (error) {
             console.log(errorMessages.network.error);
             throw error;
@@ -131,80 +150,51 @@ export default () => {
 
     form.addEventListener('input', (e) => {
         const { name, value } = e.target;
-        if (!Object.keys(state.registrationForm.fields).includes(name)) {
-            return;
-        }
-        state.registrationForm.fields[name] = value;
-
-        try {
-            schema.validateSync(state.registrationForm.fields, { abortEarly: false });
-        } catch (error) {
-            const errors = Object.fromEntries(
-                error.inner.map(({ path, message }) => [path, message])
-            );
-            state.registrationForm.errors = errors;
-            state.registrationForm.isValid = false;
-            return;
-        }
-        state.registrationForm.errors = {};
-        state.registrationForm.isValid = true;
+        state.form.fields[name] = value;
+        updateValidationState(state);
     });
 
-    const deleteErrorAlertsFromValidField = (errors = {}) => {
-        const validField = Object.keys(state.registrationForm.fields).filter(
-            (field) => !(field in errors)
-        );
-
-        validField.forEach((fieldName) => {
-            const field = form.querySelector(`[name="${fieldName}"]`);
-            field.classList.remove('is-invalid');
-
-            const divAlert = field.parentElement.querySelector('div.invalid-feedback');
-            if (divAlert) {
-                divAlert.remove();
-            }
-        });
-    };
-
-    const renderError = (errors) => {
-        deleteErrorAlertsFromValidField(errors);
-
-        const createAlertDiv = (errorMessage) => {
+    const renderError = (elements, errors) => {
+        const createErrorElement = (errorMessage) => {
             const div = document.createElement('div');
             div.className = 'invalid-feedback';
             div.textContent = errorMessage;
             return div;
         };
 
-        Object.keys(errors).forEach((fieldName) => {
-            const field = form.querySelector(`[name="${fieldName}"]`);
-
-            const divAlert = field.parentElement.querySelector('div.invalid-feedback');
-            if (divAlert) {
-                divAlert.remove();
+        elements.forEach((fieldElement) => {
+            const error = errors[fieldElement.name];
+            if (!error) {
+                return;
             }
-            field.after(createAlertDiv(errors[fieldName]));
 
-            field.classList.add('is-invalid');
+            const errorElement = fieldElement.parentElement.querySelector(
+                'div.invalid-feedback'
+            );
+            if (errorElement) {
+                fieldElement.classList.remove('is-invalid');
+                errorElement.remove();
+            }
+            fieldElement.classList.add('is-invalid');
+            fieldElement.after(createErrorElement(error));
         });
     };
 
-    watch(state.registrationForm, 'errors', () => {
-        renderError(state.registrationForm.errors);
+    watch(state.form, 'errors', () => {
+        renderError(fieldElements, state.form.errors);
     });
 
-    watch(state.registrationForm, 'isSubmitProcess', () => {
-        button.setAttribute('disabled', '');
+    watch(state.form, 'isSubmitProcess', () => {
+        submitButton.setAttribute('disabled', '');
 
-        const container = form.closest('div[data-container="sign-up"]');
         container.textContent = 'User Created!';
     });
 
-    watch(state.registrationForm, 'isValid', () => {
-        if (state.registrationForm.isValid) {
-            button.removeAttribute('disabled');
+    watch(state.form, 'isValid', () => {
+        if (state.form.isValid) {
+            submitButton.removeAttribute('disabled');
         } else {
-            button.setAttribute('disabled', '');
+            submitButton.setAttribute('disabled', '');
         }
     });
 };
