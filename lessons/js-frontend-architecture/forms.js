@@ -124,7 +124,7 @@ export default () => {
                 passwordConfirmation: '',
             },
             errors: {},
-            isSubmitProcess: false,
+            processState: 'filling',
             isValid: false,
         },
     };
@@ -138,11 +138,13 @@ export default () => {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        state.form.isSubmitProcess = true;
+        state.form.processState = 'sending';
 
         try {
             await axios.post(routes.usersPath(), state.form.fields);
+            state.form.processState = 'finished';
         } catch (error) {
+            state.form.processState = 'failed';
             console.log(errorMessages.network.error);
             throw error;
         }
@@ -180,22 +182,33 @@ export default () => {
         });
     };
 
+    watch(state.form, 'processState', () => {
+        const { processState } = state.form;
+        switch (processState) {
+            case 'failed':
+                submitButton.disabled = false;
+                // render error
+                break;
+            case 'filling':
+                submitButton.disabled = false;
+                break;
+            case 'sending':
+                submitButton.disabled = true;
+                break;
+            case 'finished':
+                container.innerHTML = 'User Created!';
+                break;
+            default:
+                throw new Error(`Unknown state: ${processState}`);
+        }
+    });
+
     watch(state.form, 'errors', () => {
         renderError(fieldElements, state.form.errors);
     });
 
-    watch(state.form, 'isSubmitProcess', () => {
-        submitButton.setAttribute('disabled', '');
-
-        container.textContent = 'User Created!';
-    });
-
     watch(state.form, 'isValid', () => {
-        if (state.form.isValid) {
-            submitButton.removeAttribute('disabled');
-        } else {
-            submitButton.setAttribute('disabled', '');
-        }
+        submitButton.disabled = !state.form.isValid;
     });
 };
 // END
