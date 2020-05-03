@@ -102,45 +102,67 @@
 
 import React from 'react';
 
-// BEGIN (write your solution here)
+// BEGIN
 export default class MyForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fields: {
+            form: {
                 email: '',
                 password: '',
-                address: '',
                 city: '',
                 country: '',
+                address: '',
                 acceptRules: false,
             },
-            submitted: false,
+            submittingState: 'fillingForm',
         };
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.setState({ submitted: true });
-    };
-
-    handleBackToForm = (e) => {
-        e.preventDefault();
-        this.setState({ submitted: false });
-    };
-
     handleChangeField = ({ target }) => {
-        const { fields } = this.state;
+        const { form } = this.state;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-        this.setState({ fields: { ...fields, [target.name]: value } });
+        this.setState({ form: { ...form, [target.name]: value } });
     };
+
+    handleBackToForm = () => {
+        this.setState({ submittingState: 'fillingForm' });
+    };
+
+    handleSubmitForm = () => {
+        this.setState({ submittingState: 'submitted' });
+    };
+
+    renderRow = (key) => {
+        const { form } = this.state;
+        return (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{form[key].toString()}</td>
+          </tr>
+        );
+    };
+
+    renderResult() {
+        const { form } = this.state;
+        const keys = Object.keys(form).sort();
+        return (
+          <div>
+            <button type="button" onClick={this.handleBackToForm}>
+              Back
+            </button>
+            <table key="fieldsValues" className="table">
+              <tbody>{keys.map(this.renderRow)}</tbody>
+            </table>
+          </div>
+        );
+    }
 
     renderForm() {
-        const {
-            fields: { email, password, address, city, country, acceptRules },
-        } = this.state;
+        const { form } = this.state;
+
         return (
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmitForm}>
             <div className="form-row">
               <div className="form-group col-md-6">
                 <label htmlFor="inputEmail4" className="col-form-label">
@@ -149,11 +171,11 @@ export default class MyForm extends React.Component {
                 <input
                   type="email"
                   name="email"
+                  onChange={this.handleChangeField}
+                  value={form.email}
                   className="form-control"
                   id="inputEmail4"
                   placeholder="Email"
-                  value={email}
-                  onChange={this.handleChangeField}
                 />
               </div>
               <div className="form-group col-md-6">
@@ -162,12 +184,12 @@ export default class MyForm extends React.Component {
                 </label>
                 <input
                   type="password"
+                  onChange={this.handleChangeField}
+                  value={form.password}
                   name="password"
                   className="form-control"
                   id="inputPassword4"
                   placeholder="Password"
-                  value={password}
-                  onChange={this.handleChangeField}
                 />
               </div>
             </div>
@@ -177,12 +199,12 @@ export default class MyForm extends React.Component {
               </label>
               <textarea
                 type="text"
-                className="form-control"
                 name="address"
+                value={form.address}
+                onChange={this.handleChangeField}
+                className="form-control"
                 id="inputAddress"
                 placeholder="1234 Main St"
-                value={address}
-                onChange={this.handleChangeField}
               />
             </div>
             <div className="form-row">
@@ -192,11 +214,11 @@ export default class MyForm extends React.Component {
                 </label>
                 <input
                   type="text"
-                  className="form-control"
                   name="city"
-                  id="inputCity"
-                  value={city}
                   onChange={this.handleChangeField}
+                  value={form.city}
+                  className="form-control"
+                  id="inputCity"
                 />
               </div>
               <div className="form-group col-md-6">
@@ -206,9 +228,9 @@ export default class MyForm extends React.Component {
                 <select
                   id="inputCountry"
                   name="country"
-                  className="form-control"
-                  value={country}
                   onChange={this.handleChangeField}
+                  className="form-control"
+                  value={form.country}
                 >
                   <option>Choose</option>
                   <option value="argentina">Argentina</option>
@@ -222,11 +244,11 @@ export default class MyForm extends React.Component {
                 <label className="form-check-label" htmlFor="rules">
                   <input
                     id="rules"
-                    type="checkbox"
                     name="acceptRules"
                     className="form-check-input"
-                    checked={acceptRules}
                     onChange={this.handleChangeField}
+                    type="checkbox"
+                    checked={form.acceptRules}
                   />
                   Accept Rules
                 </label>
@@ -239,33 +261,16 @@ export default class MyForm extends React.Component {
         );
     }
 
-    renderTable() {
-        const { fields } = this.state;
-
-        const rows = Object.entries(fields)
-            .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-            .map(([key, value]) => (
-              <tr key={key}>
-                <td>{key}</td>
-                <td>{value.toString()}</td>
-              </tr>
-            ));
-
-        return (
-          <div>
-            <button type="button" onClick={this.handleBackToForm}>
-              Back
-            </button>
-            <table className="table">
-              <tbody>{rows}</tbody>
-            </table>
-          </div>
-        );
-    }
-
     render() {
-        const { submitted } = this.state;
-        return !submitted ? this.renderForm() : this.renderTable();
+        const { submittingState } = this.state;
+        switch (submittingState) {
+            case 'fillingForm':
+                return this.renderForm();
+            case 'submitted':
+                return this.renderResult();
+            default:
+                throw new Error(`'${submittingState}' - unknown state`);
+        }
     }
 }
 // END
