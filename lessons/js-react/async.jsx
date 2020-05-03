@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 // sc: https://ru.hexlet.io/courses/js-react/lessons/async/exercise_unit
 
 // src/Autocomplete.jsx
@@ -48,15 +49,19 @@ export default class Autocomplete extends React.Component {
     }
 
     getListAutocomplete = async (e) => {
-        const { value } = e.target;        
+        const { value } = e.target;
         this.setState({ value });
-        
+
         if (value === '') {
             this.setState({ listAutocomplete: [] });
             return;
         }
         try {
             const res = await axios.get('/countries', { params: { term: value } });
+            if (this.state.value === '') {
+                this.setState({ listAutocomplete: [] });
+                return;
+            }
             this.setState({ listAutocomplete: res.data });
         } catch (error) {
             console.error(error);
