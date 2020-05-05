@@ -33,7 +33,7 @@
 // import { useImmer } from 'use-immer';
 // import cn from 'classnames';
 
-// NOTE use web hooks with https://github.com/immerjs/use-immer
+// use web hooks with https://github.com/immerjs/use-immer
 
 // BEGIN (write your solution here)
 
