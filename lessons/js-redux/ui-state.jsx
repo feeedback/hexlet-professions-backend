@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/prefer-stateless-function */
 // sc: https://ru.hexlet.io/courses/js-redux/lessons/ui-state/exercise_unit
@@ -19,10 +21,11 @@ const mapStateToProps = (state) => {
     // BEGIN (write your solution here)
     const {
         tasks: { byId, allIds },
+        tasksUIState,
     } = state;
     const tasks = allIds.map((id) => byId[id]);
 
-    return { tasks, tasksUIState: state.tasksUIState };
+    return { tasks, tasksUIState };
     // END
 };
 
@@ -32,9 +35,10 @@ const actionCreators = {
 
 class Tasks extends React.Component {
     // BEGIN (write your solution here)
-    handleToggleThemeUI = () => {
+    handleInverseTaskTheme = (id) => (e) => {
+        e.preventDefault();
         const { inverseTaskTheme } = this.props;
-        inverseTaskTheme();
+        inverseTaskTheme({ id });
     };
 
     render() {
@@ -44,31 +48,30 @@ class Tasks extends React.Component {
             return null;
         }
 
-        const themes = {
-            light: { 'bg-light': true, 'text-dark': true },
-            dark: { 'bg-dark': true, 'text-light': true },
+        const getClass = (id) => {
+            const themeToClasses = {
+                dark: 'bg-dark text-light',
+                light: 'bg-light text-dark',
+            };
+            const currentThemeClass = themeToClasses[tasksUIState[id].theme];
+            return cn({
+                'list-group-item d-flex': true,
+                [currentThemeClass]: true,
+            });
         };
-        const classTask = cn({
-            'list-group-item': true,
-            'd-flex': true,
-            ...themes[tasksUIState.current],
-        });
 
         return (
           <div className="mt-3">
             <ul className="list-group">
               {tasks.map(({ id, text }) => (
-                <li key={id} className={classTask}>
+                <li key={id} className={getClass(id)}>
                   <span className="mr-auto">
-                    <a
-                      href="#"
-                      onClick={this.handleToggleThemeUI}
-                    >
+                    <a href="#" onClick={this.handleInverseTaskTheme(id)}>
                       {text}
                     </a>
                   </span>
                 </li>
-            ))}
+                    ))}
             </ul>
           </div>
         );
@@ -108,7 +111,7 @@ class Tasks extends React.Component {
 export const addTask = createAction('TASK_ADD');
 export const updateNewTaskText = createAction('NEW_TASK_TEXT_UPDATE');
 // BEGIN (write your solution here)
-export const inverseTaskTheme = createAction('UI_THEME_TOGGLE');
+export const inverseTaskTheme = createAction('TASK_INVERSE_THEME');
 // END
 
 // src/reducers/index.js
@@ -133,15 +136,21 @@ const tasks = handleActions(
 
 const tasksUIState = handleActions(
     {
-        // BEGIN (write your solution here)
-        [actions.inverseTaskTheme](state) {
-            const { current } = state;
-            const nextThemeMap = { light: 'dark', dark: 'light' };
-            return { current: nextThemeMap[current] };
+        // BEGIN
+        [actions.addTask](state, { payload: { task } }) {
+            return { ...state, [task.id]: { theme: 'light' } };
+        },
+        [actions.inverseTaskTheme](state, { payload: { id } }) {
+            const currentTheme = state[id].theme;
+            const mapping = {
+                dark: 'light',
+                light: 'dark',
+            };
+            return { ...state, [id]: { theme: mapping[currentTheme] } };
         },
         // END
     },
-    { current: 'light' }
+    {}
 );
 
 const text = handleActions(
