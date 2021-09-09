@@ -30,20 +30,20 @@
 
 // BEGIN (write your solution here)
 const makeSegment = (beginPoint, endPoint) => {
-    const segment = { beginPoint, endPoint };
-    return segment;
+  const segment = { beginPoint, endPoint };
+  return segment;
 };
 
 const getBeginPoint = (segment) => segment.beginPoint;
 const getEndPoint = (segment) => segment.endPoint;
 
 const getMidpointOfSegment = (segment) => {
-    const beginPoint = getBeginPoint(segment);
-    const endPoint = getEndPoint(segment);
-    const midX = (getX(beginPoint) + getX(endPoint)) / 2;
-    const midY = (getY(beginPoint) + getY(endPoint)) / 2;
+  const beginPoint = getBeginPoint(segment);
+  const endPoint = getEndPoint(segment);
+  const midX = (getX(beginPoint) + getX(endPoint)) / 2;
+  const midY = (getY(beginPoint) + getY(endPoint)) / 2;
 
-    return makeDecartPoint(midX, midY);
+  return makeDecartPoint(midX, midY);
 };
 
 export { makeSegment, getBeginPoint, getEndPoint, getMidpointOfSegment };

@@ -25,41 +25,35 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 export default class MarkdownEditor extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: '' };
-        this.rootElement = React.createRef();
-    }
+  constructor(props) {
+    super(props);
+    this.state = { value: '' };
+    this.rootElement = React.createRef();
+  }
 
-    componentDidMount() {
-        $(this.rootElement.current).markdown({
-            iconlibrary: 'fa',
-            onChange: this.handleChangeValue,
-        });
-    }
+  componentDidMount() {
+    $(this.rootElement.current).markdown({
+      iconlibrary: 'fa',
+      onChange: this.handleChangeValue,
+    });
+  }
 
-    handleChangeText = () => {
-        const { value } = this.rootElement.current;
-        this.setState({ value });
-    };
+  handleChangeText = () => {
+    const { value } = this.rootElement.current;
+    this.setState({ value });
+  };
 
-    handleChangeValue = (event) => {
-        const content = event.getContent();
-        const { onContentChange } = this.props;
-        onContentChange(content);
-        this.setState({ value: content });
-    };
+  handleChangeValue = (event) => {
+    const content = event.getContent();
+    const { onContentChange } = this.props;
+    onContentChange(content);
+    this.setState({ value: content });
+  };
 
-    render() {
-        const { value } = this.state;
-        return (
-          <div
-            ref={this.rootElement}
-            value={value}
-            onChange={this.handleChangeText}
-          />
-        );
-    }
+  render() {
+    const { value } = this.state;
+    return <div ref={this.rootElement} value={value} onChange={this.handleChangeText} />;
+  }
 }
 // END
 

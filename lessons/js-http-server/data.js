@@ -82,37 +82,37 @@
 let id = 1000;
 
 export const nextId = () => {
-    id += 1;
-    return id;
+  id += 1;
+  return id;
 };
 
 export const validate = ({ name, phone }) => {
-    // BEGIN (write your solution here)
-    const validateMap = {
-        empty: (value) => value === undefined || value === '',
-        badFormat: (value) => /^[\w.]+$/g.test(value) === false,
-    };
-    const errorMessages = {
-        empty: "can't be blank",
-        badFormat: 'bad format',
-    };
-    const errors = [];
-    const fabricError = (fieldName, message) => ({
-        source: fieldName,
-        title: message,
-    });
+  // BEGIN (write your solution here)
+  const validateMap = {
+    empty: (value) => value === undefined || value === '',
+    badFormat: (value) => /^[\w.]+$/g.test(value) === false,
+  };
+  const errorMessages = {
+    empty: "can't be blank",
+    badFormat: 'bad format',
+  };
+  const errors = [];
+  const fabricError = (fieldName, message) => ({
+    source: fieldName,
+    title: message,
+  });
 
-    if (validateMap.empty(name)) {
-        errors.push(fabricError('name', errorMessages.empty));
-    } else if (validateMap.badFormat(name)) {
-        errors.push(fabricError('name', errorMessages.badFormat));
-    }
-    if (validateMap.empty(phone)) {
-        errors.push(fabricError('phone', errorMessages.empty));
-    }
+  if (validateMap.empty(name)) {
+    errors.push(fabricError('name', errorMessages.empty));
+  } else if (validateMap.badFormat(name)) {
+    errors.push(fabricError('name', errorMessages.badFormat));
+  }
+  if (validateMap.empty(phone)) {
+    errors.push(fabricError('phone', errorMessages.empty));
+  }
 
-    return errors;
-    // END
+  return errors;
+  // END
 };
 
 // => server.js
@@ -124,127 +124,120 @@ export const validate = ({ name, phone }) => {
 // import { validate, nextId } from './user';
 
 const getParams = (address) => {
-    const { query } = url.parse(address);
-    return querystring.parse(decodeURI(query || ''));
+  const { query } = url.parse(address);
+  return querystring.parse(decodeURI(query || ''));
 };
 
 const router = {
-    GET: {
-        '/': (req, res, matches, body, users) => {
-            const messages = [
-                'Welcome to The Phonebook',
-                `Records count: ${Object.keys(users).length}`,
-            ];
-            res.end(messages.join('\n'));
-        },
-
-        '/search.json': (req, res, matches, body, users) => {
-            res.setHeader('Content-Type', 'application/json');
-
-            const { q = '' } = getParams(req.url);
-            const normalizedSearch = q.trim().toLowerCase();
-            const ids = Object.keys(users);
-
-            const usersSubset = ids
-                .filter((id) => users[id].name.toLowerCase().includes(normalizedSearch))
-                .map((id) => users[id]);
-            res.end(JSON.stringify({ data: usersSubset }));
-        },
-
-        '/users.json': (req, res, matches, body, users) => {
-            res.setHeader('Content-Type', 'application/json');
-
-            const { page = 1, perPage = 10 } = getParams(req.url);
-            const ids = Object.keys(users);
-
-            const usersSubset = ids
-                .slice(page * perPage - perPage, page * perPage)
-                .map((id) => users[id]);
-            const totalPages = Math.ceil(ids.length / perPage);
-            res.end(
-                JSON.stringify({ meta: { page, perPage, totalPages }, data: usersSubset })
-            );
-        },
-
-        '/users/(\\w+).json': (req, res, matches, body, users) => {
-            const id = matches[1];
-            res.setHeader('Content-Type', 'application/json');
-            const user = users[id];
-            if (!user) {
-                res.writeHead(404);
-                res.end();
-                return;
-            }
-            res.end(JSON.stringify({ data: user }));
-        },
+  GET: {
+    '/': (req, res, matches, body, users) => {
+      const messages = ['Welcome to The Phonebook', `Records count: ${Object.keys(users).length}`];
+      res.end(messages.join('\n'));
     },
-    POST: {
-        // BEGIN (write your solution here)
-        '/users.json': (req, res, matches, body, users) => {
-            res.setHeader('Content-Type', 'application/json');
-            const dataParsed = JSON.parse(body);
 
-            const errors = validate(dataParsed);
-            if (errors.length !== 0) {
-                res.writeHead(422); // ошибка валидации
-                res.end(
-                    JSON.stringify({
-                        errors,
-                    })
-                );
-                return;
-            }
+    '/search.json': (req, res, matches, body, users) => {
+      res.setHeader('Content-Type', 'application/json');
 
-            const id = nextId();
-            const newUser = {
-                name: dataParsed.name,
-                phone: dataParsed.phone,
-            };
+      const { q = '' } = getParams(req.url);
+      const normalizedSearch = q.trim().toLowerCase();
+      const ids = Object.keys(users);
 
-            users[id] = newUser; // eslint-disable-line
-
-            const response = {
-                meta: {
-                    location: `/users/${id}.json`,
-                },
-                data: {
-                    ...newUser,
-                    id,
-                },
-            };
-            res.writeHead(201); // запрос выполнен успешно и привёл к созданию ресурса
-            res.end(JSON.stringify(response));
-        },
-        // END
+      const usersSubset = ids
+        .filter((id) => users[id].name.toLowerCase().includes(normalizedSearch))
+        .map((id) => users[id]);
+      res.end(JSON.stringify({ data: usersSubset }));
     },
+
+    '/users.json': (req, res, matches, body, users) => {
+      res.setHeader('Content-Type', 'application/json');
+
+      const { page = 1, perPage = 10 } = getParams(req.url);
+      const ids = Object.keys(users);
+
+      const usersSubset = ids.slice(page * perPage - perPage, page * perPage).map((id) => users[id]);
+      const totalPages = Math.ceil(ids.length / perPage);
+      res.end(JSON.stringify({ meta: { page, perPage, totalPages }, data: usersSubset }));
+    },
+
+    '/users/(\\w+).json': (req, res, matches, body, users) => {
+      const id = matches[1];
+      res.setHeader('Content-Type', 'application/json');
+      const user = users[id];
+      if (!user) {
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+      res.end(JSON.stringify({ data: user }));
+    },
+  },
+  POST: {
+    // BEGIN (write your solution here)
+    '/users.json': (req, res, matches, body, users) => {
+      res.setHeader('Content-Type', 'application/json');
+      const dataParsed = JSON.parse(body);
+
+      const errors = validate(dataParsed);
+      if (errors.length !== 0) {
+        res.writeHead(422); // ошибка валидации
+        res.end(
+          JSON.stringify({
+            errors,
+          })
+        );
+        return;
+      }
+
+      const id = nextId();
+      const newUser = {
+        name: dataParsed.name,
+        phone: dataParsed.phone,
+      };
+
+      users[id] = newUser; // eslint-disable-line
+
+      const response = {
+        meta: {
+          location: `/users/${id}.json`,
+        },
+        data: {
+          ...newUser,
+          id,
+        },
+      };
+      res.writeHead(201); // запрос выполнен успешно и привёл к созданию ресурса
+      res.end(JSON.stringify(response));
+    },
+    // END
+  },
 };
 
 export default (users) =>
-    http.createServer((request, response) => {
-        const body = [];
+  http.createServer((request, response) => {
+    const body = [];
 
-        request
-            .on('data', (chunk) => body.push(chunk.toString()))
-            .on('end', () => {
-                const routes = router[request.method];
-                const result = Object.keys(routes).find((str) => {
-                    const { pathname } = url.parse(request.url);
-                    if (!pathname) {
-                        return false;
-                    }
-                    const regexp = new RegExp(`^${str}$`);
-                    const matches = pathname.match(regexp);
-                    if (!matches) {
-                        return false;
-                    }
+    request
+      .on('data', (chunk) => body.push(chunk.toString()))
+      .on('end', () => {
+        const routes = router[request.method];
+        const result = Object.keys(routes).find((str) => {
+          const { pathname } = url.parse(request.url);
+          if (!pathname) {
+            return false;
+          }
+          const regexp = new RegExp(`^${str}$`);
+          const matches = pathname.match(regexp);
+          if (!matches) {
+            return false;
+          }
 
-                    routes[str](request, response, matches, body, users);
-                    return true;
-                });
+          routes[str](request, response, matches, body, users);
+          return true;
+        });
 
-                if (!result) {
-                    response.writeHead(404);
-                    response.end();
-                }
-            });
-    });
+        if (!result) {
+          response.writeHead(404);
+          response.end();
+        }
+      });
+  });

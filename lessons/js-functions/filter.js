@@ -8,5 +8,5 @@
 // friends. Пол доступен по ключу gender и может принимать значения male или female.
 
 const getGirlFriends = (users) =>
-    users.flatMap(({ friends }) => friends).filter(({ gender }) => gender === 'female');
+  users.flatMap(({ friends }) => friends).filter(({ gender }) => gender === 'female');
 export default getGirlFriends;

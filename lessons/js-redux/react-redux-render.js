@@ -41,37 +41,37 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 export default class App extends React.Component {
-    static defaultProps = {
-        text: '',
-    };
+  static defaultProps = {
+    text: '',
+  };
 
-    handleChangeValue = (event) => {
-        event.preventDefault();
-        const { dispatch, updateText } = this.props;
-        const newValue = event.target.value;
-        dispatch(updateText(newValue));
-    };
+  handleChangeValue = (event) => {
+    event.preventDefault();
+    const { dispatch, updateText } = this.props;
+    const newValue = event.target.value;
+    dispatch(updateText(newValue));
+  };
 
-    handleResetText = (event) => {
-        event.preventDefault();
-        const { dispatch, resetText } = this.props;
-        dispatch(resetText());
-    };
+  handleResetText = (event) => {
+    event.preventDefault();
+    const { dispatch, resetText } = this.props;
+    dispatch(resetText());
+  };
 
-    render() {
-        const { text } = this.props;
-        return (
-            <div>
-                <form>
-                    <input type="text" value={text} onChange={this.handleChangeValue} />
-                    <button type="button" onClick={this.handleResetText}>
-                        Reset
-                    </button>
-                </form>
-                {text && <div>{text}</div>}
-            </div>
-        );
-    }
+  render() {
+    const { text } = this.props;
+    return (
+      <div>
+        <form>
+          <input type="text" value={text} onChange={this.handleChangeValue} />
+          <button type="button" onClick={this.handleResetText}>
+            Reset
+          </button>
+        </form>
+        {text && <div>{text}</div>}
+      </div>
+    );
+  }
 }
 // END
 
@@ -88,26 +88,21 @@ export default class App extends React.Component {
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
-    reducers,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  reducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 // BEGIN (write your solution here)
 const render = (text) => {
-    ReactDOM.render(
-        <App
-            dispatch={store.dispatch}
-            text={text}
-            updateText={updateText}
-            resetText={resetText}
-        />,
-        document.getElementById('container')
-    );
+  ReactDOM.render(
+    <App dispatch={store.dispatch} text={text} updateText={updateText} resetText={resetText} />,
+    document.getElementById('container')
+  );
 };
 
 store.subscribe(() => {
-    const { text } = store.getState();
-    render(text);
+  const { text } = store.getState();
+  render(text);
 });
 
 render();
@@ -120,18 +115,18 @@ render();
 // import { combineReducers } from 'redux';
 
 const text = (state = '', action) => {
-    // BEGIN (write your solution here)
-    switch (action.type) {
-        case 'TEXT_UPDATE':
-            return action.payload.text;
+  // BEGIN (write your solution here)
+  switch (action.type) {
+    case 'TEXT_UPDATE':
+      return action.payload.text;
 
-        case 'TEXT_RESET':
-            return '';
+    case 'TEXT_RESET':
+      return '';
 
-        default:
-            return state;
-    }
-    // END
+    default:
+      return state;
+  }
+  // END
 };
 
 // export default combineReducers({
@@ -143,13 +138,13 @@ const text = (state = '', action) => {
 
 // BEGIN (write your solution here)
 export const updateText = (text) => ({
-    type: 'TEXT_UPDATE',
-    payload: {
-        text: value,
-    },
+  type: 'TEXT_UPDATE',
+  payload: {
+    text: value,
+  },
 });
 
 export const resetText = () => ({
-    type: 'TEXT_RESET',
+  type: 'TEXT_RESET',
 });
 // END

@@ -20,14 +20,8 @@
 import { promises as fs } from 'fs';
 
 // BEGIN (write your solution here)
-const reverseLines = (data) =>
-    data
-        .split('\n')
-        .reverse()
-        .join('\n');
+const reverseLines = (data) => data.split('\n').reverse().join('\n');
 
 export const reverse = (filepath) =>
-    fs
-        .readFile(filepath, 'utf8')
-        .then((data) => fs.writeFile(filepath, reverseLines(data), 'utf8'));
+  fs.readFile(filepath, 'utf8').then((data) => fs.writeFile(filepath, reverseLines(data), 'utf8'));
 // END

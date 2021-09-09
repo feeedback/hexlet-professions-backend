@@ -31,17 +31,17 @@
 
 // BEGIN (write your solution here)
 export default class FakeSubscription {
-    constructor(user) {
-        this.user = user;
-    }
+  constructor(user) {
+    this.user = user;
+  }
 
-    hasProfessionalAccess() {
-        return this.user.isAdmin();
-    }
+  hasProfessionalAccess() {
+    return this.user.isAdmin();
+  }
 
-    hasPremiumAccess() {
-        return this.user.isAdmin();
-    }
+  hasPremiumAccess() {
+    return this.user.isAdmin();
+  }
 }
 // END
 
@@ -72,18 +72,18 @@ export default class FakeSubscription {
 import FakeSubscription from './FakeSubscription.js';
 
 export default class User {
-    constructor(email, currentSubscription = new FakeSubscription(this)) {
-        this.email = email;
-        // BEGIN (write your solution here)
-        this.currentSubscription = currentSubscription;
-        // END
-    }
+  constructor(email, currentSubscription = new FakeSubscription(this)) {
+    this.email = email;
+    // BEGIN (write your solution here)
+    this.currentSubscription = currentSubscription;
+    // END
+  }
 
-    getCurrentSubscription() {
-        return this.currentSubscription;
-    }
+  getCurrentSubscription() {
+    return this.currentSubscription;
+  }
 
-    isAdmin() {
-        return this.email === 'rakhim@hexlet.io';
-    }
+  isAdmin() {
+    return this.email === 'rakhim@hexlet.io';
+  }
 }

@@ -14,35 +14,35 @@ import React from 'react';
 // import * as actions from '../actions/index.js';
 
 const mapStateToProps = () => {
-    const props = {};
-    return props;
+  const props = {};
+  return props;
 };
 
 const actionCreators = {
-    addTask: actions.addTask,
+  addTask: actions.addTask,
 };
 
 class NewTaskForm extends React.Component {
-    // BEGIN (write your solution here)
-    handleSubmit = ({ text }) => {
-        const { addTask, reset } = this.props;
-        const task = { id: _.uniqueId(), text, state: 'active' };
-        reset();
-        addTask({ task });
-    };
-    // END
+  // BEGIN (write your solution here)
+  handleSubmit = ({ text }) => {
+    const { addTask, reset } = this.props;
+    const task = { id: _.uniqueId(), text, state: 'active' };
+    reset();
+    addTask({ task });
+  };
+  // END
 
-    render() {
-        const { handleSubmit } = this.props;
-        return (
-          <form className="form-inline" onSubmit={handleSubmit(this.handleSubmit)}>
-            <div className="form-group mx-3">
-              <Field name="text" required component="input" type="text" />
-            </div>
-            <input type="submit" className="btn btn-primary btn-sm" value="Add" />
-          </form>
-        );
-    }
+  render() {
+    const { handleSubmit } = this.props;
+    return (
+      <form className="form-inline" onSubmit={handleSubmit(this.handleSubmit)}>
+        <div className="form-group mx-3">
+          <Field name="text" required component="input" type="text" />
+        </div>
+        <input type="submit" className="btn btn-primary btn-sm" value="Add" />
+      </form>
+    );
+  }
 }
 
 const ConnectedNewTaskForm = connect(mapStateToProps, actionCreators)(NewTaskForm);
@@ -60,32 +60,32 @@ export default reduxForm({ form: 'newTask' })(ConnectedNewTaskForm);
 // import * as actions from '../actions/index.js';
 
 const tasks = handleActions(
-    {
-        [actions.addTask](state, { payload: { task } }) {
-            const { byId, allIds } = state;
-            return {
-                byId: { ...byId, [task.id]: task },
-                allIds: [task.id, ...allIds],
-            };
-        },
-        [actions.removeTask](state, { payload: { id } }) {
-            const { byId, allIds } = state;
-            return {
-                byId: _.omit(byId, id),
-                allIds: _.without(allIds, id),
-            };
-        },
-        [actions.toggleTaskState](state, { payload: { id } }) {
-            const task = state.byId[id];
-            const newState = task.state === 'active' ? 'finished' : 'active';
-            const updatedTask = { ...task, state: newState };
-            return {
-                ...state,
-                byId: { ...state.byId, [task.id]: updatedTask },
-            };
-        },
+  {
+    [actions.addTask](state, { payload: { task } }) {
+      const { byId, allIds } = state;
+      return {
+        byId: { ...byId, [task.id]: task },
+        allIds: [task.id, ...allIds],
+      };
     },
-    { byId: {}, allIds: [] }
+    [actions.removeTask](state, { payload: { id } }) {
+      const { byId, allIds } = state;
+      return {
+        byId: _.omit(byId, id),
+        allIds: _.without(allIds, id),
+      };
+    },
+    [actions.toggleTaskState](state, { payload: { id } }) {
+      const task = state.byId[id];
+      const newState = task.state === 'active' ? 'finished' : 'active';
+      const updatedTask = { ...task, state: newState };
+      return {
+        ...state,
+        byId: { ...state.byId, [task.id]: updatedTask },
+      };
+    },
+  },
+  { byId: {}, allIds: [] }
 );
 
 // export default combineReducers({

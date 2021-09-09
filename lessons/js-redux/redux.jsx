@@ -17,22 +17,22 @@ import { createStore } from 'redux';
 
 // BEGIN (write your solution here)
 const reducer = (state = {}, action) => {
-    switch (action.type) {
-        case 'TASK_ADD': {
-            const newTask = action.payload.task;
-            return { ...state, [newTask.id]: newTask };
-        }
-        case 'TASK_REMOVE': {
-            const taskId = action.payload.id;
-            return omit(state, taskId);
-        }
-        default:
-            return state;
+  switch (action.type) {
+    case 'TASK_ADD': {
+      const newTask = action.payload.task;
+      return { ...state, [newTask.id]: newTask };
     }
+    case 'TASK_REMOVE': {
+      const taskId = action.payload.id;
+      return omit(state, taskId);
+    }
+    default:
+      return state;
+  }
 };
 export default (init) => {
-    const store = createStore(reducer, init);
-    return store;
+  const store = createStore(reducer, init);
+  return store;
 };
 // END
 

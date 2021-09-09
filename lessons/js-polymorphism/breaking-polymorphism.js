@@ -25,8 +25,8 @@
 
 // helpers.js
 const mapping = {
-    guest: (guest) => `Nice to meet you ${guest.getName()}!`,
-    user: (user) => `Hello ${user.getName()}!`,
+  guest: (guest) => `Nice to meet you ${guest.getName()}!`,
+  user: (user) => `Hello ${user.getName()}!`,
 };
 
 const getGreeting = (someUser) => mapping[someUser.getTypeName()](someUser);
@@ -34,38 +34,38 @@ export default getGreeting;
 
 // Guest.js
 export default class Guest {
-    constructor() {
-        this.name = 'Guest';
-        // BEGIN (write your solution here)
-        this.typeName = 'guest';
-        // END
-    }
-
-    getName() {
-        return this.name;
-    }
-
+  constructor() {
+    this.name = 'Guest';
     // BEGIN (write your solution here)
-    getTypeName() {
-        return this.typeName;
-    }
+    this.typeName = 'guest';
+    // END
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  // BEGIN (write your solution here)
+  getTypeName() {
+    return this.typeName;
+  }
 }
 
 // User.js
 export default class User {
-    constructor(name) {
-        this.name = name;
-        // BEGIN (write your solution here)
-        this.typeName = 'user';
-        // END
-    }
-
-    getName() {
-        return this.name;
-    }
-
+  constructor(name) {
+    this.name = name;
     // BEGIN (write your solution here)
-    getTypeName() {
-        return this.typeName;
-    }
+    this.typeName = 'user';
+    // END
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  // BEGIN (write your solution here)
+  getTypeName() {
+    return this.typeName;
+  }
 }

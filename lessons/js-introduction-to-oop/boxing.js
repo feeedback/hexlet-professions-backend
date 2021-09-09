@@ -22,38 +22,38 @@
 // Функции это объекты
 
 const magic1 = (magicNum = 0) => {
-    let sum = magicNum;
-    const inner = (innerNum = 0) => {
-        sum += innerNum;
-        return inner;
-    };
-    inner.valueOf = function() {
-        console.log(`sum ${sum}`);
-        return sum;
-    };
+  let sum = magicNum;
+  const inner = (innerNum = 0) => {
+    sum += innerNum;
     return inner;
+  };
+  inner.valueOf = function () {
+    console.log(`sum ${sum}`);
+    return sum;
+  };
+  return inner;
 }; // работает для одного
 
 function magic2(...magicNum) {
-    let sum = magicNum.reduce((a, b) => a + b, 0);
-    const inner = (...innerNum) => {
-        sum += innerNum.reduce((a, b) => a + b, 0);
-        return inner;
-    };
-    inner.valueOf = function() {
-        console.log(`sum ${sum}`);
-        return sum;
-    };
+  let sum = magicNum.reduce((a, b) => a + b, 0);
+  const inner = (...innerNum) => {
+    sum += innerNum.reduce((a, b) => a + b, 0);
     return inner;
+  };
+  inner.valueOf = function () {
+    console.log(`sum ${sum}`);
+    return sum;
+  };
+  return inner;
 }
 // общее состояние, для разных путей функции
 // не сразу понял, что рекурсия должна быть через вызов родительской
 
 const magic = (...a) => {
-    const sum = a.reduce((acc, n) => acc + n, 0);
+  const sum = a.reduce((acc, n) => acc + n, 0);
 
-    const inner = (...b) => magic(sum, ...b);
-    inner.valueOf = () => sum;
-    return inner;
+  const inner = (...b) => magic(sum, ...b);
+  inner.valueOf = () => sum;
+  return inner;
 };
 // export default magic;

@@ -40,53 +40,46 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 // };
 
 const actionCreators = {
-    addTask: actions.addTask,
+  addTask: actions.addTask,
 };
 
 class NewTaskForm extends React.Component {
-    // BEGIN (write your solution here)
-    handleSubmit = async (values) => {
-        const { addTask, reset } = this.props;
-        try {
-            await addTask({ task: values });
-        } catch (e) {
-            throw new SubmissionError({ _error: e.message });
-        }
-        reset();
-    };
-    // END
-
-    render() {
-        const { handleSubmit, submitting, pristine, error } = this.props;
-        // BEGIN (write your solution here)
-        return (
-          <form onSubmit={handleSubmit(this.handleSubmit)} className="form-inline">
-            <div className="form-group mx-3">
-              <Field
-                component="input"
-                name="text"
-                required
-                type="text"
-                value=""
-                disabled={submitting}
-              />
-            </div>
-            <input
-              type="submit"
-              disabled={submitting || pristine}
-              className="btn btn-primary btn-sm"
-              value="Add"
-            />
-            {error && <div className="ml-3">{error}</div>}
-          </form>
-        );
-        // END
+  // BEGIN (write your solution here)
+  handleSubmit = async (values) => {
+    const { addTask, reset } = this.props;
+    try {
+      await addTask({ task: values });
+    } catch (e) {
+      throw new SubmissionError({ _error: e.message });
     }
+    reset();
+  };
+  // END
+
+  render() {
+    const { handleSubmit, submitting, pristine, error } = this.props;
+    // BEGIN (write your solution here)
+    return (
+      <form onSubmit={handleSubmit(this.handleSubmit)} className="form-inline">
+        <div className="form-group mx-3">
+          <Field component="input" name="text" required type="text" value="" disabled={submitting} />
+        </div>
+        <input
+          type="submit"
+          disabled={submitting || pristine}
+          className="btn btn-primary btn-sm"
+          value="Add"
+        />
+        {error && <div className="ml-3">{error}</div>}
+      </form>
+    );
+    // END
+  }
 }
 
 const ConnectedNewTaskForm = connect(null, actionCreators)(NewTaskForm);
 export default reduxForm({
-    form: 'newTask',
+  form: 'newTask',
 })(ConnectedNewTaskForm);
 
 // src/index.jsx
@@ -118,13 +111,13 @@ const ext = window.__REDUX_DEVTOOLS_EXTENSION__;
 const devtoolMiddleware = ext && ext();
 
 const store = createStore(
-    reducers,
-    compose(
-        // BEGIN (write your solution here)
-        applyMiddleware(thunk),
-        // END
-        devtoolMiddleware
-    )
+  reducers,
+  compose(
+    // BEGIN (write your solution here)
+    applyMiddleware(thunk),
+    // END
+    devtoolMiddleware
+  )
 );
 
 store.dispatch(fetchTasks());
@@ -133,7 +126,7 @@ render(
   <Provider store={store}>
     <App />
   </Provider>,
-    document.getElementById('container')
+  document.getElementById('container')
 );
 
 export const fetchTasksRequest = createAction('TASKS_FETCH_REQUEST');
@@ -148,91 +141,91 @@ export const removeTaskFailure = createAction('TASK_REMOVE_FAILURE');
 export const addTaskSuccess = createAction('TASK_ADD_SUCCESS');
 
 export const addTask = ({ task }) => async (dispatch) => {
-    const response = await axios.post(routes.tasksUrl(), { task });
-    dispatch(addTaskSuccess({ task: response.data }));
+  const response = await axios.post(routes.tasksUrl(), { task });
+  dispatch(addTaskSuccess({ task: response.data }));
 };
 
 export const removeTask = ({ id }) => async (dispatch) => {
-    dispatch(removeTaskRequest());
-    try {
-        const url = routes.taskUrl(id);
-        const response = await axios.delete(url);
-        dispatch(removeTaskSuccess({ id }));
-    } catch (e) {
-        dispatch(removeTaskFailure());
-        throw e;
-    }
+  dispatch(removeTaskRequest());
+  try {
+    const url = routes.taskUrl(id);
+    const response = await axios.delete(url);
+    dispatch(removeTaskSuccess({ id }));
+  } catch (e) {
+    dispatch(removeTaskFailure());
+    throw e;
+  }
 };
 // END
 
 export const fetchTasks = () => async (dispatch) => {
-    dispatch(fetchTasksRequest());
-    try {
-        const url = routes.tasksUrl();
-        const response = await axios.get(url);
-        dispatch(fetchTasksSuccess({ tasks: response.data }));
-    } catch (e) {
-        dispatch(fetchTasksFailure());
-        throw e;
-    }
+  dispatch(fetchTasksRequest());
+  try {
+    const url = routes.tasksUrl();
+    const response = await axios.get(url);
+    dispatch(fetchTasksSuccess({ tasks: response.data }));
+  } catch (e) {
+    dispatch(fetchTasksFailure());
+    throw e;
+  }
 };
 
 // BEGIN (write your solution here)
 const taskRemovingState = handleActions(
-    {
-        [actions.removeTaskRequest]() {
-            return 'requested';
-        },
-        [actions.removeTaskFailure]() {
-            return 'failed';
-        },
-        [actions.removeTaskSuccess]() {
-            return 'finished';
-        },
+  {
+    [actions.removeTaskRequest]() {
+      return 'requested';
     },
-    'none'
+    [actions.removeTaskFailure]() {
+      return 'failed';
+    },
+    [actions.removeTaskSuccess]() {
+      return 'finished';
+    },
+  },
+  'none'
 );
 // END
 
 const tasksFetchingState = handleActions(
-    {
-        [actions.fetchTasksRequest]() {
-            return 'requested';
-        },
-        [actions.fetchTasksFailure]() {
-            return 'failed';
-        },
-        [actions.fetchTasksSuccess]() {
-            return 'finished';
-        },
+  {
+    [actions.fetchTasksRequest]() {
+      return 'requested';
     },
-    'none'
+    [actions.fetchTasksFailure]() {
+      return 'failed';
+    },
+    [actions.fetchTasksSuccess]() {
+      return 'finished';
+    },
+  },
+  'none'
 );
 
 const tasks = handleActions(
-    {
-        [actions.fetchTasksSuccess](state, { payload }) {
-            return {
-                byId: _.keyBy(payload.tasks, 'id'),
-                allIds: payload.tasks.map((t) => t.id),
-            };
-        },
-        [actions.addTaskSuccess](state, { payload: { task } }) {
-            const { byId, allIds } = state;
-            return {
-                byId: { ...byId, [task.id]: task },
-                allIds: [task.id, ...allIds],
-            };
-        },
-        [actions.removeTaskSuccess](state, { payload: { id } }) {
-            const { byId, allIds } = state;
-            return {
-                byId: _.omit(byId, id),
-                allIds: _.without(allIds, id),
-            };
-        },
+  {
+    [actions.fetchTasksSuccess](state, { payload }) {
+      return {
+        byId: _.keyBy(payload.tasks, 'id'),
+        allIds: payload.tasks.map((t) => t.id),
+      };
     },
-    { byId: {}, allIds: [] }
+    [actions.addTaskSuccess](state, { payload: { task } }) {
+      const { byId, allIds } = state;
+      return {
+        byId: { ...byId, [task.id]: task },
+        allIds: [task.id, ...allIds],
+      };
+    },
+    [actions.removeTaskSuccess](state, { payload: { id } }) {
+      const { byId, allIds } = state;
+      return {
+        byId: _.omit(byId, id),
+        allIds: _.without(allIds, id),
+      };
+    },
+  },
+  { byId: {}, allIds: [] }
 );
 
 // export default combineReducers({

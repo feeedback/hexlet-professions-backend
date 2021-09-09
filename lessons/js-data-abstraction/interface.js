@@ -27,12 +27,12 @@
 // Получить y можно по формуле radius * sin(angle)
 
 const makeDecartPoint = (x, y) => {
-    const point = {
-        angle: Math.atan2(y, x),
-        radius: Math.sqrt(x ** 2 + y ** 2),
-    };
+  const point = {
+    angle: Math.atan2(y, x),
+    radius: Math.sqrt(x ** 2 + y ** 2),
+  };
 
-    return point;
+  return point;
 };
 
 // BEGIN (write your solution here)
@@ -40,9 +40,9 @@ const getAngle = (point) => point.angle;
 const getRadius = (point) => point.radius;
 
 const polarToDecart = (radius, angle, axis) => {
-    const fn = { x: 'cos', y: 'sin' };
+  const fn = { x: 'cos', y: 'sin' };
 
-    return Math.floor(radius * Math[fn[axis]](angle));
+  return Math.floor(radius * Math[fn[axis]](angle));
 };
 
 const getX = (point) => polarToDecart(getRadius(point), getAngle(point), 'x');

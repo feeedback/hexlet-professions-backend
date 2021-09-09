@@ -5,7 +5,7 @@
 // В этой практике не будет визуальной составляющей, она заключается в том что
 // будет правильно написана функция возвращающая jsx.
 
-// src / Card.jsx 
+// src / Card.jsx
 // Реализуйте и экспортируйте функцию по умолчанию, которая принимает на вход
 // объект со свойствами title и text, и возвращает jsx с подставленными
 // значениями.Пример:
@@ -29,17 +29,17 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 const getCard = ({ title, text }) => {
-    if (!title && !text) {
-        return null;
-     }
-    return (
-      <div className="card">
-        <div className="card-body">
-          {title && <h4 className="card-title">{title}</h4>}
-          {text && <p className="card-text">{text}</p>}
-        </div>
+  if (!title && !text) {
+    return null;
+  }
+  return (
+    <div className="card">
+      <div className="card-body">
+        {title && <h4 className="card-title">{title}</h4>}
+        {text && <p className="card-text">{text}</p>}
       </div>
-    )
+    </div>
+  );
 };
 export default getCard;
 // END

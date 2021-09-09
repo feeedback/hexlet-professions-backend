@@ -21,6 +21,6 @@ import fs from 'fs';
 
 // BEGIN (write your solution here)
 export default (path, data, callback) => {
-    fs.writeFile(path, data, 'utf8', callback);
+  fs.writeFile(path, data, 'utf8', callback);
 };
 // END

@@ -17,19 +17,18 @@
 // Используйте функцию parseInt для перевода строки в необходимую систему счисления
 // Изучите возможности метода toString для числа, рассмотрите примеры.
 
-const ipToIntBitwise = (ip) =>
-    ip.split('.').reduce((sum, n) => (sum << 8) + Number(n), 0) >>> 0;
+const ipToIntBitwise = (ip) => ip.split('.').reduce((sum, n) => (sum << 8) + Number(n), 0) >>> 0;
 const intToIpBitwise1 = (int) =>
-    Array.from({ length: 4 }, (_, i) => (int >> (8 * i)) & 255)
-        .reverse()
-        .join('.');
+  Array.from({ length: 4 }, (_, i) => (int >> (8 * i)) & 255)
+    .reverse()
+    .join('.');
 
 const intToIpBitwise2 = (int) => {
-    const ip = [];
-    for (let i = 3; i >= 0; i -= 1) {
-        ip.push((int >> (8 * i)) & 255);
-    }
-    return ip.join('.');
+  const ip = [];
+  for (let i = 3; i >= 0; i -= 1) {
+    ip.push((int >> (8 * i)) & 255);
+  }
+  return ip.join('.');
 };
 
 const ipToInt256 = (ip) => ip.split('.').reduce((sum, n) => sum * 256 + Number(n), 0);
@@ -44,45 +43,41 @@ const chunkStr = (str, n) => str.match(new RegExp(`.{1,${n}}`, 'g'));
 // Поэтому можно перевести в 2 или в 16 систему счисления чтобы получить байт.
 
 const ipToInt = (ip) => {
-    const ipInHex = ip
-        .split('.')
-        .map((octet) => decToHex(octet).padStart(2, 0))
-        .join('');
-    console.log(ipInHex);
+  const ipInHex = ip
+    .split('.')
+    .map((octet) => decToHex(octet).padStart(2, 0))
+    .join('');
+  console.log(ipInHex);
 
-    return hexToDec(ipInHex);
+  return hexToDec(ipInHex);
 };
 
 const intToIp = (int) => {
-    const ipInHex = decToHex(int).padStart(8, 0);
+  const ipInHex = decToHex(int).padStart(8, 0);
 
-    return chunkStr(ipInHex, 2)
-        .map((octet) => hexToDec(octet))
-        .join('.');
+  return chunkStr(ipInHex, 2)
+    .map((octet) => hexToDec(octet))
+    .join('.');
 };
 
 const getByteLength = (notation) => 8 / Math.log2(notation);
 // длина байта должна быть целым числом, подходит 2-чная, 4-чная, 16-чная
 
 const ipToIntNotation = (ip, notation = 2) => {
-    const byteLength = getByteLength(notation);
-    const ipInHex = ip
-        .split('.')
-        .map((octet) =>
-            Number(octet)
-                .toString(notation)
-                .padStart(byteLength, '0')
-        )
-        .join('');
+  const byteLength = getByteLength(notation);
+  const ipInHex = ip
+    .split('.')
+    .map((octet) => Number(octet).toString(notation).padStart(byteLength, '0'))
+    .join('');
 
-    return parseInt(ipInHex, notation);
+  return parseInt(ipInHex, notation);
 };
 
 const intToIpNotation = (int, notation = 2) => {
-    const byteLength = getByteLength(notation);
-    const ipInHex = int.toString(notation).padStart(4 * byteLength, '0');
+  const byteLength = getByteLength(notation);
+  const ipInHex = int.toString(notation).padStart(4 * byteLength, '0');
 
-    return chunkStr(ipInHex, byteLength)
-        .map((octet) => parseInt(octet, notation))
-        .join('.');
+  return chunkStr(ipInHex, byteLength)
+    .map((octet) => parseInt(octet, notation))
+    .join('.');
 };

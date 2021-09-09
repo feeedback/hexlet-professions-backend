@@ -28,15 +28,15 @@ const Title = (props) => <h4 className="card-title">{props.children}</h4>;
 const Text = (props) => <p className="card-text">{props.children}</p>;
 
 export default class Card extends React.Component {
-    static Body = Body;
+  static Body = Body;
 
-    static Title = Title;
+  static Title = Title;
 
-    static Text = Text;
+  static Text = Text;
 
-    render() {
-        const { children } = this.props;
-        return <div className="card">{children}</div>;
-    }
+  render() {
+    const { children } = this.props;
+    return <div className="card">{children}</div>;
+  }
 }
 // END

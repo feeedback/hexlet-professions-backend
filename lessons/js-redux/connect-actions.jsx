@@ -22,37 +22,37 @@
 import React from 'react';
 
 export const updateNewTaskText = (text) => ({
-    type: 'TEXT_UPDATE',
-    payload: {
-        text,
-    },
+  type: 'TEXT_UPDATE',
+  payload: {
+    text,
+  },
 });
 
 export const addTask = (task) => ({
-    type: 'TASK_ADD',
-    payload: {
-        task,
-    },
+  type: 'TASK_ADD',
+  payload: {
+    task,
+  },
 });
 
 export const removeTask = (id) => ({
-    type: 'TASK_REMOVE',
-    payload: {
-        id,
-    },
+  type: 'TASK_REMOVE',
+  payload: {
+    id,
+  },
 });
 
 // BEGIN (write your solution here)
 export const removeAllTasks = () => ({
-    type: 'TASK_REMOVE_ALL',
-    payload: {},
+  type: 'TASK_REMOVE_ALL',
+  payload: {},
 });
 
 export const replaceTasksBy = (tasks) => ({
-    type: 'TASK_REPLACE',
-    payload: {
-        tasks,
-    },
+  type: 'TASK_REPLACE',
+  payload: {
+    tasks,
+  },
 });
 // END
 
@@ -63,37 +63,37 @@ export const replaceTasksBy = (tasks) => ({
 // import { combineReducers } from 'redux';
 
 const text = (state = '', action) => {
-    switch (action.type) {
-        case 'TEXT_UPDATE': {
-            return action.payload.text;
-        }
-        case 'TASK_ADD': {
-            return '';
-        }
-        default:
-            return state;
+  switch (action.type) {
+    case 'TEXT_UPDATE': {
+      return action.payload.text;
     }
+    case 'TASK_ADD': {
+      return '';
+    }
+    default:
+      return state;
+  }
 };
 
 const tasks = (state = [], action) => {
-    switch (action.type) {
-        case 'TASK_ADD': {
-            return [action.payload.task, ...state];
-        }
-        case 'TASK_REMOVE': {
-            return state.filter((t) => t.id !== action.payload.id);
-        }
-        // BEGIN (write your solution here)
-        case 'TASK_REMOVE_ALL': {
-            return [];
-        }
-        case 'TASK_REPLACE': {
-            return action.payload.tasks;
-        }
-        // END
-        default:
-            return state;
+  switch (action.type) {
+    case 'TASK_ADD': {
+      return [action.payload.task, ...state];
     }
+    case 'TASK_REMOVE': {
+      return state.filter((t) => t.id !== action.payload.id);
+    }
+    // BEGIN (write your solution here)
+    case 'TASK_REMOVE_ALL': {
+      return [];
+    }
+    case 'TASK_REPLACE': {
+      return action.payload.tasks;
+    }
+    // END
+    default:
+      return state;
+  }
 };
 // import _ from 'lodash';
 // import { connect } from 'react-redux';
@@ -102,45 +102,45 @@ const tasks = (state = [], action) => {
 
 // BEGIN (write your solution here)
 const actionCreators = {
-    removeAllTasks: actions.removeAllTasks,
-    replaceTasksBy: actions.replaceTasksBy,
+  removeAllTasks: actions.removeAllTasks,
+  replaceTasksBy: actions.replaceTasksBy,
 };
 
 class Panel extends React.Component {
-    handleGenerateTasks = () => {
-        const { replaceTasksBy } = this.props;
-        const getNewTask = () => ({
-            id: _.uniqueId(),
-            text: faker.lorem.sentence(),
-        });
-        const newTasks = _.times(5, getNewTask);
-        replaceTasksBy(newTasks);
-    };
+  handleGenerateTasks = () => {
+    const { replaceTasksBy } = this.props;
+    const getNewTask = () => ({
+      id: _.uniqueId(),
+      text: faker.lorem.sentence(),
+    });
+    const newTasks = _.times(5, getNewTask);
+    replaceTasksBy(newTasks);
+  };
 
-    render() {
-        const { removeAllTasks } = this.props;
+  render() {
+    const { removeAllTasks } = this.props;
 
-        return (
-          <div className="py-3">
-            <button
-              type="button"
-              data-test="clean"
-              className="btn btn-warning btn-sm mr-3"
-              onClick={removeAllTasks}
-            >
-              Clean
-            </button>
-            <button
-              type="button"
-              data-test="generate"
-              className="btn btn-primary btn-sm"
-              onClick={this.handleGenerateTasks}
-            >
-              Generate
-            </button>
-          </div>
-        );
-    }
+    return (
+      <div className="py-3">
+        <button
+          type="button"
+          data-test="clean"
+          className="btn btn-warning btn-sm mr-3"
+          onClick={removeAllTasks}
+        >
+          Clean
+        </button>
+        <button
+          type="button"
+          data-test="generate"
+          className="btn btn-primary btn-sm"
+          onClick={this.handleGenerateTasks}
+        >
+          Generate
+        </button>
+      </div>
+    );
+  }
 }
 
 export default connect(null, actionCreators)(Panel);

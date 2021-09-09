@@ -16,15 +16,15 @@
 
 // Пример такого разделения и хороших абстракций — в решении учителя.
 const isPrime = (num) => {
-    for (let i = 2; i <= Math.sqrt(num); i++) {
-        if (num % i === 0) {
-            return false;
-        }
+  for (let i = 2; i <= Math.sqrt(num); i++) {
+    if (num % i === 0) {
+      return false;
     }
-    return num > 1;
+  }
+  return num > 1;
 };
 
 export default (num) => {
-    const answer = isPrime(num) ? 'yes' : 'no';
-    console.log(answer);
+  const answer = isPrime(num) ? 'yes' : 'no';
+  console.log(answer);
 };

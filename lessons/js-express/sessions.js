@@ -90,97 +90,97 @@
 // import Guest from './entities/Guest.js';
 
 export default () => {
-    const app = new Express();
-    app.use(morgan('combined'));
-    app.use(methodOverride('_method'));
-    app.set('view engine', 'pug');
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use('/assets', Express.static(process.env.NODE_PATH.split(':')[0]));
-    app.use(
-        session({
-            secret: 'secret key',
-            resave: false,
-            saveUninitialized: false,
-        })
-    );
+  const app = new Express();
+  app.use(morgan('combined'));
+  app.use(methodOverride('_method'));
+  app.set('view engine', 'pug');
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use('/assets', Express.static(process.env.NODE_PATH.split(':')[0]));
+  app.use(
+    session({
+      secret: 'secret key',
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
 
-    const users = [new User('admin', encrypt('qwerty'))];
+  const users = [new User('admin', encrypt('qwerty'))];
 
-    app.use((req, res, next) => {
-        if (req.session && req.session.nickname) {
-            const { nickname } = req.session;
-            res.locals.currentUser = users.find((user) => user.nickname === nickname);
-        } else {
-            res.locals.currentUser = new Guest();
-        }
-        next();
+  app.use((req, res, next) => {
+    if (req.session && req.session.nickname) {
+      const { nickname } = req.session;
+      res.locals.currentUser = users.find((user) => user.nickname === nickname);
+    } else {
+      res.locals.currentUser = new Guest();
+    }
+    next();
+  });
+
+  app.get('/', (_req, res) => {
+    res.render('index');
+  });
+
+  // BEGIN (write your solution here)
+  app.get('/users/new', (_req, res) => {
+    res.render('users/new', { form: {}, errors: {} });
+  });
+
+  app.get('/session/new', (_req, res) => {
+    res.render('session/new', { form: {} });
+  });
+
+  app.post('/users', (req, res) => {
+    // регистрация
+    const { nickname, password } = req.body;
+
+    const errors = {};
+    if (!nickname) {
+      errors.nickname = "Nickname can't be blank";
+    } else {
+      const isUniq = !users.some((user) => user.nickname === nickname);
+      if (!isUniq) {
+        errors.nickname = 'Already exist';
+      }
+    }
+
+    if (!password) {
+      errors.password = "Password can't be blank";
+    }
+
+    if (Object.keys(errors).length !== 0) {
+      res.status(422);
+      res.render('users/new', { form: req.body, errors });
+      return;
+    }
+
+    const user = new User(nickname, encrypt(password));
+    users.push(user);
+    res.redirect('/');
+  });
+
+  app.post('/session', (req, res) => {
+    // авторизация / аутентификация
+    const { nickname, password } = req.body;
+
+    const user = users.find((u) => u.nickname === nickname);
+    if (!user || user.passHash !== encrypt(password)) {
+      const error = 'Invalid nickname or password';
+
+      res.status(422);
+      res.render('session/new', { form: req.body, error });
+      return;
+    }
+
+    req.session.nickname = nickname;
+    res.redirect('/');
+  });
+
+  app.delete('/session', (req, res) => {
+    req.session.destroy(() => {
+      res.redirect('/');
     });
+  });
+  // END
 
-    app.get('/', (_req, res) => {
-        res.render('index');
-    });
-
-    // BEGIN (write your solution here)
-    app.get('/users/new', (_req, res) => {
-        res.render('users/new', { form: {}, errors: {} });
-    });
-
-    app.get('/session/new', (_req, res) => {
-        res.render('session/new', { form: {} });
-    });
-
-    app.post('/users', (req, res) => {
-        // регистрация
-        const { nickname, password } = req.body;
-
-        const errors = {};
-        if (!nickname) {
-            errors.nickname = "Nickname can't be blank";
-        } else {
-            const isUniq = !users.some((user) => user.nickname === nickname);
-            if (!isUniq) {
-                errors.nickname = 'Already exist';
-            }
-        }
-
-        if (!password) {
-            errors.password = "Password can't be blank";
-        }
-
-        if (Object.keys(errors).length !== 0) {
-            res.status(422);
-            res.render('users/new', { form: req.body, errors });
-            return;
-        }
-
-        const user = new User(nickname, encrypt(password));
-        users.push(user);
-        res.redirect('/');
-    });
-
-    app.post('/session', (req, res) => {
-        // авторизация / аутентификация
-        const { nickname, password } = req.body;
-
-        const user = users.find((u) => u.nickname === nickname);
-        if (!user || user.passHash !== encrypt(password)) {
-            const error = 'Invalid nickname or password';
-
-            res.status(422);
-            res.render('session/new', { form: req.body, error });
-            return;
-        }
-
-        req.session.nickname = nickname;
-        res.redirect('/');
-    });
-
-    app.delete('/session', (req, res) => {
-        req.session.destroy(() => {
-            res.redirect('/');
-        });
-    });
-    // END
-
-    return app;
+  return app;
 };

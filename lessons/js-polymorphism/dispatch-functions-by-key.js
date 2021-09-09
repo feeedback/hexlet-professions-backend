@@ -43,18 +43,18 @@
 // BEGIN (write your solution here)
 
 const buildAttrs = (tag) => {
-    const specialKeys = new Set(['name', 'tagType', 'body']);
+  const specialKeys = new Set(['name', 'tagType', 'body']);
 
-    const attributes = Object.keys(tag)
-        .filter((key) => !specialKeys.has(key))
-        .map((attr) => ` ${attr}="${tag[attr]}"`)
-        .join('');
-    return attributes;
+  const attributes = Object.keys(tag)
+    .filter((key) => !specialKeys.has(key))
+    .map((attr) => ` ${attr}="${tag[attr]}"`)
+    .join('');
+  return attributes;
 };
 
 const mapTagType = {
-    single: (tag) => `<${tag.name}${buildAttrs(tag)}>`,
-    pair: (tag) => `<${tag.name}${buildAttrs(tag)}>${tag.body}</${tag.name}>`,
+  single: (tag) => `<${tag.name}${buildAttrs(tag)}>`,
+  pair: (tag) => `<${tag.name}${buildAttrs(tag)}>${tag.body}</${tag.name}>`,
 };
 
 const stringify = (tag) => mapTagType[tag.tagType](tag);

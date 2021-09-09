@@ -99,87 +99,85 @@
 
 // BEGIN (write your solution here)
 const mapElementView = {
-    list: (name, state) => {
-        const listState = {
-            current: `<b>${name}</b>`,
-            inactive: `<a href="#${name.toLowerCase()}">${name}</a>`,
-        };
-        return name === state.currentList ? listState.current : listState.inactive;
-    },
-    task: (name) => `${name}`,
+  list: (name, state) => {
+    const listState = {
+      current: `<b>${name}</b>`,
+      inactive: `<a href="#${name.toLowerCase()}">${name}</a>`,
+    };
+    return name === state.currentList ? listState.current : listState.inactive;
+  },
+  task: (name) => `${name}`,
 };
 
 const renderNew = (elements, type, newName, state) => {
-    const wrapper = elements[`${type}sContainer`];
-    let ul = wrapper.querySelector('ul');
-    if (!ul) {
-        wrapper.append(document.createElement('ul'));
-        ul = wrapper.querySelector('ul');
-    }
+  const wrapper = elements[`${type}sContainer`];
+  let ul = wrapper.querySelector('ul');
+  if (!ul) {
+    wrapper.append(document.createElement('ul'));
+    ul = wrapper.querySelector('ul');
+  }
 
-    const li = document.createElement('li');
-    li.innerHTML = mapElementView[type](newName, state);
-    ul.append(li);
+  const li = document.createElement('li');
+  li.innerHTML = mapElementView[type](newName, state);
+  ul.append(li);
 };
 
 const renderAll = (elements, state) => {
-    elements.listsContainer.innerHTML = '';
-    elements.tasksContainer.innerHTML = '';
+  elements.listsContainer.innerHTML = '';
+  elements.tasksContainer.innerHTML = '';
 
-    state.lists.forEach((list) => renderNew(elements, 'list', list.name, state));
-    const currentListTasks = state.tasks.filter(
-        (task) => task.listName === state.currentList
-    );
-    currentListTasks.forEach((task) => renderNew(elements, 'task', task.name, state));
+  state.lists.forEach((list) => renderNew(elements, 'list', list.name, state));
+  const currentListTasks = state.tasks.filter((task) => task.listName === state.currentList);
+  currentListTasks.forEach((task) => renderNew(elements, 'task', task.name, state));
 };
 
 export default () => {
-    const elements = {
-        listsContainer: document.querySelector('[data-container="lists"]'),
-        tasksContainer: document.querySelector('[data-container="tasks"]'),
-        listAddForm: document.querySelector('[data-container="new-list-form"]'),
-        taskAddForm: document.querySelector('[data-container="new-task-form"]'),
-    };
+  const elements = {
+    listsContainer: document.querySelector('[data-container="lists"]'),
+    tasksContainer: document.querySelector('[data-container="tasks"]'),
+    listAddForm: document.querySelector('[data-container="new-list-form"]'),
+    taskAddForm: document.querySelector('[data-container="new-task-form"]'),
+  };
 
-    const state = {
-        lists: [{ name: 'General' }],
-        currentList: 'General',
-        tasks: [],
-    };
+  const state = {
+    lists: [{ name: 'General' }],
+    currentList: 'General',
+    tasks: [],
+  };
 
-    const fabric = {
-        createList: (name) => ({ name }),
-        createTask: (name, currentList) => ({ name, listName: currentList }),
-    };
+  const fabric = {
+    createList: (name) => ({ name }),
+    createTask: (name, currentList) => ({ name, listName: currentList }),
+  };
 
-    elements.listAddForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const newListName = new FormData(event.target).get('name');
-        if (newListName === '') {
-            return;
-        }
-        state.lists.push(fabric.createList(newListName));
-        renderNew(elements, 'list', newListName, state);
-    });
-    elements.taskAddForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const newTaskName = new FormData(event.target).get('name');
-        if (newTaskName === '') {
-            return;
-        }
-        state.tasks.push(fabric.createTask(newTaskName, state.currentList));
-        renderNew(elements, 'task', newTaskName, state);
-    });
+  elements.listAddForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const newListName = new FormData(event.target).get('name');
+    if (newListName === '') {
+      return;
+    }
+    state.lists.push(fabric.createList(newListName));
+    renderNew(elements, 'list', newListName, state);
+  });
+  elements.taskAddForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const newTaskName = new FormData(event.target).get('name');
+    if (newTaskName === '') {
+      return;
+    }
+    state.tasks.push(fabric.createTask(newTaskName, state.currentList));
+    renderNew(elements, 'task', newTaskName, state);
+  });
 
-    elements.listsContainer.addEventListener('click', (event) => {
-        const element = event.target;
-        if (element.nodeName !== 'A') {
-            return;
-        }
-        event.preventDefault();
-        state.currentList = element.textContent;
-        renderAll(elements, state);
-    });
+  elements.listsContainer.addEventListener('click', (event) => {
+    const element = event.target;
+    if (element.nodeName !== 'A') {
+      return;
+    }
+    event.preventDefault();
+    state.currentList = element.textContent;
     renderAll(elements, state);
+  });
+  renderAll(elements, state);
 };
 // END

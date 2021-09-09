@@ -46,20 +46,19 @@ const getHost = (data) => data.host;
 const setPath = (data, path) => (data.pathname = path);
 const getPath = (data) => data.pathname;
 const setQueryParam = (data, key, value) => data.searchParams.set(key, value);
-const getQueryParam = (data, paramName, def = null) =>
-    data.searchParams.get(paramName) || def;
+const getQueryParam = (data, paramName, def = null) => data.searchParams.get(paramName) || def;
 const toString = (data) => data.toString();
 
 export {
-    make,
-    setProtocol,
-    getProtocol,
-    setHost,
-    getHost,
-    setPath,
-    getPath,
-    setQueryParam,
-    getQueryParam,
-    toString,
+  make,
+  setProtocol,
+  getProtocol,
+  setHost,
+  getHost,
+  setPath,
+  getPath,
+  setQueryParam,
+  getQueryParam,
+  toString,
 };
 // END

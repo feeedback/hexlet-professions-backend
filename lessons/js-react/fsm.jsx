@@ -35,35 +35,37 @@ import cn from 'classnames';
 
 // BEGIN (write your solution here)
 export default class Collapse extends React.Component {
-    static defaultProps = {
-        opened: true,
-    };
+  static defaultProps = {
+    opened: true,
+  };
 
-    constructor(props) {
-        super(props);
-        const { opened } = props;
-        this.state = { isShown: opened };
-    }
+  constructor(props) {
+    super(props);
+    const { opened } = props;
+    this.state = { isShown: opened };
+  }
 
-    toggleText = (e) => {
-        e.preventDefault();
-        this.setState(({  isShown  }) => ({ isShown: !isShown }));
-    };
+  toggleText = (e) => {
+    e.preventDefault();
+    this.setState(({ isShown }) => ({ isShown: !isShown }));
+  };
 
-    render() {
-        const {  isShown } = this.state;
-        const {  text } = this.props;
-        const classCollapseItem = cn({ collapse: true, show: isShown })
-        return (
-          <div>
-            <p>
-              <a className="btn btn-primary" href="#" onClick={this.toggleText}>Link with href</a>
-            </p>
-            <div className={classCollapseItem}>
-              <div className="card card-body">{text}</div>
-            </div>
-          </div>
-        );
-    }
+  render() {
+    const { isShown } = this.state;
+    const { text } = this.props;
+    const classCollapseItem = cn({ collapse: true, show: isShown });
+    return (
+      <div>
+        <p>
+          <a className="btn btn-primary" href="#" onClick={this.toggleText}>
+            Link with href
+          </a>
+        </p>
+        <div className={classCollapseItem}>
+          <div className="card card-body">{text}</div>
+        </div>
+      </div>
+    );
+  }
 }
 // END

@@ -23,8 +23,8 @@
 
 // BEGIN (write your solution here)
 export default (req, res, next) => {
-    const ua = UAParser(req.headers['user-agent']);
-    req.useragent = ua;
-    next();
+  const ua = UAParser(req.headers['user-agent']);
+  req.useragent = ua;
+  next();
 };
 // END

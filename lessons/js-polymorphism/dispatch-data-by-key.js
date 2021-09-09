@@ -26,12 +26,12 @@
 
 // BEGIN (write your solution here)
 const getLinks = (tags) => {
-    const map = new Map([
-        ['img', 'src'],
-        ['a', 'href'],
-        ['link', 'href'],
-    ]);
-    return tags.filter(({ name }) => map.has(name)).map((tag) => tag[map.get(tag.name)]);
+  const map = new Map([
+    ['img', 'src'],
+    ['a', 'href'],
+    ['link', 'href'],
+  ]);
+  return tags.filter(({ name }) => map.has(name)).map((tag) => tag[map.get(tag.name)]);
 };
 export default getLinks;
 // END

@@ -59,37 +59,35 @@
 // }
 
 export default function Money(value, currency = 'usd') {
-    this.value = value;
-    this.currency = currency;
+  this.value = value;
+  this.currency = currency;
 }
 
 Money.prototype.getValue = function getValue() {
-    return this.value;
+  return this.value;
 };
 Money.prototype.getCurrency = function getCurrency() {
-    return this.currency;
+  return this.currency;
 };
 
 Money.prototype.exchangeTo = function exchangeTo(currency) {
-    const rate = { usd: { eur: 0.7 }, eur: { usd: 1.2 } };
-    const newValue = this.getValue() * rate[this.getCurrency()][currency];
+  const rate = { usd: { eur: 0.7 }, eur: { usd: 1.2 } };
+  const newValue = this.getValue() * rate[this.getCurrency()][currency];
 
-    return new Money(newValue, currency);
+  return new Money(newValue, currency);
 };
 
 Money.prototype.add = function add(money) {
-    const thisCurrency = this.getCurrency();
-    const addValue =
-        money.getCurrency() !== thisCurrency
-            ? money.exchangeTo(thisCurrency).getValue()
-            : money.getValue();
+  const thisCurrency = this.getCurrency();
+  const addValue =
+    money.getCurrency() !== thisCurrency ? money.exchangeTo(thisCurrency).getValue() : money.getValue();
 
-    return new Money(this.getValue() + addValue, thisCurrency);
+  return new Money(this.getValue() + addValue, thisCurrency);
 };
 
 Money.prototype.format = function format() {
-    return this.getValue().toLocaleString(undefined, {
-        style: 'currency',
-        currency: [this.getCurrency()],
-    });
+  return this.getValue().toLocaleString(undefined, {
+    style: 'currency',
+    currency: [this.getCurrency()],
+  });
 };

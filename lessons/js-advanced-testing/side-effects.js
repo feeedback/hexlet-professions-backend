@@ -35,11 +35,11 @@
 
 // BEGIN (write your solution here)
 test('каждый вызов buildUser возвращает объект с другими данными', () => {
-    expect(buildUser()).not.toEqual(buildUser());
+  expect(buildUser()).not.toEqual(buildUser());
 });
 test('работает установка свойств через параметры', () => {
-    const newData = { firstName: 'Petya' };
-    const user = buildUser(newData);
-    expect(user).toMatchObject(newData);
+  const newData = { firstName: 'Petya' };
+  const user = buildUser(newData);
+  expect(user).toMatchObject(newData);
 });
 // END

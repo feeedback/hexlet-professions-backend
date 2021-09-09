@@ -33,15 +33,12 @@ const getWidth = (rectangle) => rectangle.width;
 const getHeight = (rectangle) => rectangle.height;
 
 const containsOrigin = (rectangle) => {
-    const topLeftPoint = getStartPoint(rectangle);
-    const [topLeftX, topLeftY] = [getX(topLeftPoint), getY(topLeftPoint)];
+  const topLeftPoint = getStartPoint(rectangle);
+  const [topLeftX, topLeftY] = [getX(topLeftPoint), getY(topLeftPoint)];
 
-    const bottomRightPoint = makeDecartPoint(
-        topLeftX + getWidth(rectangle),
-        topLeftY - getHeight(rectangle)
-    );
+  const bottomRightPoint = makeDecartPoint(topLeftX + getWidth(rectangle), topLeftY - getHeight(rectangle));
 
-    return getQuadrant(topLeftPoint) === 2 && getQuadrant(bottomRightPoint) === 4;
+  return getQuadrant(topLeftPoint) === 2 && getQuadrant(bottomRightPoint) === 4;
 };
 
 export { makeRectangle, getStartPoint, getWidth, getHeight, containsOrigin };

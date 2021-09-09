@@ -21,20 +21,20 @@
 
 // BEGIN (write your solution here)
 export const getDirectorySize = (dirpath, callback) => {
-    fs.readdir(dirpath, (error1, names) => {
-        if (error1) {
-            callback(error1);
-            return;
-        }
-        const files = names.map((name) => path.join(dirpath, name));
-        async.map(files, fs.stat, (error2, stats) => {
-            if (error2) {
-                callback(error2);
-                return;
-            }
-            const onlyFilesStats = stats.filter((stat) => stat.isFile());
-            callback(null, _.sumBy(onlyFilesStats, 'size'));
-        });
+  fs.readdir(dirpath, (error1, names) => {
+    if (error1) {
+      callback(error1);
+      return;
+    }
+    const files = names.map((name) => path.join(dirpath, name));
+    async.map(files, fs.stat, (error2, stats) => {
+      if (error2) {
+        callback(error2);
+        return;
+      }
+      const onlyFilesStats = stats.filter((stat) => stat.isFile());
+      callback(null, _.sumBy(onlyFilesStats, 'size'));
     });
+  });
 };
 // END

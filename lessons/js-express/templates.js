@@ -39,44 +39,41 @@
 // import Post from './entities/Post.js';
 
 export default () => {
-    const app = new Express();
-    app.set('view engine', 'pug');
-    app.use('/assets', Express.static(process.env.NODE_PATH.split(':')[0]));
-    app.use(bodyParser.urlencoded({ extended: false }));
+  const app = new Express();
+  app.set('view engine', 'pug');
+  app.use('/assets', Express.static(process.env.NODE_PATH.split(':')[0]));
+  app.use(bodyParser.urlencoded({ extended: false }));
 
-    const posts = [
-        new Post('hello', 'how are you?'),
-        new Post('nodejs', 'story about nodejs'),
-    ];
+  const posts = [new Post('hello', 'how are you?'), new Post('nodejs', 'story about nodejs')];
 
-    app.get('/', (req, res) => {
-        res.render('index');
-    });
+  app.get('/', (req, res) => {
+    res.render('index');
+  });
 
-    // BEGIN (write your solution here)
-    app.get('/posts', (req, res) => {
-        res.render('posts/index', { posts });
-    });
-    app.get('/posts/new', (req, res) => {
-        res.render('posts/new');
-    });
-    app.get('/posts/:id', (req, res) => {
-        const post = posts.find((p) => p.id.toString() === req.params.id);
-        res.render('posts/show', { post });
-    });
-    app.post('/posts', (req, res) => {
-        const { title, body } = req.body;
-        if (!title || !body) {
-            res.sendStatus(422);
-            return;
-        }
-        const post = new Post(title, body);
-        posts.push(post);
-        res.redirect(302, `/posts/${post.id}`);
-    });
-    // END
+  // BEGIN (write your solution here)
+  app.get('/posts', (req, res) => {
+    res.render('posts/index', { posts });
+  });
+  app.get('/posts/new', (req, res) => {
+    res.render('posts/new');
+  });
+  app.get('/posts/:id', (req, res) => {
+    const post = posts.find((p) => p.id.toString() === req.params.id);
+    res.render('posts/show', { post });
+  });
+  app.post('/posts', (req, res) => {
+    const { title, body } = req.body;
+    if (!title || !body) {
+      res.sendStatus(422);
+      return;
+    }
+    const post = new Post(title, body);
+    posts.push(post);
+    res.redirect(302, `/posts/${post.id}`);
+  });
+  // END
 
-    return app;
+  return app;
 };
 
 // views/posts/index.pug

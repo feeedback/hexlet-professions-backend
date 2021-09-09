@@ -24,32 +24,32 @@
 import Express from 'express';
 
 export default () => {
-    // BEGIN (write your solution here)
-    const DEFAULT_VALUE = 0;
-    const counter = { value: DEFAULT_VALUE };
+  // BEGIN (write your solution here)
+  const DEFAULT_VALUE = 0;
+  const counter = { value: DEFAULT_VALUE };
 
-    const app = new Express();
-    app.get('/', (req, res) => {
-        res.json(counter);
-    });
-    app.put('/set', (req, res) => {
-        const { value } = req.query;
-        counter.value = Number(value);
-        res.sendStatus(204);
-    });
-    app.post('/increment', (req, res) => {
-        counter.value += 1;
-        res.sendStatus(204);
-    });
-    app.post('/decrement', (req, res) => {
-        counter.value -= 1;
-        res.sendStatus(204);
-    });
-    app.delete('/reset', (req, res) => {
-        counter.value = DEFAULT_VALUE;
-        res.sendStatus(204);
-    });
-    // END
+  const app = new Express();
+  app.get('/', (req, res) => {
+    res.json(counter);
+  });
+  app.put('/set', (req, res) => {
+    const { value } = req.query;
+    counter.value = Number(value);
+    res.sendStatus(204);
+  });
+  app.post('/increment', (req, res) => {
+    counter.value += 1;
+    res.sendStatus(204);
+  });
+  app.post('/decrement', (req, res) => {
+    counter.value -= 1;
+    res.sendStatus(204);
+  });
+  app.delete('/reset', (req, res) => {
+    counter.value = DEFAULT_VALUE;
+    res.sendStatus(204);
+  });
+  // END
 
-    return app;
+  return app;
 };

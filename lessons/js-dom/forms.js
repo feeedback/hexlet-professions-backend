@@ -41,27 +41,27 @@
 // };
 
 const render = (element, data) => {
-    const div = document.createElement('div');
-    const { email, name, comment } = data;
-    div.innerHTML = `
+  const div = document.createElement('div');
+  const { email, name, comment } = data;
+  div.innerHTML = `
     <p>Feedback has been sent</p>
     <div>Email: ${email}</div>
     <div>Name: ${name}</div>
     <div>Comment: ${comment}</div>
   `;
-    element.replaceWith(div);
+  element.replaceWith(div);
 };
 
 export default () => {
-    const formElement = document.querySelector('.feedback-form');
-    const handle = (event) => {
-        event.preventDefault();
+  const formElement = document.querySelector('.feedback-form');
+  const handle = (event) => {
+    event.preventDefault();
 
-        const form = event.target;
-        const formData = new FormData(form);
+    const form = event.target;
+    const formData = new FormData(form);
 
-        render(form, Object.fromEntries(formData));
-    };
-    formElement.addEventListener('submit', handle);
+    render(form, Object.fromEntries(formData));
+  };
+  formElement.addEventListener('submit', handle);
 };
 // END

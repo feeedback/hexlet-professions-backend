@@ -46,27 +46,27 @@ import _ from 'lodash';
 
 // BEGIN (write your solution here)
 export default class InMemoryKV {
-    constructor(dataObj = {}) {
-        this.data = _.cloneDeep(dataObj);
-    }
+  constructor(dataObj = {}) {
+    this.data = _.cloneDeep(dataObj);
+  }
 
-    set(key, value) {
-        this.data[key] = value;
-    }
+  set(key, value) {
+    this.data[key] = value;
+  }
 
-    unset(key) {
-        // const dataWithoutKey = _.omit(data, key);
-        // this.data = dataWithoutKey;
-        delete this.data[key];
-    }
+  unset(key) {
+    // const dataWithoutKey = _.omit(data, key);
+    // this.data = dataWithoutKey;
+    delete this.data[key];
+  }
 
-    get(key, defaultValue = null) {
-        return _.get(this.data, key, defaultValue);
-    }
+  get(key, defaultValue = null) {
+    return _.get(this.data, key, defaultValue);
+  }
 
-    toObject() {
-        return _.cloneDeep(this.data);
-    }
+  toObject() {
+    return _.cloneDeep(this.data);
+  }
 }
 // END
 
@@ -92,11 +92,11 @@ export default class InMemoryKV {
 
 // BEGIN (write your solution here)
 const swapKeyValue = (dataKV) => {
-    const showcase = dataKV.toObject();
-    for (const key in showcase) {
-        dataKV.unset(key);
-        dataKV.set(showcase[key], key);
-    }
+  const showcase = dataKV.toObject();
+  for (const key in showcase) {
+    dataKV.unset(key);
+    dataKV.set(showcase[key], key);
+  }
 };
 export default swapKeyValue;
 // END

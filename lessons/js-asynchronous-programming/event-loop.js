@@ -44,13 +44,13 @@ import { waterfall } from 'async';
 
 // BEGIN (write your solution here)
 export const unionFiles = (inputPath1, inputPath2, outputPath, callback) => {
-    waterfall(
-        [
-            (cb) => fs.readFile(inputPath1, cb),
-            (data1, cb) => fs.readFile(inputPath2, (err, data2) => cb(err, data1, data2)),
-            (data1, data2, cb) => fs.writeFile(outputPath, `${data1}${data2}`, cb),
-        ],
-        callback
-    );
+  waterfall(
+    [
+      (cb) => fs.readFile(inputPath1, cb),
+      (data1, cb) => fs.readFile(inputPath2, (err, data2) => cb(err, data1, data2)),
+      (data1, data2, cb) => fs.writeFile(outputPath, `${data1}${data2}`, cb),
+    ],
+    callback
+  );
 };
 // END

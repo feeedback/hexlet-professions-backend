@@ -35,20 +35,20 @@ import { resolve } from 'url';
 
 // BEGIN (write your solution here)
 export default class WeatherService {
-    constructor(urlAPI, httpClient) {
-        this.api = urlAPI;
-        this.httpClient = httpClient;
-    }
+  constructor(urlAPI, httpClient) {
+    this.api = urlAPI;
+    this.httpClient = httpClient;
+  }
 
-    async get(city) {
-        try {
-            const response = await this.httpClient.get(`${this.api}${city}`);
-            const weather = JSON.parse(response.data);
-            return [null, weather];
-        } catch (error) {
-            return [error];
-        }
+  async get(city) {
+    try {
+      const response = await this.httpClient.get(`${this.api}${city}`);
+      const weather = JSON.parse(response.data);
+      return [null, weather];
+    } catch (error) {
+      return [error];
     }
+  }
 }
 // END
 
@@ -56,16 +56,13 @@ export default class WeatherService {
 
 // BEGIN (write your solution here)
 (async () => {
-    const cityName = process.argv[2];
-    const weatherService = new WeatherService(
-        'http://localhost:8080/api/v2/cities/',
-        axios
-    );
-    const [err, weatherCity] = await weatherService.get(cityName);
-    if (err) {
-        throw err;
-    }
-    const message = `Temperature in ${cityName}: ${weatherCity.temperature}C`;
-    console.log(message);
+  const cityName = process.argv[2];
+  const weatherService = new WeatherService('http://localhost:8080/api/v2/cities/', axios);
+  const [err, weatherCity] = await weatherService.get(cityName);
+  if (err) {
+    throw err;
+  }
+  const message = `Temperature in ${cityName}: ${weatherCity.temperature}C`;
+  console.log(message);
 })();
 // END

@@ -29,19 +29,19 @@ const makeValidator = getImplementation();
 
 // BEGIN (write your solution here)
 test('Validator', () => {
-    const validator = makeValidator();
+  const validator = makeValidator();
 
-    expect(validator.isValid('some value')).toBe(true);
-    validator.addCheck(isNumber);
+  expect(validator.isValid('some value')).toBe(true);
+  validator.addCheck(isNumber);
 
-    validator.addCheck((v) => v > 5);
-    expect(validator.isValid(3)).toBe(false);
-    expect(validator.isValid(8)).toBe(true);
+  validator.addCheck((v) => v > 5);
+  expect(validator.isValid(3)).toBe(false);
+  expect(validator.isValid(8)).toBe(true);
 
-    validator.addCheck((v) => v % 2 === 0);
-    expect(validator.isValid(4)).toBe(false);
-    expect(validator.isValid(6)).toBe(true);
+  validator.addCheck((v) => v % 2 === 0);
+  expect(validator.isValid(4)).toBe(false);
+  expect(validator.isValid(6)).toBe(true);
 
-    expect(validator.isValid('string')).toBe(false);
+  expect(validator.isValid('string')).toBe(false);
 });
 // END

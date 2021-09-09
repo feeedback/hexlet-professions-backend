@@ -40,47 +40,47 @@
 
 // BEGIN (write your solution here)
 export default class Node {
-    constructor(key = null) {
-        this.key = key;
-        this.left = null;
-        this.right = null;
+  constructor(key = null) {
+    this.key = key;
+    this.left = null;
+    this.right = null;
+  }
+
+  getKey() {
+    return this.key;
+  }
+
+  getLeft() {
+    return this.left;
+  }
+
+  getRight() {
+    return this.right;
+  }
+
+  insert(key) {
+    // если нет нод
+    if (this.key === null) {
+      this.key = key;
     }
 
-    getKey() {
-        return this.key;
+    // если переданное число МЕНЬШЕ ключа данного узла
+    if (key < this.key) {
+      if (this.left !== null) {
+        this.left.insert(key);
+      } else {
+        this.left = new Node(key);
+      }
     }
 
-    getLeft() {
-        return this.left;
+    // если переданное число БОЛЬШЕ ключа данного узла
+    if (key > this.key) {
+      if (this.right !== null) {
+        this.right.insert(key);
+      } else {
+        this.right = new Node(key);
+      }
     }
-
-    getRight() {
-        return this.right;
-    }
-
-    insert(key) {
-        // если нет нод
-        if (this.key === null) {
-            this.key = key;
-        }
-
-        // если переданное число МЕНЬШЕ ключа данного узла
-        if (key < this.key) {
-            if (this.left !== null) {
-                this.left.insert(key);
-            } else {
-                this.left = new Node(key);
-            }
-        }
-
-        // если переданное число БОЛЬШЕ ключа данного узла
-        if (key > this.key) {
-            if (this.right !== null) {
-                this.right.insert(key);
-            } else {
-                this.right = new Node(key);
-            }
-        }
-    }
+  }
 }
 // END

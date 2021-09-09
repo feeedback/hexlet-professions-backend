@@ -21,10 +21,10 @@ import fs from 'fs';
 
 // BEGIN (write your solution here)
 export const compareFileSizes = (file1, file2, cb) => {
-    fs.stat(file1, (_error1, stats1) => {
-        fs.stat(file2, (_error2, stats2) => {
-            cb(_error1, Math.sign(stats1.size - stats2.size));
-        });
+  fs.stat(file1, (_error1, stats1) => {
+    fs.stat(file2, (_error2, stats2) => {
+      cb(_error1, Math.sign(stats1.size - stats2.size));
     });
+  });
 };
 // END

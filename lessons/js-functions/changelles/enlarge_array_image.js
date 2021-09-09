@@ -8,14 +8,14 @@
 const duplicateValues = (arr) => arr.flatMap((el) => [el, el]);
 
 const enlargeArrayImage = (matrix) => {
-    const horizontallyStretched = matrix.map(duplicateValues);
-    return duplicateValues(horizontallyStretched);
+  const horizontallyStretched = matrix.map(duplicateValues);
+  return duplicateValues(horizontallyStretched);
 };
 
 const enlargeArrayImageReduce = (matrix) =>
-    matrix.reduce((acc, row) => {
-        const newRow = row.reduce((accRow, e) => [...accRow, e, e], []);
-        return [...acc, newRow, newRow];
-    }, []);
+  matrix.reduce((acc, row) => {
+    const newRow = row.reduce((accRow, e) => [...accRow, e, e], []);
+    return [...acc, newRow, newRow];
+  }, []);
 
 export default enlargeArrayImage;

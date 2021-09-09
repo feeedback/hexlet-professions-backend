@@ -27,21 +27,21 @@ const makeCart = getImplementation();
 
 // BEGIN (write your solution here)
 test('cart', () => {
-    const item1 = { name: 'car', price: 3 };
-    const count1 = 5;
-    const item2 = { name: 'house', price: 10 };
-    const count2 = 2;
+  const item1 = { name: 'car', price: 3 };
+  const count1 = 5;
+  const item2 = { name: 'house', price: 10 };
+  const count2 = 2;
 
-    const cart = makeCart();
+  const cart = makeCart();
 
-    cart.addItem(item1, count1);
-    const items = cart.getItems();
-    const itemsEq = [{ good: item1, count: count1 }];
-    expect(items).toStrictEqual(itemsEq);
+  cart.addItem(item1, count1);
+  const items = cart.getItems();
+  const itemsEq = [{ good: item1, count: count1 }];
+  expect(items).toStrictEqual(itemsEq);
 
-    cart.addItem(item2, count2);
-    expect(cart.getItems()).toHaveLength(2);
-    expect(cart.getCost()).toEqual(item1.price * count1 + item2.price * count2);
-    expect(cart.getCount()).toEqual(count1 + count2);
+  cart.addItem(item2, count2);
+  expect(cart.getItems()).toHaveLength(2);
+  expect(cart.getCost()).toEqual(item1.price * count1 + item2.price * count2);
+  expect(cart.getCount()).toEqual(count1 + count2);
 });
 // END

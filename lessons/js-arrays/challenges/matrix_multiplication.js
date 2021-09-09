@@ -46,16 +46,16 @@
 // Демонстрация операции перемножения матриц. http://matrixmultiplication.xyz/
 
 export default (matrixA, matrixB) => {
-    // столбец
-    matrixA[0].foreach((row) => row);
+  // столбец
+  matrixA[0].foreach((row) => row);
 
-    // строка
-    matrixB.foreach((row) => row);
+  // строка
+  matrixB.foreach((row) => row);
 
-    for (let x = 0; x < matrixA.length; x++) {
-        const row = matrixA[x];
-        for (let y = 0; y < row.length; y++) {
-            const coll = row[y];
-        }
+  for (let x = 0; x < matrixA.length; x++) {
+    const row = matrixA[x];
+    for (let y = 0; y < row.length; y++) {
+      const coll = row[y];
     }
+  }
 };

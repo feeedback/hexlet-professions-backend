@@ -28,23 +28,23 @@
 // @ts-check
 // BEGIN (write your solution here)
 const make = (numer, denom) => ({
-    numer,
-    denom,
-    getNumer() {
-        return this.numer;
-    },
-    getDenom() {
-        return this.denom;
-    },
-    add(rat) {
-        return make(
-            this.getNumer() * rat.getDenom() + rat.getNumer() * this.getDenom(),
-            this.getDenom() * rat.getDenom()
-        );
-    },
-    toString() {
-        return `${this.getNumer()}/${this.getDenom()}`;
-    },
+  numer,
+  denom,
+  getNumer() {
+    return this.numer;
+  },
+  getDenom() {
+    return this.denom;
+  },
+  add(rat) {
+    return make(
+      this.getNumer() * rat.getDenom() + rat.getNumer() * this.getDenom(),
+      this.getDenom() * rat.getDenom()
+    );
+  },
+  toString() {
+    return `${this.getNumer()}/${this.getDenom()}`;
+  },
 });
 
 export default make;

@@ -20,5 +20,5 @@
 import { intersectionBy } from 'lodash';
 
 export const getMutualFriends = (user1, user2) =>
-    intersectionBy(user1.getFriends(), user2.getFriends(), (user) => user.id);
+  intersectionBy(user1.getFriends(), user2.getFriends(), (user) => user.id);
 // END

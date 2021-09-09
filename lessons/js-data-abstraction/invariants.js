@@ -30,16 +30,16 @@
 
 // import getGcd from './utils.js';
 const getGcd = (a, b) => {
-    if (b === 0) {
-        return a;
-    }
+  if (b === 0) {
+    return a;
+  }
 
-    return getGcd(b, a % b);
+  return getGcd(b, a % b);
 };
 // BEGIN (write your solution here)
 const normalizeRat = ({ numer, denom }) => {
-    const gcd = getGcd(numer, denom);
-    return { numer: numer / gcd, denom: denom / gcd };
+  const gcd = getGcd(numer, denom);
+  return { numer: numer / gcd, denom: denom / gcd };
 };
 const getLcm = (a, b) => Math.abs(a * b) / getGcd(a, b);
 
@@ -48,35 +48,35 @@ const getNumer = (rat) => rat.numer;
 const getDenom = (rat) => rat.denom;
 
 const twoRatToCommonDenom = (rat1, rat2) => {
-    const lcm = getLcm(getDenom(rat1), getDenom(rat2));
-    const newNumer1 = (lcm / getDenom(rat1)) * getNumer(rat1);
-    const newNumer2 = (lcm / getDenom(rat2)) * getNumer(rat2);
-    return [newNumer1, newNumer2, lcm];
+  const lcm = getLcm(getDenom(rat1), getDenom(rat2));
+  const newNumer1 = (lcm / getDenom(rat1)) * getNumer(rat1);
+  const newNumer2 = (lcm / getDenom(rat2)) * getNumer(rat2);
+  return [newNumer1, newNumer2, lcm];
 };
 const add = (rat1, rat2) => {
-    const [newNumer1, newNumer2, lcm] = twoRatToCommonDenom(rat1, rat2);
-    return makeRational(newNumer1 + newNumer2, lcm);
+  const [newNumer1, newNumer2, lcm] = twoRatToCommonDenom(rat1, rat2);
+  return makeRational(newNumer1 + newNumer2, lcm);
 };
 const sub = (rat1, rat2) => {
-    const [newNumer1, newNumer2, lcm] = twoRatToCommonDenom(rat1, rat2);
-    return makeRational(newNumer1 - newNumer2, lcm);
+  const [newNumer1, newNumer2, lcm] = twoRatToCommonDenom(rat1, rat2);
+  return makeRational(newNumer1 - newNumer2, lcm);
 };
 
 const add2 = (rat1, rat2) => {
-    const denom1 = getDenom(rat1);
-    const denom2 = getDenom(rat2);
-    const newNumer = getNumer(rat1) * denom2 + getNumer(rat2) * denom1;
-    const newDenom = denom1 * denom2;
+  const denom1 = getDenom(rat1);
+  const denom2 = getDenom(rat2);
+  const newNumer = getNumer(rat1) * denom2 + getNumer(rat2) * denom1;
+  const newDenom = denom1 * denom2;
 
-    return makeRational(newNumer, newDenom);
+  return makeRational(newNumer, newDenom);
 };
 const sub2 = (rat1, rat2) => {
-    const denom1 = getDenom(rat1);
-    const denom2 = getDenom(rat2);
-    const newNumer = getNumer(rat1) * denom2 - getNumer(rat2) * denom1;
-    const newDenom = denom1 * denom2;
+  const denom1 = getDenom(rat1);
+  const denom2 = getDenom(rat2);
+  const newNumer = getNumer(rat1) * denom2 - getNumer(rat2) * denom1;
+  const newDenom = denom1 * denom2;
 
-    return makeRational(newNumer, newDenom);
+  return makeRational(newNumer, newDenom);
 };
 // END
 const ratToString = (rat) => `${getNumer(rat)}/${getDenom(rat)}`;

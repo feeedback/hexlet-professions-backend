@@ -20,22 +20,22 @@
 // должна вернуть null.
 
 export default (dna) => {
-    const arr = dna.split('');
-    const dict = { G: 'C', C: 'G', T: 'A', A: 'U' };
-    if (arr.some((e) => !(e in dict))) {
-        return null;
-    }
-    return arr.map((e) => dict[e]).join('');
+  const arr = dna.split('');
+  const dict = { G: 'C', C: 'G', T: 'A', A: 'U' };
+  if (arr.some((e) => !(e in dict))) {
+    return null;
+  }
+  return arr.map((e) => dict[e]).join('');
 };
 
 export const dnaToRnaForOf = (dna) => {
-    const dict = { G: 'C', C: 'G', T: 'A', A: 'U' };
-    const rna = [];
-    for (const nucleotide of dna) {
-        if (!(nucleotide in dict)) {
-            return null;
-        }
-        rna.push(dict[nucleotide]);
+  const dict = { G: 'C', C: 'G', T: 'A', A: 'U' };
+  const rna = [];
+  for (const nucleotide of dna) {
+    if (!(nucleotide in dict)) {
+      return null;
     }
-    return rna.join('');
+    rna.push(dict[nucleotide]);
+  }
+  return rna.join('');
 };

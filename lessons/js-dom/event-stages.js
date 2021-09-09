@@ -41,53 +41,53 @@
 const values = [9, 6, 13, 11, 2, 15, 14, 8, 12, 10, 5, 4, 7, 1, 3];
 
 const generatePlayingField = () => {
-    const tableEl = document.createElement('table');
+  const tableEl = document.createElement('table');
 
-    tableEl.className = 'table-bordered';
-    for (let i = 0; i < 4; i += 1) {
-        const row = tableEl.insertRow();
-        for (let j = 0; j < 4; j += 1) {
-            const cell = row.insertCell();
-            cell.className = 'p-3';
-            if (i === 3 && j === 3) {
-                cell.classList.add('table-active');
-            } else {
-                cell.textContent = values[i + j * 4];
-            }
-        }
+  tableEl.className = 'table-bordered';
+  for (let i = 0; i < 4; i += 1) {
+    const row = tableEl.insertRow();
+    for (let j = 0; j < 4; j += 1) {
+      const cell = row.insertCell();
+      cell.className = 'p-3';
+      if (i === 3 && j === 3) {
+        cell.classList.add('table-active');
+      } else {
+        cell.textContent = values[i + j * 4];
+      }
     }
-    return tableEl;
+  }
+  return tableEl;
 };
 
 // BEGIN (write your solution here)
 const getDistance = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 const getCoordsCell = (cell) => {
-    const {
-        cellIndex,
-        parentElement: { rowIndex },
-    } = cell;
-    return { y: rowIndex, x: cellIndex };
+  const {
+    cellIndex,
+    parentElement: { rowIndex },
+  } = cell;
+  return { y: rowIndex, x: cellIndex };
 };
 
 export default () => {
-    const box = document.querySelector('div.gem-puzzle');
-    const getEmptyCell = () => box.querySelector('td.table-active');
+  const box = document.querySelector('div.gem-puzzle');
+  const getEmptyCell = () => box.querySelector('td.table-active');
 
-    const gameLogic = (event) => {
-        const targetCell = event.target;
-        const emptyCell = getEmptyCell();
-        if (getDistance(getCoordsCell(targetCell), getCoordsCell(emptyCell)) !== 1) {
-            return;
-        }
+  const gameLogic = (event) => {
+    const targetCell = event.target;
+    const emptyCell = getEmptyCell();
+    if (getDistance(getCoordsCell(targetCell), getCoordsCell(emptyCell)) !== 1) {
+      return;
+    }
 
-        emptyCell.textContent = targetCell.textContent;
-        targetCell.textContent = '';
-        emptyCell.classList.remove('table-active');
-        targetCell.classList.add('table-active');
-    };
+    emptyCell.textContent = targetCell.textContent;
+    targetCell.textContent = '';
+    emptyCell.classList.remove('table-active');
+    targetCell.classList.add('table-active');
+  };
 
-    const fieldGame = generatePlayingField();
-    box.append(fieldGame);
-    fieldGame.addEventListener('click', gameLogic);
+  const fieldGame = generatePlayingField();
+  box.append(fieldGame);
+  fieldGame.addEventListener('click', gameLogic);
 };
 // END

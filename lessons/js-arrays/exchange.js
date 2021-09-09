@@ -11,15 +11,15 @@
 // Если хотя бы одного из индексов не существует, функция возвращает исходный массив.
 
 const swap = (arr, pivotIndex) => {
-    const prev = pivotIndex - 1;
-    const next = pivotIndex + 1;
-    if (!(prev in arr && next in arr)) return arr;
+  const prev = pivotIndex - 1;
+  const next = pivotIndex + 1;
+  if (!(prev in arr && next in arr)) return arr;
 
-    const resArr = arr.slice();
-    const temp = resArr[prev];
-    resArr[prev] = resArr[next];
-    resArr[next] = temp;
+  const resArr = arr.slice();
+  const temp = resArr[prev];
+  resArr[prev] = resArr[next];
+  resArr[next] = temp;
 
-    return resArr;
+  return resArr;
 };
 export default swap;

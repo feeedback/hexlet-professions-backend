@@ -19,9 +19,9 @@ const without = getFunction();
 
 // BEGIN (write your solution here)
 test('without', () => {
-    const arr = [2, 1, 2, 3];
-    expect(without(arr, 1, 2)).toEqual([3]);
-    expect(without(arr)).toEqual(arr);
-    expect(without([])).toEqual([]);
+  const arr = [2, 1, 2, 3];
+  expect(without(arr, 1, 2)).toEqual([3]);
+  expect(without(arr)).toEqual(arr);
+  expect(without([])).toEqual([]);
 });
 // END

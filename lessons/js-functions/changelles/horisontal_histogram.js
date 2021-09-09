@@ -23,31 +23,31 @@
 import _ from 'lodash';
 
 export default (rollsCount, rollDie) => {
-    const digits = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+  const digits = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
-    for (let i = 1; i <= rollsCount; i += 1) {
-        digits[rollDie()] += 1;
-    }
+  for (let i = 1; i <= rollsCount; i += 1) {
+    digits[rollDie()] += 1;
+  }
 
-    const rows = Object.entries(digits).map(([digit, count]) => {
-        const row = `${digit}|`;
-        return count === 0 ? row : `${row}${'#'.repeat(count)} ${count}`;
-    });
+  const rows = Object.entries(digits).map(([digit, count]) => {
+    const row = `${digit}|`;
+    return count === 0 ? row : `${row}${'#'.repeat(count)} ${count}`;
+  });
 
-    console.log(rows.join('\n'));
+  console.log(rows.join('\n'));
 };
 
 export const play = (rollsCount, rollDie) => {
-    const rolls = _.times(rollsCount, rollDie);
-    const digitsCount = {
-        ...{ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
-        ..._.countBy(rolls),
-    };
+  const rolls = _.times(rollsCount, rollDie);
+  const digitsCount = {
+    ...{ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+    ..._.countBy(rolls),
+  };
 
-    const rows = Object.entries(digitsCount).map(([digit, count]) => {
-        const row = `${digit}|`;
-        return count === 0 ? row : `${row}${'#'.repeat(count)} ${count}`;
-    });
+  const rows = Object.entries(digitsCount).map(([digit, count]) => {
+    const row = `${digit}|`;
+    return count === 0 ? row : `${row}${'#'.repeat(count)} ${count}`;
+  });
 
-    console.log(rows.join('\n'));
+  console.log(rows.join('\n'));
 };

@@ -25,17 +25,15 @@ import 'regenerator-runtime/runtime';
 
 // BEGIN (write your solution here)
 const prettify = (document) => {
-    document.querySelectorAll('div').forEach((div) => {
-        const textNodes = [...div.childNodes].filter(
-            (el) => el instanceof Text && el.textContent.trim() !== ''
-        ); // el.nodeType === el.TEXT_NODE
+  document.querySelectorAll('div').forEach((div) => {
+    const textNodes = [...div.childNodes].filter((el) => el instanceof Text && el.textContent.trim() !== ''); // el.nodeType === el.TEXT_NODE
 
-        textNodes.forEach((textNode) => {
-            const pEl = document.createElement('p');
-            pEl.append(textNode.textContent);
-            textNode.replaceWith(pEl);
-        });
+    textNodes.forEach((textNode) => {
+      const pEl = document.createElement('p');
+      pEl.append(textNode.textContent);
+      textNode.replaceWith(pEl);
     });
+  });
 };
 export default prettify;
 // END

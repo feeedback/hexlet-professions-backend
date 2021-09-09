@@ -9,9 +9,9 @@
 import _ from 'lodash';
 
 const getMenCountByYear = (users) => {
-    const years = users
-        .filter(({ gender }) => gender === 'male')
-        .map(({ birthday }) => new Date(birthday).getUTCFullYear());
-    return _.countBy(years);
+  const years = users
+    .filter(({ gender }) => gender === 'male')
+    .map(({ birthday }) => new Date(birthday).getUTCFullYear());
+  return _.countBy(years);
 };
 export default getMenCountByYear;

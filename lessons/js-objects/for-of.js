@@ -11,16 +11,16 @@
 const isHas = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
 
 export const pick = (obj, keys) =>
-    keys.reduce((res, key) => (isHas(obj, key) ? { ...res, [key]: obj[key] } : res), {});
+  keys.reduce((res, key) => (isHas(obj, key) ? { ...res, [key]: obj[key] } : res), {});
 
 export default (obj, keys) => {
-    const result = {};
-    const mapKeys = new Set(Object.keys(obj));
+  const result = {};
+  const mapKeys = new Set(Object.keys(obj));
 
-    for (const key of keys) {
-        if (mapKeys.has(key)) {
-            result[key] = obj[key];
-        }
+  for (const key of keys) {
+    if (mapKeys.has(key)) {
+      result[key] = obj[key];
     }
-    return result;
+  }
+  return result;
 };

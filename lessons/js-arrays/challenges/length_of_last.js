@@ -6,8 +6,8 @@
 // содержащая пробелов.
 
 const lengthOfLastWord = (str) => {
-    const words = str.trim().split(' ');
-    const lastWord = words[words.length - 1];
-    return lastWord.length;
+  const words = str.trim().split(' ');
+  const lastWord = words[words.length - 1];
+  return lastWord.length;
 };
 export default lengthOfLastWord;

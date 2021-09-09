@@ -8,19 +8,19 @@
 // закончилась в ничью, то нужно вернуть null.
 
 const getSuperSeriesWinner = (series) => {
-    const dict = ['ussr', null, 'canada'];
-    const score = series.reduce((sum, [a, b]) => sum + Math.sign(a - b), 0);
-    return dict[Math.sign(score) + 1];
+  const dict = ['ussr', null, 'canada'];
+  const score = series.reduce((sum, [a, b]) => sum + Math.sign(a - b), 0);
+  return dict[Math.sign(score) + 1];
 };
 // export default getSuperSeriesWinner;
 const scores = [
-    [3, 2],
-    [4, 1],
-    [5, 8],
-    [5, 5],
-    [2, 2],
-    [2, 4],
-    [4, 2],
-    [2, 3],
+  [3, 2],
+  [4, 1],
+  [5, 8],
+  [5, 5],
+  [2, 2],
+  [2, 4],
+  [4, 2],
+  [2, 3],
 ];
 console.log(getSuperSeriesWinner(scores));

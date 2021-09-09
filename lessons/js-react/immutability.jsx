@@ -37,73 +37,65 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 export default class Component extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: 0, log: [] };
+  constructor(props) {
+    super(props);
+    this.state = { value: 0, log: [] };
+  }
+
+  addItem = (step) => {
+    const { value, log } = this.state;
+
+    const newValue = value + step;
+    this.setState({
+      value: newValue,
+      log: [{ value: newValue, id: _.uniqueId() }, ...log],
+    });
+  };
+
+  handleDec = () => this.addItem(-1);
+
+  handleInc = () => this.addItem(1);
+
+  removeItem = (id) => () => {
+    const { log } = this.state;
+    const newLog = log.filter((item) => item.id !== id);
+
+    this.setState({ log: newLog });
+  };
+
+  renderItems() {
+    const { log } = this.state;
+
+    if (log.length === 0) {
+      return null;
     }
+    const items = log.map((item) => (
+      <button
+        key={item.id}
+        onClick={this.removeItem(item.id)}
+        type="button"
+        className="list-group-item list-group-item-action"
+      >
+        {item.value}
+      </button>
+    ));
+    return <div className="list-group">{items}</div>;
+  }
 
-    addItem = (step) => {
-        const { value, log } = this.state;
-        
-        const newValue = value + step;
-        this.setState({
-            value: newValue,
-            log: [{ value: newValue, id: _.uniqueId() }, ...log],
-        });
-    };
-
-    handleDec = () => this.addItem(-1);
-
-    handleInc = () => this.addItem(1);
-
-    removeItem = (id) => () => {
-        const { log } = this.state;
-        const newLog = log.filter((item) => item.id !== id);
-
-        this.setState({ log: newLog });
-    };
-
-    renderItems() {
-        const { log } = this.state;
-
-        if (log.length === 0) {
-            return null;
-        }
-        const items = log.map((item) => (
-          <button
-            key={item.id}
-            onClick={this.removeItem(item.id)}
-            type="button"
-            className="list-group-item list-group-item-action"
-          >
-            {item.value}
+  render() {
+    return (
+      <div>
+        <div className="btn-group" role="group">
+          <button onClick={this.handleInc} type="button" className="btn hexlet-inc">
+            +
           </button>
-        ));
-        return <div className="list-group">{items}</div>;
-    }
-
-    render() {
-        return (
-          <div>
-            <div className="btn-group" role="group">
-              <button
-                onClick={this.handleInc}
-                type="button"
-                className="btn hexlet-inc"
-              >
-                +
-              </button>
-              <button
-                onClick={this.handleDec}
-                type="button"
-                className="btn hexlet-dec"
-              >
-                -
-              </button>
-            </div>
-            {this.renderItems()}
-          </div>
-        );
-    }
+          <button onClick={this.handleDec} type="button" className="btn hexlet-dec">
+            -
+          </button>
+        </div>
+        {this.renderItems()}
+      </div>
+    );
+  }
 }
 // END

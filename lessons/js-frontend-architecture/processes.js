@@ -57,63 +57,63 @@
 
 // BEGIN (write your solution here)
 const mapStates = {
-    defaultText: {
-        getHtml: (name) => `<i>${name}</i>`,
-        nextState: () => 'filling',
-    },
-    filling: {
-        getHtml: (name) =>
-            `<form><input type="text" name="${name}" value=""><input type="submit" value="Save"></form>`,
-        nextState: (value) => (value === '' ? 'defaultText' : 'savingText'),
-    },
-    savingText: {
-        getHtml: (name, value) => `${value}`,
-        nextState: () => 'filling',
-    },
+  defaultText: {
+    getHtml: (name) => `<i>${name}</i>`,
+    nextState: () => 'filling',
+  },
+  filling: {
+    getHtml: (name) =>
+      `<form><input type="text" name="${name}" value=""><input type="submit" value="Save"></form>`,
+    nextState: (value) => (value === '' ? 'defaultText' : 'savingText'),
+  },
+  savingText: {
+    getHtml: (name, value) => `${value}`,
+    nextState: () => 'filling',
+  },
 };
 
 const render = (field) => {
-    const element = document.querySelector(`div[data-editable-target=${field.name}]`);
-    element.innerHTML = mapStates[field.state].getHtml(field.name, field.value);
+  const element = document.querySelector(`div[data-editable-target=${field.name}]`);
+  element.innerHTML = mapStates[field.state].getHtml(field.name, field.value);
 };
 
 export default () => {
-    const fields = document.querySelectorAll('div[data-editable-target]');
-    const states = Object.fromEntries(
-        [...fields].map(({ dataset: { editableTarget: name } }) => [
-            name,
-            { name, value: '', state: 'defaultText' },
-        ])
-    );
+  const fields = document.querySelectorAll('div[data-editable-target]');
+  const states = Object.fromEntries(
+    [...fields].map(({ dataset: { editableTarget: name } }) => [
+      name,
+      { name, value: '', state: 'defaultText' },
+    ])
+  );
 
-    fields.forEach((field) => {
-        const name = field.dataset.editableTarget;
-        const obj = states[name];
+  fields.forEach((field) => {
+    const name = field.dataset.editableTarget;
+    const obj = states[name];
 
-        const standardHandle = (event) => {
-            event.preventDefault();
-            const nextState = mapStates[obj.state].nextState(obj.value);
-            obj.state = nextState;
-            render(obj);
-        };
+    const standardHandle = (event) => {
+      event.preventDefault();
+      const nextState = mapStates[obj.state].nextState(obj.value);
+      obj.state = nextState;
+      render(obj);
+    };
 
-        const saveForm = (event) => {
-            const form = field.querySelector('form');
-            obj.value = form.elements[name].value;
-            standardHandle(event);
+    const saveForm = (event) => {
+      const form = field.querySelector('form');
+      obj.value = form.elements[name].value;
+      standardHandle(event);
 
-            form.removeEventListener('submit', saveForm);
-            field.addEventListener('click', showForm);
-        };
+      form.removeEventListener('submit', saveForm);
+      field.addEventListener('click', showForm);
+    };
 
-        const showForm = (event) => {
-            standardHandle(event);
+    const showForm = (event) => {
+      standardHandle(event);
 
-            field.removeEventListener('click', showForm);
-            field.querySelector('form').addEventListener('submit', saveForm);
-        };
-        field.addEventListener('click', showForm);
-    });
+      field.removeEventListener('click', showForm);
+      field.querySelector('form').addEventListener('submit', saveForm);
+    };
+    field.addEventListener('click', showForm);
+  });
 };
 
 // END

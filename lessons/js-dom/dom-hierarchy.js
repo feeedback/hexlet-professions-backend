@@ -21,28 +21,23 @@
 // Более подробно варианты использования смотрите в тестах
 
 const searchMy = (document, tagName) => {
-    const tags = [];
+  const tags = [];
 
-    const inner = (node) => {
-        if (node.tagName.toLowerCase() === tagName) {
-            tags.push(node);
-        }
-        [...node.children].forEach(inner);
-    };
+  const inner = (node) => {
+    if (node.tagName.toLowerCase() === tagName) {
+      tags.push(node);
+    }
+    [...node.children].forEach(inner);
+  };
 
-    inner(document.documentElement);
-    return tags;
+  inner(document.documentElement);
+  return tags;
 };
 
 const search = (node, lookingForTagName) => {
-    const children = [...node.children];
+  const children = [...node.children];
 
-    const currentTags = children.filter(
-        ({ tagName }) => tagName === lookingForTagName.toUpperCase()
-    );
+  const currentTags = children.filter(({ tagName }) => tagName === lookingForTagName.toUpperCase());
 
-    return children.reduce(
-        (tags, child) => [...tags, ...search(child, lookingForTagName)],
-        currentTags
-    );
+  return children.reduce((tags, child) => [...tags, ...search(child, lookingForTagName)], currentTags);
 };

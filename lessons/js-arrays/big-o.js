@@ -20,41 +20,41 @@
 // инкрементируется указатель второго массива, иначе — первого.
 
 export default (numsA, numsB) => {
-    const intersection = [];
-    let a = 0;
-    let b = 0;
-    while (a < numsA.length && b < numsB.length) {
-        if (numsA[a] === numsB[b]) {
-            intersection.push(numsA[a]);
-            a += 1;
-            b += 1;
-        } else if (numsA[a] > numsB[b]) {
-            b += 1;
-        } else {
-            a += 1;
-        }
+  const intersection = [];
+  let a = 0;
+  let b = 0;
+  while (a < numsA.length && b < numsB.length) {
+    if (numsA[a] === numsB[b]) {
+      intersection.push(numsA[a]);
+      a += 1;
+      b += 1;
+    } else if (numsA[a] > numsB[b]) {
+      b += 1;
+    } else {
+      a += 1;
     }
-    return intersection;
+  }
+  return intersection;
 };
 const bad = (numsA, numsB) => {
-    const intersection = [];
-    let a = 0;
-    let b = 0;
-    const fns = {
-        '0': () => {
-            intersection.push(numsA[a]);
-            a += 1;
-            b += 1;
-        },
-        '1': () => {
-            b += 1;
-        },
-        '-1': () => {
-            a += 1;
-        },
-    };
-    while (a < numsA.length && b < numsB.length) {
-        fns[Math.sign(numsA[a], numsB[b])]();
-    }
-    return intersection;
+  const intersection = [];
+  let a = 0;
+  let b = 0;
+  const fns = {
+    0: () => {
+      intersection.push(numsA[a]);
+      a += 1;
+      b += 1;
+    },
+    1: () => {
+      b += 1;
+    },
+    '-1': () => {
+      a += 1;
+    },
+  };
+  while (a < numsA.length && b < numsB.length) {
+    fns[Math.sign(numsA[a], numsB[b])]();
+  }
+  return intersection;
 };

@@ -27,27 +27,27 @@ import { promises as fs } from 'fs';
 const getTypeName = (stat) => (stat.isDirectory() ? 'directory' : 'file');
 
 export const getTypesProcedure = (filePaths) => {
-    const types = [];
+  const types = [];
 
-    const statFilePipe = (promise, filepath) =>
-        promise
-            .then(() => fs.stat(filepath))
-            .then((stat) => types.push(getTypeName(stat)))
-            .catch(() => types.push(null));
+  const statFilePipe = (promise, filepath) =>
+    promise
+      .then(() => fs.stat(filepath))
+      .then((stat) => types.push(getTypeName(stat)))
+      .catch(() => types.push(null));
 
-    const promiseAll = filePaths.reduce(statFilePipe, Promise.resolve());
-    return promiseAll.then(() => types);
+  const promiseAll = filePaths.reduce(statFilePipe, Promise.resolve());
+  return promiseAll.then(() => types);
 };
 
 export const getTypes = (filesPath) =>
-    filesPath.reduce(
-        (promise, filepath) =>
-            promise.then((result) =>
-                fs
-                    .stat(filepath)
-                    .then((data) => [...result, getTypeName(data)])
-                    .catch(() => [...result, null])
-            ),
-        Promise.resolve([])
-    );
+  filesPath.reduce(
+    (promise, filepath) =>
+      promise.then((result) =>
+        fs
+          .stat(filepath)
+          .then((data) => [...result, getTypeName(data)])
+          .catch(() => [...result, null])
+      ),
+    Promise.resolve([])
+  );
 // END

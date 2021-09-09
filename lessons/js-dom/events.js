@@ -56,25 +56,25 @@
 // hash https://developer.mozilla.org/ru/docs/Web/API/HTMLHyperlinkElementUtils/hash
 
 export default () => {
-    // BEGIN (write your solution here)
-    const tabLinks = document.querySelectorAll('a[data-toggle]');
+  // BEGIN (write your solution here)
+  const tabLinks = document.querySelectorAll('a[data-toggle]');
 
-    const tabLogic = (event) => {
-        event.preventDefault();
-        const tabLink = event.target;
-        const tabLinkParent = tabLink.closest('ul.nav');
-        const tabContent = document.querySelector(tabLink.hash);
+  const tabLogic = (event) => {
+    event.preventDefault();
+    const tabLink = event.target;
+    const tabLinkParent = tabLink.closest('ul.nav');
+    const tabContent = document.querySelector(tabLink.hash);
 
-        const pastActiveLink = tabLinkParent.querySelector('a[data-toggle].active');
-        const pastActiveContent = document.querySelector(pastActiveLink.hash);
+    const pastActiveLink = tabLinkParent.querySelector('a[data-toggle].active');
+    const pastActiveContent = document.querySelector(pastActiveLink.hash);
 
-        pastActiveLink.classList.remove('active');
-        pastActiveContent.classList.remove('active');
+    pastActiveLink.classList.remove('active');
+    pastActiveContent.classList.remove('active');
 
-        tabLink.classList.add('active');
-        tabContent.classList.add('active');
-    };
+    tabLink.classList.add('active');
+    tabContent.classList.add('active');
+  };
 
-    tabLinks.forEach((a) => a.addEventListener('click', tabLogic));
-    // END
+  tabLinks.forEach((a) => a.addEventListener('click', tabLogic));
+  // END
 };

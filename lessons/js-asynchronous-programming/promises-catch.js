@@ -16,6 +16,5 @@
 import { promises as fs } from 'fs';
 
 // BEGIN (write your solution here)
-export const touch = (filepath) =>
-    fs.access(filepath).catch((error) => fs.writeFile(filepath, ''));
+export const touch = (filepath) => fs.access(filepath).catch((error) => fs.writeFile(filepath, ''));
 // END

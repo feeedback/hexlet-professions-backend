@@ -58,22 +58,22 @@ import _ from 'lodash';
 
 // BEGIN (write your solution here)
 const calcSize = (tree) => {
-    if (isFile(tree)) {
-        return getMeta(tree).size;
-    }
+  if (isFile(tree)) {
+    return getMeta(tree).size;
+  }
 
-    const children = getChildren(tree);
-    const sizes = children.map(calcSize);
-    return _.sum(sizes);
+  const children = getChildren(tree);
+  const sizes = children.map(calcSize);
+  return _.sum(sizes);
 };
 
 const du = (tree) => {
-    const children = getChildren(tree);
-    const result = children
-        .map((child) => [getName(child), calcSize(child)])
-        .sort(([, sizeA], [, sizeB]) => sizeB - sizeA);
+  const children = getChildren(tree);
+  const result = children
+    .map((child) => [getName(child), calcSize(child)])
+    .sort(([, sizeA], [, sizeB]) => sizeB - sizeA);
 
-    return result;
+  return result;
 };
 export default du;
 // END

@@ -29,20 +29,17 @@ import path from 'path';
 import http from 'http';
 
 export default async (port, callback) => {
-    // BEGIN (write your solution here)
-    const DATAFILE = 'phonebook.txt';
-    const data = await fs.readFile(path.join(__dirname, DATAFILE));
-    const { length: recordsCount } = data
-        .toString()
-        .trim()
-        .split('\n');
+  // BEGIN (write your solution here)
+  const DATAFILE = 'phonebook.txt';
+  const data = await fs.readFile(path.join(__dirname, DATAFILE));
+  const { length: recordsCount } = data.toString().trim().split('\n');
 
-    const server = http.createServer((request, response) => {
-        const messages = [`Welcome to The Phonebook`, `Records count: ${recordsCount}`];
+  const server = http.createServer((request, response) => {
+    const messages = [`Welcome to The Phonebook`, `Records count: ${recordsCount}`];
 
-        response.end(messages.join('\n'));
-    });
+    response.end(messages.join('\n'));
+  });
 
-    server.listen(port, callback);
-    // END
+  server.listen(port, callback);
+  // END
 };

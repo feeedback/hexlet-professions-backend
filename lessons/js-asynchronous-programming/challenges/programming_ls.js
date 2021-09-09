@@ -34,18 +34,18 @@ import { promises as fs } from 'fs';
 
 // BEGIN (write your solution here)
 export default async (inputPath) => {
-    const FileInf = (filepath, mode) => ({ filepath, mode });
-    const absolutePath = path.resolve(inputPath);
+  const FileInf = (filepath, mode) => ({ filepath, mode });
+  const absolutePath = path.resolve(inputPath);
 
-    const stat = await fs.stat(absolutePath);
-    if (stat.isFile()) {
-        return [FileInf(absolutePath, stat.mode)];
-    }
+  const stat = await fs.stat(absolutePath);
+  if (stat.isFile()) {
+    return [FileInf(absolutePath, stat.mode)];
+  }
 
-    const filenames = (await fs.readdir(absolutePath)).sort();
-    const filepaths = filenames.map((n) => path.join(absolutePath, n));
+  const filenames = (await fs.readdir(absolutePath)).sort();
+  const filepaths = filenames.map((n) => path.join(absolutePath, n));
 
-    const stats = await Promise.all(filepaths.map(fs.stat));
-    return filepaths.map((filepath, i) => FileInf(filepath, stats[i].mode));
+  const stats = await Promise.all(filepaths.map(fs.stat));
+  return filepaths.map((filepath, i) => FileInf(filepath, stats[i].mode));
 };
 // END

@@ -31,14 +31,14 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFile = (filename) => fs.readFile(getFixturePath(filename), 'utf-8');
 
 beforeAll(async () => {
-    expected = await readFile('result.html');
+  expected = await readFile('result.html');
 });
 
 const formats = ['csv', 'json', 'yml'];
 test.each(formats)('%s', async (format) => {
-    const filePath = getFixturePath(`list.${format}`);
-    const actual = await toHtmlList(filePath);
+  const filePath = getFixturePath(`list.${format}`);
+  const actual = await toHtmlList(filePath);
 
-    expect(actual.trim()).toEqual(expected.trim());
+  expect(actual.trim()).toEqual(expected.trim());
 });
 // END

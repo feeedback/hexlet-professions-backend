@@ -7,8 +7,8 @@
 // элемента входного массива.
 
 const sameParity = (arr) => {
-    const isEven = (num) => num % 2 === 0;
-    const firstIsEven = isEven(arr[0]);
-    return arr.filter((num) => isEven(num) === firstIsEven);
+  const isEven = (num) => num % 2 === 0;
+  const firstIsEven = isEven(arr[0]);
+  return arr.filter((num) => isEven(num) === firstIsEven);
 };
 export default sameParity;

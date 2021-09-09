@@ -35,39 +35,39 @@
 // Для остановки clearInterval
 
 export const makeTimerWithSetTimeout = (totalTime, cb) => ({
-    // BEGIN (write your solution here)
-    start() {
-        const startTime = Date.now();
-        const ringing = () => {
-            cb({ state: 'working', elapsedTime: Date.now() - startTime });
-        };
-        const id = setInterval(ringing, 100);
+  // BEGIN (write your solution here)
+  start() {
+    const startTime = Date.now();
+    const ringing = () => {
+      cb({ state: 'working', elapsedTime: Date.now() - startTime });
+    };
+    const id = setInterval(ringing, 100);
 
-        const stopRinging = () => {
-            clearInterval(id);
-            cb({ state: 'finished' });
-        };
-        setTimeout(stopRinging, totalTime);
-    },
-    // END
+    const stopRinging = () => {
+      clearInterval(id);
+      cb({ state: 'finished' });
+    };
+    setTimeout(stopRinging, totalTime);
+  },
+  // END
 });
 
 export default (totalTime, cb) => ({
-    // BEGIN (write your solution here)
-    elapsedTime: 0,
-    totalTime,
-    STEP: 100,
-    tick() {
-        this.elapsedTime += this.STEP;
-        const state = this.elapsedTime >= this.totalTime ? 'finished' : 'working';
+  // BEGIN (write your solution here)
+  elapsedTime: 0,
+  totalTime,
+  STEP: 100,
+  tick() {
+    this.elapsedTime += this.STEP;
+    const state = this.elapsedTime >= this.totalTime ? 'finished' : 'working';
 
-        if (state === 'finished') {
-            clearInterval(this.id);
-        }
-        cb({ state, elapsedTime: this.elapsedTime });
-    },
-    start() {
-        this.id = setInterval(this.tick.bind(this), this.STEP);
-    },
-    // END
+    if (state === 'finished') {
+      clearInterval(this.id);
+    }
+    cb({ state, elapsedTime: this.elapsedTime });
+  },
+  start() {
+    this.id = setInterval(this.tick.bind(this), this.STEP);
+  },
+  // END
 });

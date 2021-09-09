@@ -66,112 +66,105 @@
 
 // Never hardcore urls
 const routes = {
-    usersPath: () => '/users',
+  usersPath: () => '/users',
 };
 
 const errorMessages = {
-    network: 'Network Problems. Try again.',
-    email: 'Value is not a valid email',
-    password: 'Must be at least 6 letters',
-    passwordConfirmation: 'Password confirmation does not match to password',
+  network: 'Network Problems. Try again.',
+  email: 'Value is not a valid email',
+  password: 'Must be at least 6 letters',
+  passwordConfirmation: 'Password confirmation does not match to password',
 };
 
 // BEGIN (write your solution here)
 export default () => {
-    const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const form = document.querySelector('form[data-form="sign-up"]');
+  const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const form = document.querySelector('form[data-form="sign-up"]');
 
-    const mapFieldValid = {
-        email: (field) => emailRegex.test(field.value),
-        password: (field) => field.value.length >= 6,
-        passwordConfirmation: (field) =>
-            field.value === state.registrationForm.data.password.value,
-    };
-    // брать все inputs с аттрибутом require
-    const state = {
-        registrationForm: {
-            data: {
-                email: {
-                    value: '',
-                    isValid: true,
-                },
-                password: {
-                    value: '',
-                    isValid: true,
-                },
-                passwordConfirmation: {
-                    value: '',
-                    isValid: true,
-                },
-            },
-            errors: errorMessages,
-            isValidForm() {
-                const fields = Object.entries(this.data);
-                return fields.every(([key, data]) => mapFieldValid[key](data));
-            },
+  const mapFieldValid = {
+    email: (field) => emailRegex.test(field.value),
+    password: (field) => field.value.length >= 6,
+    passwordConfirmation: (field) => field.value === state.registrationForm.data.password.value,
+  };
+  // брать все inputs с аттрибутом require
+  const state = {
+    registrationForm: {
+      data: {
+        email: {
+          value: '',
+          isValid: true,
         },
-    };
+        password: {
+          value: '',
+          isValid: true,
+        },
+        passwordConfirmation: {
+          value: '',
+          isValid: true,
+        },
+      },
+      errors: errorMessages,
+      isValidForm() {
+        const fields = Object.entries(this.data);
+        return fields.every(([key, data]) => mapFieldValid[key](data));
+      },
+    },
+  };
 
-    const requiredFields = [...new FormData(form)].filter(
-        ([name]) => form.elements[name].required
+  const requiredFields = [...new FormData(form)].filter(([name]) => form.elements[name].required);
+
+  requiredFields.forEach(([name, value]) => {
+    state.registrationForm.data[name].value = value;
+
+    form.elements[name].addEventListener('input', (e) => {
+      state.registrationForm.data[name].value = e.target.value;
+      state.registrationForm.data[name].isValid = mapFieldValid[name](state.registrationForm.data[name]);
+    });
+  });
+
+  const renderError = (fieldName, errors) => {
+    // <div class="invalid-feedback">
+    const div = document.createElement('div');
+    div.className = 'invalid-feedback';
+    div.textContent = errors[fieldName];
+    form.querySelector(`[name="${fieldName}"]`).parentElement.append(div);
+  };
+
+  watch(state.registrationForm, () => {
+    if (!state.registrationForm.isValidForm()) {
+      form.querySelector('input[type="submit"]').disabled = false;
+    }
+    const invalids = Object.entries(state.registrationForm.data).filter(
+      ([_, data]) => data.isValid === false
     );
+    invalids.forEach(([fieldName]) => renderError(fieldName, state.registrationForm.errors));
 
-    requiredFields.forEach(([name, value]) => {
-        state.registrationForm.data[name].value = value;
+    // Отрисовка ошибок, хранящихся где-то в состоянии
+    // state.registrationForm.errors
+  });
 
-        form.elements[name].addEventListener('input', (e) => {
-            state.registrationForm.data[name].value = e.target.value;
-            state.registrationForm.data[name].isValid = mapFieldValid[name](
-                state.registrationForm.data[name]
-            );
-        });
-    });
+  form.addEventListener('submit', (e) => {
+    console.log('submit');
+    // Обработка данных, например, отправка на сервер
+    // state.registrationForm.data
+  });
 
-    const renderError = (fieldName, errors) => {
-        // <div class="invalid-feedback">
-        const div = document.createElement('div');
-        div.className = 'invalid-feedback';
-        div.textContent = errors[fieldName];
-        form.querySelector(`[name="${fieldName}"]`).parentElement.append(div);
-    };
+  // form.addEventListener('change', (event) => {
+  //     const el = event.target;
+  //     if (el.value === '' || el.validity.valid) {
+  //         el.classList.remove('is-invalid');
+  //         if (isValid(form)) {
+  //             form.querySelector('input[type="submit"]').disabled = false;
+  //         }
+  //         return;
+  //     }
+  //     el.classList.add('is-invalid');
+  //     form.querySelector('input[type="submit"]').disabled = true;
+  // });
 
-    watch(state.registrationForm, () => {
-        if (!state.registrationForm.isValidForm()) {
-            form.querySelector('input[type="submit"]').disabled = false;
-        }
-        const invalids = Object.entries(state.registrationForm.data).filter(
-            ([_, data]) => data.isValid === false
-        );
-        invalids.forEach(([fieldName]) =>
-            renderError(fieldName, state.registrationForm.errors)
-        );
-
-        // Отрисовка ошибок, хранящихся где-то в состоянии
-        // state.registrationForm.errors
-    });
-
-    form.addEventListener('submit', (e) => {
-        console.log('submit');
-        // Обработка данных, например, отправка на сервер
-        // state.registrationForm.data
-    });
-
-    // form.addEventListener('change', (event) => {
-    //     const el = event.target;
-    //     if (el.value === '' || el.validity.valid) {
-    //         el.classList.remove('is-invalid');
-    //         if (isValid(form)) {
-    //             form.querySelector('input[type="submit"]').disabled = false;
-    //         }
-    //         return;
-    //     }
-    //     el.classList.add('is-invalid');
-    //     form.querySelector('input[type="submit"]').disabled = true;
-    // });
-
-    // form.reportValidity();
-    //  el.setCustomValidity('Value is not a valid email');
-    // el.checkValidity();
+  // form.reportValidity();
+  //  el.setCustomValidity('Value is not a valid email');
+  // el.checkValidity();
 };
 
 // END

@@ -61,60 +61,60 @@ import _ from 'lodash';
 // from lessons/event-stages
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 const generatePlayingField = (values) => {
-    const tableEl = document.createElement('table');
-    tableEl.className = 'table-bordered';
-    for (let i = 0; i < 4; i += 1) {
-        const row = tableEl.insertRow();
-        for (let j = 0; j < 4; j += 1) {
-            const cell = row.insertCell();
-            cell.className = 'p-3';
-            if (i === 3 && j === 3) {
-                cell.classList.add('table-active');
-            } else {
-                cell.textContent = values[i + j * 4];
-            }
-        }
+  const tableEl = document.createElement('table');
+  tableEl.className = 'table-bordered';
+  for (let i = 0; i < 4; i += 1) {
+    const row = tableEl.insertRow();
+    for (let j = 0; j < 4; j += 1) {
+      const cell = row.insertCell();
+      cell.className = 'p-3';
+      if (i === 3 && j === 3) {
+        cell.classList.add('table-active');
+      } else {
+        cell.textContent = values[i + j * 4];
+      }
     }
-    return tableEl;
+  }
+  return tableEl;
 };
 
 const getCoordsCell = (cell) => {
-    const {
-        cellIndex,
-        parentElement: { rowIndex },
-    } = cell;
-    return { y: rowIndex, x: cellIndex };
+  const {
+    cellIndex,
+    parentElement: { rowIndex },
+  } = cell;
+  return { y: rowIndex, x: cellIndex };
 };
 
 const mapKeys = {
-    ArrowLeft: { getMovingCell: (table, x, y) => table.rows[y]?.cells[x + 1] },
-    ArrowRight: { getMovingCell: (table, x, y) => table.rows[y]?.cells[x - 1] },
-    ArrowUp: { getMovingCell: (table, x, y) => table.rows[y + 1]?.cells[x] },
-    ArrowDown: { getMovingCell: (table, x, y) => table.rows[y - 1]?.cells[x] },
+  ArrowLeft: { getMovingCell: (table, x, y) => table.rows[y]?.cells[x + 1] },
+  ArrowRight: { getMovingCell: (table, x, y) => table.rows[y]?.cells[x - 1] },
+  ArrowUp: { getMovingCell: (table, x, y) => table.rows[y + 1]?.cells[x] },
+  ArrowDown: { getMovingCell: (table, x, y) => table.rows[y - 1]?.cells[x] },
 };
 
 export default (randomize = _.shuffle) => {
-    const box = document.querySelector('.gem-puzzle');
-    const fieldGame = generatePlayingField(randomize(NUMBERS));
-    box.append(fieldGame);
+  const box = document.querySelector('.gem-puzzle');
+  const fieldGame = generatePlayingField(randomize(NUMBERS));
+  box.append(fieldGame);
 
-    const gameLogic = (event) => {
-        event.preventDefault();
-        if (!_.has(mapKeys, event.key)) {
-            return;
-        }
-        const emptyCell = fieldGame.querySelector('td.table-active');
-        const { y, x } = getCoordsCell(emptyCell);
+  const gameLogic = (event) => {
+    event.preventDefault();
+    if (!_.has(mapKeys, event.key)) {
+      return;
+    }
+    const emptyCell = fieldGame.querySelector('td.table-active');
+    const { y, x } = getCoordsCell(emptyCell);
 
-        const movingCell = mapKeys[event.key].getMovingCell(fieldGame, x, y);
-        if (!movingCell) {
-            return;
-        }
-        emptyCell.textContent = movingCell.textContent;
-        movingCell.textContent = '';
-        emptyCell.classList.remove('table-active');
-        movingCell.classList.add('table-active');
-    };
+    const movingCell = mapKeys[event.key].getMovingCell(fieldGame, x, y);
+    if (!movingCell) {
+      return;
+    }
+    emptyCell.textContent = movingCell.textContent;
+    movingCell.textContent = '';
+    emptyCell.classList.remove('table-active');
+    movingCell.classList.add('table-active');
+  };
 
-    document.addEventListener('keyup', gameLogic);
+  document.addEventListener('keyup', gameLogic);
 };

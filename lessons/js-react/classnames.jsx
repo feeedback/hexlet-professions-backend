@@ -14,7 +14,7 @@
 // <Alert type="warning" text="what is love?" />;
 
 // Вывод:
-// 
+//
 
 // Подсказки
 // Alerts https://getbootstrap.com/docs/4.0/components/alerts/
@@ -26,14 +26,18 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 export default class Alert extends React.Component {
-    render() {
-        const { type, text } = this.props;
-        const alertClass = cn({
-            alert: true,
-            [`alert-${type}`]: true,
-        });
+  render() {
+    const { type, text } = this.props;
+    const alertClass = cn({
+      alert: true,
+      [`alert-${type}`]: true,
+    });
 
-        return <div className={alertClass} role="alert">{text}</div>;
-    }
-};
+    return (
+      <div className={alertClass} role="alert">
+        {text}
+      </div>
+    );
+  }
+}
 // END

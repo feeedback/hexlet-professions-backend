@@ -45,30 +45,30 @@
 // return internal[index];
 
 const getHashIndex = (key) => {
-    const hash = crc32.str(key);
-    const index = Math.abs(hash) % 1000;
-    return index;
+  const hash = crc32.str(key);
+  const index = Math.abs(hash) % 1000;
+  return index;
 };
 const isCollision = (map, index, key) => {
-    const [oldKey] = map[index];
-    return key !== oldKey;
+  const [oldKey] = map[index];
+  return key !== oldKey;
 };
 
 const make = () => [];
 const set = (map, key, value) => {
-    const index = getHashIndex(key);
-    if (index in map && isCollision(map, index, key)) {
-        return false;
-    }
-    map[index] = [key, value];
-    return true;
+  const index = getHashIndex(key);
+  if (index in map && isCollision(map, index, key)) {
+    return false;
+  }
+  map[index] = [key, value];
+  return true;
 };
 const get = (map, key, defaultValue = null) => {
-    const index = getHashIndex(key);
-    if (index in map && !isCollision(map, index, key)) {
-        const [, value] = map[index];
-        return value;
-    }
-    return defaultValue;
+  const index = getHashIndex(key);
+  if (index in map && !isCollision(map, index, key)) {
+    const [, value] = map[index];
+    return value;
+  }
+  return defaultValue;
 };
 export { make, set, get };

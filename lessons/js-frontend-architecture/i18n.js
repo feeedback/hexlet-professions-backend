@@ -78,111 +78,101 @@
 
 // BEGIN (write your solution here)
 const getOrderDirection = (name, { by, desc }) => {
-    if (name !== by) {
-        return i18next.t('unsorted');
-    }
-    return i18next.t(desc ? 'desc' : 'asc');
+  if (name !== by) {
+    return i18next.t('unsorted');
+  }
+  return i18next.t(desc ? 'desc' : 'asc');
 };
 const generateTrClickHandler = (name, order) => (e) => {
-    e.preventDefault();
-    order.desc = order.by === name ? !order.desc : false;
-    order.by = name;
+  e.preventDefault();
+  order.desc = order.by === name ? !order.desc : false;
+  order.by = name;
 };
 
 const startStateData = [
-    ...Object.entries(document.location)
-        .filter(
-            ([, value]) =>
-                typeof value !== 'function' && typeof value !== 'object' && value !== ''
-        )
-        .map(([name, value]) => ({ name, value })),
+  ...Object.entries(document.location)
+    .filter(([, value]) => typeof value !== 'function' && typeof value !== 'object' && value !== '')
+    .map(([name, value]) => ({ name, value })),
 ];
 
 export default async () => {
-    await i18next.init({
-        lng: 'en',
-        debug: true,
-        resources,
+  await i18next.init({
+    lng: 'en',
+    debug: true,
+    resources,
+  });
+
+  const state = {
+    grid: {
+      order: {
+        by: 'name',
+        desc: false,
+      },
+    },
+  };
+
+  const renderTable = (container) => {
+    const table = document.createElement('table');
+    table.className = 'table';
+    const tbody = document.createElement('tbody');
+    table.append(tbody);
+
+    const thName = document.createElement('th');
+    const nameLink = document.createElement('a');
+    nameLink.setAttribute('href', '');
+    thName.append(nameLink);
+
+    const thValue = document.createElement('th');
+    const valueLink = document.createElement('a');
+    valueLink.setAttribute('href', '');
+    thValue.append(valueLink);
+
+    const tr = table.insertRow();
+    tr.append(thName, thValue);
+    container.append(table);
+    return table;
+  };
+
+  const container = document.querySelector('div.container');
+  const table = renderTable(container);
+  const [nameLink, valueLink] = container.querySelectorAll('table th a');
+
+  const renderTableData = (tableEl, data) => {
+    const createNewRow = (value1, value2) => {
+      const newTr = tableEl.insertRow();
+      const tdName = newTr.insertCell();
+      const tdValue = newTr.insertCell();
+      tdName.textContent = value1;
+      tdValue.textContent = value2;
+    };
+    data.forEach(({ name, value }) => createNewRow(name, value));
+  };
+  const deleteTableData = (tableEl) => {
+    [...tableEl.rows].slice(1).forEach((row) => row.remove());
+  };
+
+  const renderSortedRows = (stateGrid) => {
+    const { by, desc } = stateGrid.order;
+
+    nameLink.innerHTML = i18next.t('grid.cols.name', {
+      direction: getOrderDirection('name', state.grid.order),
+    });
+    valueLink.innerHTML = i18next.t('grid.cols.value', {
+      direction: getOrderDirection('value', state.grid.order),
     });
 
-    const state = {
-        grid: {
-            order: {
-                by: 'name',
-                desc: false,
-            },
-        },
-    };
+    deleteTableData(table);
+    const data = startStateData
+      .slice()
+      .sort((a, b) => a[by].localeCompare(b[by], i18next.language, { numeric: true }) * (desc ? -1 : 1));
+    renderTableData(table, data);
+  };
 
-    const renderTable = (container) => {
-        const table = document.createElement('table');
-        table.className = 'table';
-        const tbody = document.createElement('tbody');
-        table.append(tbody);
+  nameLink.addEventListener('click', generateTrClickHandler('name', state.grid.order));
+  valueLink.addEventListener('click', generateTrClickHandler('value', state.grid.order));
 
-        const thName = document.createElement('th');
-        const nameLink = document.createElement('a');
-        nameLink.setAttribute('href', '');
-        thName.append(nameLink);
-
-        const thValue = document.createElement('th');
-        const valueLink = document.createElement('a');
-        valueLink.setAttribute('href', '');
-        thValue.append(valueLink);
-
-        const tr = table.insertRow();
-        tr.append(thName, thValue);
-        container.append(table);
-        return table;
-    };
-
-    const container = document.querySelector('div.container');
-    const table = renderTable(container);
-    const [nameLink, valueLink] = container.querySelectorAll('table th a');
-
-    const renderTableData = (tableEl, data) => {
-        const createNewRow = (value1, value2) => {
-            const newTr = tableEl.insertRow();
-            const tdName = newTr.insertCell();
-            const tdValue = newTr.insertCell();
-            tdName.textContent = value1;
-            tdValue.textContent = value2;
-        };
-        data.forEach(({ name, value }) => createNewRow(name, value));
-    };
-    const deleteTableData = (tableEl) => {
-        [...tableEl.rows].slice(1).forEach((row) => row.remove());
-    };
-
-    const renderSortedRows = (stateGrid) => {
-        const { by, desc } = stateGrid.order;
-
-        nameLink.innerHTML = i18next.t('grid.cols.name', {
-            direction: getOrderDirection('name', state.grid.order),
-        });
-        valueLink.innerHTML = i18next.t('grid.cols.value', {
-            direction: getOrderDirection('value', state.grid.order),
-        });
-
-        deleteTableData(table);
-        const data = startStateData
-            .slice()
-            .sort(
-                (a, b) =>
-                    a[by].localeCompare(b[by], i18next.language, { numeric: true }) *
-                    (desc ? -1 : 1)
-            );
-        renderTableData(table, data);
-    };
-
-    nameLink.addEventListener('click', generateTrClickHandler('name', state.grid.order));
-    valueLink.addEventListener(
-        'click',
-        generateTrClickHandler('value', state.grid.order)
-    );
-
-    watch(state.grid, 'order', () => renderSortedRows(state.grid));
-    renderSortedRows(state.grid);
+  watch(state.grid, 'order', () => renderSortedRows(state.grid));
+  renderSortedRows(state.grid);
 };
 // END
 

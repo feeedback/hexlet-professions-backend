@@ -22,35 +22,35 @@
 
 // BEGIN (write your solution here)
 const reverse1 = (list) => {
-    const iter = (node) => {
-        if (node.getNext() === null) {
-            return [node.getValue()];
-        }
-        return [node.getValue(), ...iter(node.getNext())];
-    };
-    return iter(list).reduce((acc, node) => new Node(node, acc), null);
+  const iter = (node) => {
+    if (node.getNext() === null) {
+      return [node.getValue()];
+    }
+    return [node.getValue(), ...iter(node.getNext())];
+  };
+  return iter(list).reduce((acc, node) => new Node(node, acc), null);
 };
 
 const reverse = (list, acc = null) => {
-    const value = list.getValue();
-    const next = list.getNext();
+  const value = list.getValue();
+  const next = list.getNext();
 
-    if (next === null) {
-        return new Node(value, acc);
-    }
-    return reverse(next, new Node(value, acc));
+  if (next === null) {
+    return new Node(value, acc);
+  }
+  return reverse(next, new Node(value, acc));
 };
 
 const reverseTeacher = (list) => {
-    let newHead = null;
-    let current = list;
+  let newHead = null;
+  let current = list;
 
-    while (current) {
-        newHead = new Node(current.getValue(), newHead);
-        current = current.getNext();
-    }
+  while (current) {
+    newHead = new Node(current.getValue(), newHead);
+    current = current.getNext();
+  }
 
-    return newHead;
+  return newHead;
 };
 
 // END

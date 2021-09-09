@@ -35,20 +35,20 @@ import _ from 'lodash';
 
 // BEGIN (write your solution here)
 export const compressImages = (tree) => {
-    const children = getChildren(tree);
+  const children = getChildren(tree);
 
-    const compress = (file) => {
-        const oldMeta = getMeta(file);
-        const newMeta = _.cloneDeep(oldMeta);
-        newMeta.size = oldMeta.size / 2;
+  const compress = (file) => {
+    const oldMeta = getMeta(file);
+    const newMeta = _.cloneDeep(oldMeta);
+    newMeta.size = oldMeta.size / 2;
 
-        return mkfile(getName(file), newMeta);
-    };
+    return mkfile(getName(file), newMeta);
+  };
 
-    const newChildren = children.map((node) =>
-        isFile(node) && getName(node).endsWith('.jpg') ? compress(node) : node
-    );
-    const newMeta = _.cloneDeep(getMeta(tree));
-    return mkdir(getName(tree), newChildren, newMeta);
+  const newChildren = children.map((node) =>
+    isFile(node) && getName(node).endsWith('.jpg') ? compress(node) : node
+  );
+  const newMeta = _.cloneDeep(getMeta(tree));
+  return mkdir(getName(tree), newChildren, newMeta);
 };
 // END

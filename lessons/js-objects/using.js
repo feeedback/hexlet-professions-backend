@@ -12,23 +12,23 @@
 const isHas = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
 
 const getIn = (obj, path) => {
-    if (!path.length) {
-        return obj;
-    }
-    const [key, ...tail] = path;
+  if (!path.length) {
+    return obj;
+  }
+  const [key, ...tail] = path;
 
-    return isHas(obj, key) ? getIn(obj[key], tail) : null;
+  return isHas(obj, key) ? getIn(obj[key], tail) : null;
 };
 
 const getInForOf = (data, keys) => {
-    let current = data;
-    for (const key of keys) {
-        if (!isHas(current, key)) {
-            return null;
-        }
-        current = current[key];
+  let current = data;
+  for (const key of keys) {
+    if (!isHas(current, key)) {
+      return null;
     }
+    current = current[key];
+  }
 
-    return current;
+  return current;
 };
 export default getIn;

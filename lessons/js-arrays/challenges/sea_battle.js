@@ -33,26 +33,26 @@
 
 // BEGIN (write your solution here)
 export const isValidateField = (field) => {
-    const isNeighborhoodEmpty = (cell) => {
-        const [x, y] = cell;
+  const isNeighborhoodEmpty = (cell) => {
+    const [x, y] = cell;
 
-        const upLeft = field[x - 1]?.[y - 1];
-        const upRight = field[x + 1]?.[y - 1];
-        const downLeft = field[x - 1]?.[y + 1];
-        const downRight = field[x + 1]?.[y + 1];
+    const upLeft = field[x - 1]?.[y - 1];
+    const upRight = field[x + 1]?.[y - 1];
+    const downLeft = field[x - 1]?.[y + 1];
+    const downRight = field[x + 1]?.[y + 1];
 
-        const isDiagonalsEmpty = !(upLeft || upRight || downLeft || downRight);
-        return isDiagonalsEmpty;
-    };
+    const isDiagonalsEmpty = !(upLeft || upRight || downLeft || downRight);
+    return isDiagonalsEmpty;
+  };
 
-    for (let y = 0; y < field.length; y++) {
-        for (let x = 0; x < field[y].length; x++) {
-            if (field[x][y] === 1 && !isNeighborhoodEmpty([x, y])) {
-                return false;
-            }
-        }
+  for (let y = 0; y < field.length; y++) {
+    for (let x = 0; x < field[y].length; x++) {
+      if (field[x][y] === 1 && !isNeighborhoodEmpty([x, y])) {
+        return false;
+      }
     }
-    return true;
+  }
+  return true;
 };
 
 // export const calcShipsCount = (field) => {
@@ -94,17 +94,17 @@ export const isValidateField = (field) => {
 // END
 
 export const calcShipsCount = (battleField) => {
-    let shipsCount = 0;
-    const fieldSize = battleField.length;
-    for (let row = 0; row < fieldSize; row += 1) {
-        for (let col = 0; col < fieldSize; col += 1) {
-            if (battleField[row][col] === 1) {
-                if (!battleField[row - 1]?.[col] && !battleField[row][col - 1]) {
-                    shipsCount += 1;
-                }
-            }
+  let shipsCount = 0;
+  const fieldSize = battleField.length;
+  for (let row = 0; row < fieldSize; row += 1) {
+    for (let col = 0; col < fieldSize; col += 1) {
+      if (battleField[row][col] === 1) {
+        if (!battleField[row - 1]?.[col] && !battleField[row][col - 1]) {
+          shipsCount += 1;
         }
+      }
     }
+  }
 
-    return shipsCount;
+  return shipsCount;
 };

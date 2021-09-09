@@ -37,17 +37,17 @@
 
 // BEGIN (write your solution here)
 export default class LabelTag {
-    constructor(text, innerTag) {
-        this.text = text;
-        this.innerTag = innerTag;
-    }
+  constructor(text, innerTag) {
+    this.text = text;
+    this.innerTag = innerTag;
+  }
 
-    render() {
-        return `<label>${this.text}${this.innerTag}</label>`;
-    }
+  render() {
+    return `<label>${this.text}${this.innerTag}</label>`;
+  }
 
-    toString() {
-        return this.render();
-    }
+  toString() {
+    return this.render();
+  }
 }
 // END

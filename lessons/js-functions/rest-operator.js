@@ -9,9 +9,9 @@
 import { sum } from 'lodash';
 
 export default (...nums) => {
-    const count = nums.length;
-    if (count === 0) {
-        return null;
-    }
-    return sum(nums) / count;
+  const count = nums.length;
+  if (count === 0) {
+    return null;
+  }
+  return sum(nums) / count;
 };

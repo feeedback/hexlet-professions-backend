@@ -18,26 +18,26 @@
 // Элемент Progress https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress
 
 export default () => {
-    const progress = document.querySelector('progress');
+  const progress = document.querySelector('progress');
 
-    const progressValueInc = () => {
-        const nextValue = Number(progress.getAttribute('value')) + 1;
-        progress.setAttribute('value', nextValue);
-        if (nextValue < 100) {
-            setTimeout(progressValueInc, 1000);
-        }
-    };
-    setTimeout(progressValueInc, 1000);
+  const progressValueInc = () => {
+    const nextValue = Number(progress.getAttribute('value')) + 1;
+    progress.setAttribute('value', nextValue);
+    if (nextValue < 100) {
+      setTimeout(progressValueInc, 1000);
+    }
+  };
+  setTimeout(progressValueInc, 1000);
 };
 
 // eslint-disable-next-line no-unused-vars
 const teacher = () => {
-    const element = document.querySelector('progress');
-    const handler = (counter = 0) => {
-        if (counter <= 100) {
-            element.setAttribute('value', counter);
-            setTimeout(() => handler(counter + 1), 1000);
-        }
-    };
-    handler();
+  const element = document.querySelector('progress');
+  const handler = (counter = 0) => {
+    if (counter <= 100) {
+      element.setAttribute('value', counter);
+      setTimeout(() => handler(counter + 1), 1000);
+    }
+  };
+  handler();
 };

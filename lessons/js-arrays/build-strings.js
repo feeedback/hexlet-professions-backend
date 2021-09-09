@@ -16,10 +16,10 @@
 // термин и его определение.
 
 const buildDefinitionList = (definitions) => {
-    if (definitions.length === 0) {
-        return '';
-    }
-    const dtdd = definitions.map(([dt, dd]) => `<dt>${dt}</dt><dd>${dd}</dd>`);
-    return `<dl>${dtdd.join('')}</dl>`;
+  if (definitions.length === 0) {
+    return '';
+  }
+  const dtdd = definitions.map(([dt, dd]) => `<dt>${dt}</dt><dd>${dd}</dd>`);
+  return `<dl>${dtdd.join('')}</dl>`;
 };
 export default buildDefinitionList;

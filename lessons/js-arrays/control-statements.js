@@ -11,12 +11,12 @@
 // Наименование валюты
 
 const getTotalAmount = (wallet, currency) => {
-    const getName = (bill) => bill.slice(0, 3);
-    const getValue = (bill) => Number(bill.slice(4));
+  const getName = (bill) => bill.slice(0, 3);
+  const getValue = (bill) => Number(bill.slice(4));
 
-    const getCurrencyValue = (bill) => (getName(bill) === currency ? getValue(bill) : 0);
+  const getCurrencyValue = (bill) => (getName(bill) === currency ? getValue(bill) : 0);
 
-    return wallet.reduce((sum, bill) => sum + getCurrencyValue(bill), 0);
+  return wallet.reduce((sum, bill) => sum + getCurrencyValue(bill), 0);
 };
 
 // export default getTotalAmount;

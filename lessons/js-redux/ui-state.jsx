@@ -18,65 +18,65 @@ import React from 'react';
 // import * as actions from '../actions/index.js';
 
 const mapStateToProps = (state) => {
-    // BEGIN (write your solution here)
-    const {
-        tasks: { byId, allIds },
-        tasksUIState,
-    } = state;
-    const tasks = allIds.map((id) => byId[id]);
+  // BEGIN (write your solution here)
+  const {
+    tasks: { byId, allIds },
+    tasksUIState,
+  } = state;
+  const tasks = allIds.map((id) => byId[id]);
 
-    return { tasks, tasksUIState };
-    // END
+  return { tasks, tasksUIState };
+  // END
 };
 
 const actionCreators = {
-    inverseTaskTheme: actions.inverseTaskTheme,
+  inverseTaskTheme: actions.inverseTaskTheme,
 };
 
 class Tasks extends React.Component {
-    // BEGIN (write your solution here)
-    handleInverseTaskTheme = (id) => (e) => {
-        e.preventDefault();
-        const { inverseTaskTheme } = this.props;
-        inverseTaskTheme({ id });
+  // BEGIN (write your solution here)
+  handleInverseTaskTheme = (id) => (e) => {
+    e.preventDefault();
+    const { inverseTaskTheme } = this.props;
+    inverseTaskTheme({ id });
+  };
+
+  render() {
+    const { tasks, tasksUIState } = this.props;
+
+    if (tasks.length === 0) {
+      return null;
+    }
+
+    const getClass = (id) => {
+      const themeToClasses = {
+        dark: 'bg-dark text-light',
+        light: 'bg-light text-dark',
+      };
+      const currentThemeClass = themeToClasses[tasksUIState[id].theme];
+      return cn({
+        'list-group-item d-flex': true,
+        [currentThemeClass]: true,
+      });
     };
 
-    render() {
-        const { tasks, tasksUIState } = this.props;
-
-        if (tasks.length === 0) {
-            return null;
-        }
-
-        const getClass = (id) => {
-            const themeToClasses = {
-                dark: 'bg-dark text-light',
-                light: 'bg-light text-dark',
-            };
-            const currentThemeClass = themeToClasses[tasksUIState[id].theme];
-            return cn({
-                'list-group-item d-flex': true,
-                [currentThemeClass]: true,
-            });
-        };
-
-        return (
-          <div className="mt-3">
-            <ul className="list-group">
-              {tasks.map(({ id, text }) => (
-                <li key={id} className={getClass(id)}>
-                  <span className="mr-auto">
-                    <a href="#" onClick={this.handleInverseTaskTheme(id)}>
-                      {text}
-                    </a>
-                  </span>
-                </li>
-                    ))}
-            </ul>
-          </div>
-        );
-    }
-    // END
+    return (
+      <div className="mt-3">
+        <ul className="list-group">
+          {tasks.map(({ id, text }) => (
+            <li key={id} className={getClass(id)}>
+              <span className="mr-auto">
+                <a href="#" onClick={this.handleInverseTaskTheme(id)}>
+                  {text}
+                </a>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+  // END
 }
 
 // export default connect(mapStateToProps, actionCreators)(Tasks);
@@ -122,47 +122,47 @@ export const inverseTaskTheme = createAction('TASK_INVERSE_THEME');
 // import * as actions from '../actions/index.js';
 
 const tasks = handleActions(
-    {
-        [actions.addTask](state, { payload: { task } }) {
-            const { byId, allIds } = state;
-            return {
-                byId: { ...byId, [task.id]: task },
-                allIds: [task.id, ...allIds],
-            };
-        },
+  {
+    [actions.addTask](state, { payload: { task } }) {
+      const { byId, allIds } = state;
+      return {
+        byId: { ...byId, [task.id]: task },
+        allIds: [task.id, ...allIds],
+      };
     },
-    { byId: {}, allIds: [] }
+  },
+  { byId: {}, allIds: [] }
 );
 
 const tasksUIState = handleActions(
-    {
-        // BEGIN
-        [actions.addTask](state, { payload: { task } }) {
-            return { ...state, [task.id]: { theme: 'light' } };
-        },
-        [actions.inverseTaskTheme](state, { payload: { id } }) {
-            const currentTheme = state[id].theme;
-            const mapping = {
-                dark: 'light',
-                light: 'dark',
-            };
-            return { ...state, [id]: { theme: mapping[currentTheme] } };
-        },
-        // END
+  {
+    // BEGIN
+    [actions.addTask](state, { payload: { task } }) {
+      return { ...state, [task.id]: { theme: 'light' } };
     },
-    {}
+    [actions.inverseTaskTheme](state, { payload: { id } }) {
+      const currentTheme = state[id].theme;
+      const mapping = {
+        dark: 'light',
+        light: 'dark',
+      };
+      return { ...state, [id]: { theme: mapping[currentTheme] } };
+    },
+    // END
+  },
+  {}
 );
 
 const text = handleActions(
-    {
-        [actions.addTask]() {
-            return '';
-        },
-        [actions.updateNewTaskText](state, { payload }) {
-            return payload.text;
-        },
+  {
+    [actions.addTask]() {
+      return '';
     },
-    ''
+    [actions.updateNewTaskText](state, { payload }) {
+      return payload.text;
+    },
+  },
+  ''
 );
 
 // export default combineReducers({

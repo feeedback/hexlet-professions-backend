@@ -21,68 +21,68 @@
 // вычисления по обратной польской записи. Экспортируйте функцию по умолачнию.
 
 const calcInPolishNotation1 = (str) => {
-    let res = str.slice();
-    const operations = {
-        '*': (a, b) => a * b,
-        '/': (a, b) => a / b,
-        '+': (a, b) => a + b,
-        '-': (a, b) => a - b,
-    };
-    let i = 0;
-    while (res.length > 1) {
-        const char = res[i];
-        if (char in operations) {
-            const n1 = res[i - 2];
-            const n2 = res[i - 1];
-            const result = operations[char](n1, n2);
-            const left = res.slice(0, i - 2 || 0);
-            const right = res.slice(i + 1);
-            res = [...left, result, ...right];
-            i = 0;
-        } else {
-            i += 1;
-        }
+  let res = str.slice();
+  const operations = {
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
+    '+': (a, b) => a + b,
+    '-': (a, b) => a - b,
+  };
+  let i = 0;
+  while (res.length > 1) {
+    const char = res[i];
+    if (char in operations) {
+      const n1 = res[i - 2];
+      const n2 = res[i - 1];
+      const result = operations[char](n1, n2);
+      const left = res.slice(0, i - 2 || 0);
+      const right = res.slice(i + 1);
+      res = [...left, result, ...right];
+      i = 0;
+    } else {
+      i += 1;
     }
-    return res[0];
+  }
+  return res[0];
 };
 const calcInPolishNotation11 = (array) => {
-    const stack = [];
-    const operators = {
-        '*': (a, b) => a * b,
-        '/': (a, b) => a / b,
-        '+': (a, b) => a + b,
-        '-': (a, b) => a - b,
-    };
-    for (const value of array) {
-        if (!(value in operators)) {
-            stack.push(value);
-            continue;
-        }
-
-        const b = stack.pop();
-        const a = stack.pop();
-        stack.push(operators[value](a, b));
+  const stack = [];
+  const operators = {
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
+    '+': (a, b) => a + b,
+    '-': (a, b) => a - b,
+  };
+  for (const value of array) {
+    if (!(value in operators)) {
+      stack.push(value);
+      continue;
     }
 
-    return stack.pop();
+    const b = stack.pop();
+    const a = stack.pop();
+    stack.push(operators[value](a, b));
+  }
+
+  return stack.pop();
 };
 const calcInPolishNotation = (array) => {
-    const stack = [];
-    const operators = {
-        '*': (a, b) => a * b,
-        '/': (a, b) => a / b,
-        '+': (a, b) => a + b,
-        '-': (a, b) => a - b,
-    };
-    for (const value of array) {
-        if (value in operators) {
-            const b = stack.pop();
-            const a = stack.pop();
-            stack.push(operators[value](a, b));
-        } else {
-            stack.push(value);
-        }
+  const stack = [];
+  const operators = {
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
+    '+': (a, b) => a + b,
+    '-': (a, b) => a - b,
+  };
+  for (const value of array) {
+    if (value in operators) {
+      const b = stack.pop();
+      const a = stack.pop();
+      stack.push(operators[value](a, b));
+    } else {
+      stack.push(value);
     }
-    return stack.pop();
+  }
+  return stack.pop();
 };
 console.log(calcInPolishNotation([7, 2, 3, '*', '-']));

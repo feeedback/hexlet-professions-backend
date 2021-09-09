@@ -28,25 +28,25 @@ let mutateObject;
 let objectCopy;
 
 beforeEach(() => {
-    mutateObject = { a: [{ b: { c: 3 } }] };
-    objectCopy = cloneDeep(mutateObject);
+  mutateObject = { a: [{ b: { c: 3 } }] };
+  objectCopy = cloneDeep(mutateObject);
 });
 
 test('plain set', () => {
-    set(mutateObject, 'a', 'value');
-    objectCopy.a = 'value';
-    expect(mutateObject).toEqual(objectCopy);
+  set(mutateObject, 'a', 'value');
+  objectCopy.a = 'value';
+  expect(mutateObject).toEqual(objectCopy);
 });
 
 test('nested set', () => {
-    set(mutateObject, 'a[0].b.c', true);
-    objectCopy.a[0].b.c = true;
-    expect(mutateObject).toEqual(objectCopy);
+  set(mutateObject, 'a[0].b.c', true);
+  objectCopy.a[0].b.c = true;
+  expect(mutateObject).toEqual(objectCopy);
 });
 
 test('set new property', () => {
-    set(mutateObject, 'a[0].b.d', false);
-    objectCopy.a[0].b.d = false;
-    expect(mutateObject).toEqual(objectCopy);
+  set(mutateObject, 'a[0].b.d', false);
+  objectCopy.a[0].b.d = false;
+  expect(mutateObject).toEqual(objectCopy);
 });
 // END

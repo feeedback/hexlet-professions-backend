@@ -10,25 +10,22 @@
 // искомому числу, то возвращается наименьший из индексов ближайших чисел.
 
 export default (nums, wanted) => {
-    let minIndex = 0;
-    for (let i = 0, minDiff = Infinity; i < nums.length; i += 1) {
-        const diff = Math.abs(wanted - nums[i]);
-        if (diff < minDiff) {
-            minIndex = i;
-            minDiff = diff;
-        }
+  let minIndex = 0;
+  for (let i = 0, minDiff = Infinity; i < nums.length; i += 1) {
+    const diff = Math.abs(wanted - nums[i]);
+    if (diff < minDiff) {
+      minIndex = i;
+      minDiff = diff;
     }
-    return nums.length ? minIndex : null;
+  }
+  return nums.length ? minIndex : null;
 };
 
 export const findIndexOfNearest = (nums, wanted) => {
-    if (nums.length === 0) {
-        return null;
-    }
-    const diffs = nums.map((n) => Math.abs(wanted - n));
+  if (nums.length === 0) {
+    return null;
+  }
+  const diffs = nums.map((n) => Math.abs(wanted - n));
 
-    return diffs.reduce(
-        (minIndex, diff, index) => (diff < diffs[minIndex] ? index : minIndex),
-        0
-    );
+  return diffs.reduce((minIndex, diff, index) => (diff < diffs[minIndex] ? index : minIndex), 0);
 };

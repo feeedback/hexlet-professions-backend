@@ -69,146 +69,133 @@
 
 // Never hardcore urls
 const routes = {
-    usersPath: () => '/users',
+  usersPath: () => '/users',
 };
 
 const schema = yup.object().shape({
-    email: yup
-        .string()
-        .required()
-        .email(),
+  email: yup.string().required().email(),
 
-    password: yup
-        .string()
-        .required()
-        .min(6),
+  password: yup.string().required().min(6),
 
-    passwordConfirmation: yup
-        .string()
-        .required()
-        .oneOf(
-            [yup.ref('password'), null],
-            'Password confirmation does not match to password'
-        ),
+  passwordConfirmation: yup
+    .string()
+    .required()
+    .oneOf([yup.ref('password'), null], 'Password confirmation does not match to password'),
 });
 
 const errorMessages = {
-    network: {
-        error: 'Network Problems. Try again.',
-    },
+  network: {
+    error: 'Network Problems. Try again.',
+  },
 };
 
 // BEGIN (write your solution here)
 const updateValidationState = (state) => {
-    try {
-        schema.validateSync(state.form.fields, { abortEarly: false });
+  try {
+    schema.validateSync(state.form.fields, { abortEarly: false });
 
-        state.form.errors = {};
-        state.form.isValid = true;
-    } catch (error) {
-        const errors = Object.fromEntries(
-            error.inner.map(({ path, message }) => [path, message])
-        );
-        state.form.errors = errors;
-        state.form.isValid = false;
-    }
+    state.form.errors = {};
+    state.form.isValid = true;
+  } catch (error) {
+    const errors = Object.fromEntries(error.inner.map(({ path, message }) => [path, message]));
+    state.form.errors = errors;
+    state.form.isValid = false;
+  }
 };
 
 export default () => {
-    const state = {
-        form: {
-            fields: {
-                name: '',
-                email: '',
-                password: '',
-                passwordConfirmation: '',
-            },
-            errors: {},
-            processState: 'filling',
-            isValid: false,
-        },
+  const state = {
+    form: {
+      fields: {
+        name: '',
+        email: '',
+        password: '',
+        passwordConfirmation: '',
+      },
+      errors: {},
+      processState: 'filling',
+      isValid: false,
+    },
+  };
+
+  const form = document.querySelector('form[data-form="sign-up"]');
+  const submitButton = form.querySelector('input[type="submit"]');
+  const container = form.closest('div[data-container="sign-up"]');
+  const fieldElements = Object.keys(state.form.fields).map((fieldName) =>
+    form.querySelector(`[name="${fieldName}"]`)
+  );
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    state.form.processState = 'sending';
+
+    try {
+      await axios.post(routes.usersPath(), state.form.fields);
+      state.form.processState = 'finished';
+    } catch (error) {
+      state.form.processState = 'failed';
+      console.log(errorMessages.network.error);
+      throw error;
+    }
+  });
+
+  form.addEventListener('input', (e) => {
+    const { name, value } = e.target;
+    state.form.fields[name] = value;
+    updateValidationState(state);
+  });
+
+  const renderError = (elements, errors) => {
+    const createErrorElement = (errorMessage) => {
+      const div = document.createElement('div');
+      div.className = 'invalid-feedback';
+      div.textContent = errorMessage;
+      return div;
     };
 
-    const form = document.querySelector('form[data-form="sign-up"]');
-    const submitButton = form.querySelector('input[type="submit"]');
-    const container = form.closest('div[data-container="sign-up"]');
-    const fieldElements = Object.keys(state.form.fields).map((fieldName) =>
-        form.querySelector(`[name="${fieldName}"]`)
-    );
+    elements.forEach((fieldElement) => {
+      const error = errors[fieldElement.name];
+      if (!error) {
+        return;
+      }
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        state.form.processState = 'sending';
-
-        try {
-            await axios.post(routes.usersPath(), state.form.fields);
-            state.form.processState = 'finished';
-        } catch (error) {
-            state.form.processState = 'failed';
-            console.log(errorMessages.network.error);
-            throw error;
-        }
+      const errorElement = fieldElement.parentElement.querySelector('div.invalid-feedback');
+      if (errorElement) {
+        fieldElement.classList.remove('is-invalid');
+        errorElement.remove();
+      }
+      fieldElement.classList.add('is-invalid');
+      fieldElement.after(createErrorElement(error));
     });
+  };
 
-    form.addEventListener('input', (e) => {
-        const { name, value } = e.target;
-        state.form.fields[name] = value;
-        updateValidationState(state);
-    });
+  watch(state.form, 'processState', () => {
+    const { processState } = state.form;
+    switch (processState) {
+      case 'failed':
+        submitButton.disabled = false;
+        // render error
+        break;
+      case 'filling':
+        submitButton.disabled = false;
+        break;
+      case 'sending':
+        submitButton.disabled = true;
+        break;
+      case 'finished':
+        container.innerHTML = 'User Created!';
+        break;
+      default:
+        throw new Error(`Unknown state: ${processState}`);
+    }
+  });
 
-    const renderError = (elements, errors) => {
-        const createErrorElement = (errorMessage) => {
-            const div = document.createElement('div');
-            div.className = 'invalid-feedback';
-            div.textContent = errorMessage;
-            return div;
-        };
+  watch(state.form, 'errors', () => {
+    renderError(fieldElements, state.form.errors);
+  });
 
-        elements.forEach((fieldElement) => {
-            const error = errors[fieldElement.name];
-            if (!error) {
-                return;
-            }
-
-            const errorElement = fieldElement.parentElement.querySelector(
-                'div.invalid-feedback'
-            );
-            if (errorElement) {
-                fieldElement.classList.remove('is-invalid');
-                errorElement.remove();
-            }
-            fieldElement.classList.add('is-invalid');
-            fieldElement.after(createErrorElement(error));
-        });
-    };
-
-    watch(state.form, 'processState', () => {
-        const { processState } = state.form;
-        switch (processState) {
-            case 'failed':
-                submitButton.disabled = false;
-                // render error
-                break;
-            case 'filling':
-                submitButton.disabled = false;
-                break;
-            case 'sending':
-                submitButton.disabled = true;
-                break;
-            case 'finished':
-                container.innerHTML = 'User Created!';
-                break;
-            default:
-                throw new Error(`Unknown state: ${processState}`);
-        }
-    });
-
-    watch(state.form, 'errors', () => {
-        renderError(fieldElements, state.form.errors);
-    });
-
-    watch(state.form, 'isValid', () => {
-        submitButton.disabled = !state.form.isValid;
-    });
+  watch(state.form, 'isValid', () => {
+    submitButton.disabled = !state.form.isValid;
+  });
 };
 // END

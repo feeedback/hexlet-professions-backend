@@ -12,24 +12,24 @@
 import { get, countBy } from 'lodash';
 
 export const scrabble = (chars, word) => {
-    const charsArr = chars.split('');
-    const wordArr = word.toLowerCase().split('');
-    return wordArr.every((char) => {
-        const index = charsArr.indexOf(char);
-        charsArr[index] = null;
-        return index !== -1;
-    });
+  const charsArr = chars.split('');
+  const wordArr = word.toLowerCase().split('');
+  return wordArr.every((char) => {
+    const index = charsArr.indexOf(char);
+    charsArr[index] = null;
+    return index !== -1;
+  });
 };
 
 export default (chars, word) => {
-    const countsChars = countBy(chars);
+  const countsChars = countBy(chars);
 
-    for (const char of word.toLowerCase()) {
-        if (get(countsChars, char, 0) === 0) {
-            return false;
-        }
-        countsChars[char] -= 1;
+  for (const char of word.toLowerCase()) {
+    if (get(countsChars, char, 0) === 0) {
+      return false;
     }
+    countsChars[char] -= 1;
+  }
 
-    return true;
+  return true;
 };

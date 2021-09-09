@@ -18,22 +18,22 @@
 
 // BEGIN (write your solution here)
 export default () => (req, res, next) => {
-    if (!('session' in req)) {
-        throw new Error('a req.session is required!');
-    }
+  if (!('session' in req)) {
+    throw new Error('a req.session is required!');
+  }
 
-    // при следующем запросе, берутся данные из глобальной переменной для сессии
-    res.locals.flash = req.session.flash ?? [];
-    req.session.flash = [];
+  // при следующем запросе, берутся данные из глобальной переменной для сессии
+  res.locals.flash = req.session.flash ?? [];
+  req.session.flash = [];
 
-    // вызываем функцию для записи в флэш, записывается в глобальную переменную для сессии
-    res.flash = (type, message) => {
-        req.session.flash.push({
-            type,
-            message,
-        });
-    };
+  // вызываем функцию для записи в флэш, записывается в глобальную переменную для сессии
+  res.flash = (type, message) => {
+    req.session.flash.push({
+      type,
+      message,
+    });
+  };
 
-    next();
+  next();
 };
 // END

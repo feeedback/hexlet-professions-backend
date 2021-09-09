@@ -56,18 +56,18 @@ import _ from 'lodash';
 
 // BEGIN (write your solution here)
 const downcaseFileNames = (tree) => {
-    const name = getName(tree);
-    const newMeta = _.cloneDeep(getMeta(tree));
+  const name = getName(tree);
+  const newMeta = _.cloneDeep(getMeta(tree));
 
-    if (isFile(tree)) {
-        // Возвращаем обновленный файл
-        return mkfile(name.toLowerCase(), newMeta);
-    }
+  if (isFile(tree)) {
+    // Возвращаем обновленный файл
+    return mkfile(name.toLowerCase(), newMeta);
+  }
 
-    // Вызываем рекурсивное обновление каждого ребенка
-    const newChildren = getChildren(tree).map(downcaseFileNames);
-    // Возвращаем обновленную директорию
-    return mkdir(name, newChildren, newMeta);
+  // Вызываем рекурсивное обновление каждого ребенка
+  const newChildren = getChildren(tree).map(downcaseFileNames);
+  // Возвращаем обновленную директорию
+  return mkdir(name, newChildren, newMeta);
 };
 export default downcaseFileNames;
 // END

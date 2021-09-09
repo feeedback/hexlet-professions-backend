@@ -8,14 +8,10 @@
 // Фукнция принимает исходное слово и список для проверки (массив), а возвращает массив
 // всех анаграмм. Если в списке слов отсутствуют анаграммы, то возвращается пустой массив.
 
-const sortStr = (str) =>
-    str
-        .split('')
-        .sort()
-        .join('');
+const sortStr = (str) => str.split('').sort().join('');
 
 export default (sourceWord, list) => {
-    const chars = sortStr(sourceWord);
-    const anagrams = list.filter((word) => sortStr(word) === chars);
-    return anagrams;
+  const chars = sortStr(sourceWord);
+  const anagrams = list.filter((word) => sortStr(word) === chars);
+  return anagrams;
 };

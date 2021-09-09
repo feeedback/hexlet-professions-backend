@@ -29,23 +29,23 @@ import _ from 'lodash';
 
 // BEGIN (write your solution here)
 export default class DatabaseConfigLoader {
-    constructor(dirpath) {
-        this.dirpath = dirpath;
-    }
+  constructor(dirpath) {
+    this.dirpath = dirpath;
+  }
 
-    extend(config) {
-        const extendEnv = this.load(config.extend);
-        const configWithoutExtend = _.omit(config, 'extend');
-        const extendedConfig = _.merge(extendEnv, configWithoutExtend);
-        return extendedConfig;
-    }
+  extend(config) {
+    const extendEnv = this.load(config.extend);
+    const configWithoutExtend = _.omit(config, 'extend');
+    const extendedConfig = _.merge(extendEnv, configWithoutExtend);
+    return extendedConfig;
+  }
 
-    load(env) {
-        const filepath = path.join(this.dirpath, `database.${env}.json`);
-        const config = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
+  load(env) {
+    const filepath = path.join(this.dirpath, `database.${env}.json`);
+    const config = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
 
-        return _.has(config, 'extend') ? this.extend(config) : config;
-    }
+    return _.has(config, 'extend') ? this.extend(config) : config;
+  }
 }
 // END
 

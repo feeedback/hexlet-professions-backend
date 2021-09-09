@@ -36,63 +36,63 @@
 // import Easy from './strategies/Easy.js';
 // import Normal from './strategies/Normal.js';
 const mappingAI = {
-    easy: Easy,
-    normal: Normal,
+  easy: Easy,
+  normal: Normal,
 };
 class TicTacToe {
-    // BEGIN (write your solution here)
-    constructor(difficulty = 'easy') {
-        this.mesh = Array.from({ length: 3 }, () => new Array(3).fill(null));
-        this.difficulty = difficulty;
-        this.AI = new mappingAI[difficulty]();
+  // BEGIN (write your solution here)
+  constructor(difficulty = 'easy') {
+    this.mesh = Array.from({ length: 3 }, () => new Array(3).fill(null));
+    this.difficulty = difficulty;
+    this.AI = new mappingAI[difficulty]();
 
-        this.mappingPlayer = {
-            human: { char: 'O', step: (coords) => coords },
-            AI: { char: 'O', step: () => this.AI.go(this.mesh) },
-        };
-        this.isFirst = true;
+    this.mappingPlayer = {
+      human: { char: 'O', step: (coords) => coords },
+      AI: { char: 'O', step: () => this.AI.go(this.mesh) },
+    };
+    this.isFirst = true;
+  }
+
+  checkEnd() {
+    return !this.mesh.some((row) => row.includes(null));
+  }
+
+  isStreak(row, char) {
+    return row.every((cell) => cell === char);
+  }
+
+  checkWin(char) {
+    const { mesh } = this;
+    const isRow = mesh.some((row) => this.isStreak(row, char));
+
+    const isColl = mesh[0].some((_, x) => {
+      const coll = [mesh[0][x], mesh[1][x], mesh[2][x]];
+      return this.isStreak(coll, char);
+    });
+
+    const diagonal1 = [mesh[0][0], mesh[1][1], mesh[2][2]];
+    const isDiagonal1 = this.isStreak(diagonal1, char);
+
+    const diagonal2 = [mesh[2][0], mesh[1][1], mesh[0][2]];
+    const isDiagonal2 = this.isStreak(diagonal2, char);
+
+    return isRow || isColl || isDiagonal1 || isDiagonal2;
+  }
+
+  go(...coords) {
+    const playerName = coords.length ? 'human' : 'AI';
+    const player = this.mappingPlayer[playerName];
+    if (this.isFirst) {
+      player.char = 'X';
+      this.isFirst = false;
     }
 
-    checkEnd() {
-        return !this.mesh.some((row) => row.includes(null));
-    }
+    const [y, x] = player.step(coords);
+    this.mesh[y][x] = player.char;
 
-    isStreak(row, char) {
-        return row.every((cell) => cell === char);
-    }
-
-    checkWin(char) {
-        const { mesh } = this;
-        const isRow = mesh.some((row) => this.isStreak(row, char));
-
-        const isColl = mesh[0].some((_, x) => {
-            const coll = [mesh[0][x], mesh[1][x], mesh[2][x]];
-            return this.isStreak(coll, char);
-        });
-
-        const diagonal1 = [mesh[0][0], mesh[1][1], mesh[2][2]];
-        const isDiagonal1 = this.isStreak(diagonal1, char);
-
-        const diagonal2 = [mesh[2][0], mesh[1][1], mesh[0][2]];
-        const isDiagonal2 = this.isStreak(diagonal2, char);
-
-        return isRow || isColl || isDiagonal1 || isDiagonal2;
-    }
-
-    go(...coords) {
-        const playerName = coords.length ? 'human' : 'AI';
-        const player = this.mappingPlayer[playerName];
-        if (this.isFirst) {
-            player.char = 'X';
-            this.isFirst = false;
-        }
-
-        const [y, x] = player.step(coords);
-        this.mesh[y][x] = player.char;
-
-        return this.checkWin(player.char) || this.checkEnd();
-    }
-    // END
+    return this.checkWin(player.char) || this.checkEnd();
+  }
+  // END
 }
 export default TicTacToe;
 
@@ -105,17 +105,17 @@ export default TicTacToe;
 /* eslint-disable class-methods-use-this */
 
 class Easy {
-    // BEGIN (write your solution here)
-    go(mesh) {
-        for (let y = 0; y < mesh.length; y++) {
-            for (let x = 0; x < mesh[0].length; x++) {
-                if (mesh[y][x] === null) {
-                    return [y, x];
-                }
-            }
+  // BEGIN (write your solution here)
+  go(mesh) {
+    for (let y = 0; y < mesh.length; y++) {
+      for (let x = 0; x < mesh[0].length; x++) {
+        if (mesh[y][x] === null) {
+          return [y, x];
         }
+      }
     }
-    // END
+  }
+  // END
 }
 // export default Easy;
 
@@ -133,17 +133,17 @@ class Easy {
 /* eslint-disable class-methods-use-this */
 
 class Normal {
-    // BEGIN (write your solution here)
-    go(mesh) {
-        for (let y = mesh.length - 1; y >= 0; y--) {
-            for (let x = 0; x < mesh[0].length; x++) {
-                if (mesh[y][x] === null) {
-                    return [y, x];
-                }
-            }
+  // BEGIN (write your solution here)
+  go(mesh) {
+    for (let y = mesh.length - 1; y >= 0; y--) {
+      for (let x = 0; x < mesh[0].length; x++) {
+        if (mesh[y][x] === null) {
+          return [y, x];
         }
+      }
     }
-    // END
+  }
+  // END
 }
 
 // export default Normal;

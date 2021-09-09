@@ -40,19 +40,19 @@
 
 // BEGIN (write your solution here)
 const findFilesByName = (tree, str) => {
-    const iter = (node, ancestry) => {
-        const name = getName(node);
-        const newAncestry = path.join(ancestry, name);
+  const iter = (node, ancestry) => {
+    const name = getName(node);
+    const newAncestry = path.join(ancestry, name);
 
-        if (isFile(node)) {
-            return name.includes(str) ? newAncestry : [];
-        }
+    if (isFile(node)) {
+      return name.includes(str) ? newAncestry : [];
+    }
 
-        const children = getChildren(node);
-        return children.flatMap((child) => iter(child, newAncestry));
-    };
+    const children = getChildren(node);
+    return children.flatMap((child) => iter(child, newAncestry));
+  };
 
-    return iter(tree, '');
+  return iter(tree, '');
 };
 export default findFilesByName;
 // END

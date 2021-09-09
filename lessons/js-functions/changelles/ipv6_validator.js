@@ -39,43 +39,43 @@
 // BEGIN (write your solution here)
 
 const IS = (ipv6) => {
-    let groups = ipv6.split(':');
-    console.log(groups);
-    const notEmptyGroupsLength = groups.filter((group) => group !== '').length;
-    console.log(notEmptyGroupsLength);
+  let groups = ipv6.split(':');
+  console.log(groups);
+  const notEmptyGroupsLength = groups.filter((group) => group !== '').length;
+  console.log(notEmptyGroupsLength);
 
-    const str = ipv6.replace(
-        /(?<=[\dABCDEF])::/i,
-        ':0000:0000'.concat(':0000'.repeat(6 - notEmptyGroupsLength))
-    );
-    // НЕ ОБРАБАТЫВАЕТ СЛУЧАИ, КОГДА ГРУППЫ (ЦИФРЫ) ЕСТЬ СЛЕВА ИЛИ СПРАВА ОТ ::
+  const str = ipv6.replace(
+    /(?<=[\dABCDEF])::/i,
+    ':0000:0000'.concat(':0000'.repeat(6 - notEmptyGroupsLength))
+  );
+  // НЕ ОБРАБАТЫВАЕТ СЛУЧАИ, КОГДА ГРУППЫ (ЦИФРЫ) ЕСТЬ СЛЕВА ИЛИ СПРАВА ОТ ::
 
-    // const str = ipv6.replace(
-    //     /(?<=[\dABCDEF])::/i,
-    //     '0000:0000'.concat(':0000'.repeat(6 - notEmptyGroupsLength))
-    // );
-    // const str = ipv6.replace(
-    //     '::',
-    //     '0000:0000'.concat(':0000'.repeat(6 - notEmptyGroupsLength))
-    // );
+  // const str = ipv6.replace(
+  //     /(?<=[\dABCDEF])::/i,
+  //     '0000:0000'.concat(':0000'.repeat(6 - notEmptyGroupsLength))
+  // );
+  // const str = ipv6.replace(
+  //     '::',
+  //     '0000:0000'.concat(':0000'.repeat(6 - notEmptyGroupsLength))
+  // );
 
-    console.log(str);
-    groups = str.split(':');
-    console.log(groups);
-    if (groups.length !== 8) {
-        return false;
-    }
+  console.log(str);
+  groups = str.split(':');
+  console.log(groups);
+  if (groups.length !== 8) {
+    return false;
+  }
 
-    if (groups.some((group) => group === '')) {
-        return false;
-    }
-    groups = groups.map((group) => group.padStart(4, '0'));
-    console.log(groups);
-    if (groups.some((group) => !/^[\dABCDEF]{4}$/gi.test(group))) {
-        return false;
-    }
+  if (groups.some((group) => group === '')) {
+    return false;
+  }
+  groups = groups.map((group) => group.padStart(4, '0'));
+  console.log(groups);
+  if (groups.some((group) => !/^[\dABCDEF]{4}$/gi.test(group))) {
+    return false;
+  }
 
-    return true;
+  return true;
 };
 
 console.log(IS('1::1'));

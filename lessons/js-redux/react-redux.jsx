@@ -34,37 +34,36 @@ import _ from 'lodash';
 //   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 // );
 
-
 // BEGIN (write your solution here)
 render(
   <Provider store={store}>
     <App />
   </Provider>,
-    document.getElementById('container')
+  document.getElementById('container')
 );
 // END
 
 // src/actions/index.js
 // Реализуйте необходимые действия.
 export const updateNewTaskText = (text) => ({
-    type: 'TEXT_UPDATE',
-    payload: {
-        text,
-    },
+  type: 'TEXT_UPDATE',
+  payload: {
+    text,
+  },
 });
 
 // BEGIN (write your solution here)
 export const addTask = (task) => ({
-    type: 'TASK_ADD',
-    payload: {
-        task,
-    },
+  type: 'TASK_ADD',
+  payload: {
+    task,
+  },
 });
 export const removeTask = (id) => ({
-    type: 'TEXT_REMOVE',
-    payload: {
-        id,
-    },
+  type: 'TEXT_REMOVE',
+  payload: {
+    id,
+  },
 });
 // END
 
@@ -74,30 +73,30 @@ export const removeTask = (id) => ({
 // import { combineReducers } from 'redux';
 
 const text = (state = '', action) => {
-    switch (action.type) {
-        case 'TEXT_UPDATE': {
-            return action.payload.text;
-        }
-        case 'TASK_ADD': {
-            return '';
-        }
-        default:
-            return state;
+  switch (action.type) {
+    case 'TEXT_UPDATE': {
+      return action.payload.text;
     }
+    case 'TASK_ADD': {
+      return '';
+    }
+    default:
+      return state;
+  }
 };
 
 // BEGIN (write your solution here)
 const tasks = (state = [], action) => {
-    switch (action.type) {
-        case 'TASK_ADD': {            
-            return [action.payload.task, ...state];
-        }
-        case 'TEXT_REMOVE': {
-            return state.filter((task) => task.id !== action.payload.id);
-        }
-        default:
-            return state;
+  switch (action.type) {
+    case 'TASK_ADD': {
+      return [action.payload.task, ...state];
     }
+    case 'TEXT_REMOVE': {
+      return state.filter((task) => task.id !== action.payload.id);
+    }
+    default:
+      return state;
+  }
 };
 // import { updateNewTaskText, addTask, removeTask } from '../actions/index.js';
 
@@ -105,84 +104,75 @@ const tasks = (state = [], action) => {
 // Эта функция, берет нужные данные из контейнера и отдаёт их компоненту
 // Компоненту TasksBox нужны задачи
 const mapStateToProps = (state) => {
-    const props = {
-        text: state.text,
-        tasks: state.tasks,
-    };
-    return props;
+  const props = {
+    text: state.text,
+    tasks: state.tasks,
+  };
+  return props;
 };
 
 class App extends React.Component {
-    handleChangeValue = (event) => {
-        const { dispatch } = this.props;
-        const newValue = event.target.value;
-        dispatch(updateNewTaskText(newValue));
-    };
+  handleChangeValue = (event) => {
+    const { dispatch } = this.props;
+    const newValue = event.target.value;
+    dispatch(updateNewTaskText(newValue));
+  };
 
-    handleAddTask = (event) => {
-        event.preventDefault();
-        const { dispatch, text } = this.props;
-        const task = { id: _.uniqueId(), text };
-        dispatch(addTask(task));
-    };
+  handleAddTask = (event) => {
+    event.preventDefault();
+    const { dispatch, text } = this.props;
+    const task = { id: _.uniqueId(), text };
+    dispatch(addTask(task));
+  };
 
-    handleDeleteTask = (id) => () => {
-        const { dispatch } = this.props;
-        dispatch(removeTask(id));
-    };
+  handleDeleteTask = (id) => () => {
+    const { dispatch } = this.props;
+    dispatch(removeTask(id));
+  };
 
-    renderForm() {
-        const { text } = this.props;
-        return (
-          <form action="" className="form-inline" onSubmit={this.handleAddTask}>
-            <div className="form-group mx-sm-3">
-              <input
-                type="text"
-                required
-                value={text}
-                onChange={this.handleChangeValue}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary btn-sm">
-              Add
-            </button>
-          </form>
-        );
+  renderForm() {
+    const { text } = this.props;
+    return (
+      <form action="" className="form-inline" onSubmit={this.handleAddTask}>
+        <div className="form-group mx-sm-3">
+          <input type="text" required value={text} onChange={this.handleChangeValue} />
+        </div>
+        <button type="submit" className="btn btn-primary btn-sm">
+          Add
+        </button>
+      </form>
+    );
+  }
+
+  renderTask() {
+    const { tasks } = this.props;
+    if (tasks.length === 0) {
+      return null;
     }
+    return (
+      <div className="mt-3">
+        <ul className="list-group">
+          {tasks.map((task) => (
+            <li key={task.id} className="list-group-item d-flex">
+              <span className="mr-auto">{task.text}</span>
+              <button type="button" className="close" onClick={this.handleDeleteTask(task.id)}>
+                <span>&times;</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
-    renderTask() {
-        const { tasks } = this.props;
-        if (tasks.length === 0) {
-            return null;
-        }
-        return (
-          <div className="mt-3">
-            <ul className="list-group">
-              {tasks.map((task) => (
-                <li key={task.id} className="list-group-item d-flex">
-                  <span className="mr-auto">{task.text}</span>
-                  <button
-                    type="button"
-                    className="close"
-                    onClick={this.handleDeleteTask(task.id)}
-                  >
-                    <span>&times;</span>
-                  </button>
-                </li>
-                    ))}
-            </ul>
-          </div>
-        );
-    }
-
-    render() {
-        return (
-          <div className="col-5">
-            {this.renderForm()}
-            {this.renderTask()}
-          </div>
-        );
-    }
+  render() {
+    return (
+      <div className="col-5">
+        {this.renderForm()}
+        {this.renderTask()}
+      </div>
+    );
+  }
 }
 
 export default connect(mapStateToProps)(App);

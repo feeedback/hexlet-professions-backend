@@ -29,17 +29,17 @@ const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name
 
 let tempFilePath;
 beforeEach(async () => {
-    tempFilePath = path.resolve(os.tmpdir(), 'example.html');
-    await fs.unlink(tempFilePath).catch(_.noop);
-    const srcFilePath = getFixturePath('before.html');
-    await fs.copyFile(srcFilePath, tempFilePath);
+  tempFilePath = path.resolve(os.tmpdir(), 'example.html');
+  await fs.unlink(tempFilePath).catch(_.noop);
+  const srcFilePath = getFixturePath('before.html');
+  await fs.copyFile(srcFilePath, tempFilePath);
 });
 
 test('форматирует указанный HTML-файл', async () => {
-    const expectedAfter = await fs.readFile(getFixturePath('after.html'), 'utf-8');
-    await prettifyHTMLFile(tempFilePath);
-    const after = await fs.readFile(tempFilePath, 'utf-8');
+  const expectedAfter = await fs.readFile(getFixturePath('after.html'), 'utf-8');
+  await prettifyHTMLFile(tempFilePath);
+  const after = await fs.readFile(tempFilePath, 'utf-8');
 
-    expect(after.trim()).toEqual(expectedAfter.trim());
+  expect(after.trim()).toEqual(expectedAfter.trim());
 });
 // END

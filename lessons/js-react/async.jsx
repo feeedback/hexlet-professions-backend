@@ -43,58 +43,58 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 export default class Autocomplete extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: '', listAutocomplete: [] };
+  constructor(props) {
+    super(props);
+    this.state = { value: '', listAutocomplete: [] };
+  }
+
+  getListAutocomplete = async (e) => {
+    const { value } = e.target;
+    this.setState({ value });
+
+    if (value === '') {
+      this.setState({ listAutocomplete: [] });
+      return;
     }
-
-    getListAutocomplete = async (e) => {
-        const { value } = e.target;
-        this.setState({ value });
-
-        if (value === '') {
-            this.setState({ listAutocomplete: [] });
-            return;
-        }
-        try {
-            const res = await axios.get('/countries', { params: { term: value } });
-            if (this.state.value === '') {
-                this.setState({ listAutocomplete: [] });
-                return;
-            }
-            this.setState({ listAutocomplete: res.data });
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    renderListAutocomplete() {
-        const { listAutocomplete } = this.state;
-        if (listAutocomplete.length === 0) {
-            return null;
-        }
-        const items = listAutocomplete.map((item) => <li key={item}>{item}</li>);
-        return <ul>{items}</ul>;
+    try {
+      const res = await axios.get('/countries', { params: { term: value } });
+      if (this.state.value === '') {
+        this.setState({ listAutocomplete: [] });
+        return;
+      }
+      this.setState({ listAutocomplete: res.data });
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    render() {
-        const { value } = this.state;
-        return (
-          <div>
-            <form>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Country"
-                  value={value}
-                  onChange={this.getListAutocomplete}
-                />
-              </div>
-            </form>
-            {this.renderListAutocomplete()}
+  renderListAutocomplete() {
+    const { listAutocomplete } = this.state;
+    if (listAutocomplete.length === 0) {
+      return null;
+    }
+    const items = listAutocomplete.map((item) => <li key={item}>{item}</li>);
+    return <ul>{items}</ul>;
+  }
+
+  render() {
+    const { value } = this.state;
+    return (
+      <div>
+        <form>
+          <div className="form-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter Country"
+              value={value}
+              onChange={this.getListAutocomplete}
+            />
           </div>
-        );
-    }
+        </form>
+        {this.renderListAutocomplete()}
+      </div>
+    );
+  }
 }
 // END

@@ -23,44 +23,40 @@ import { promises as fs } from 'fs';
 
 // BEGIN (write your solution here)
 export const getDirectorySize1 = (dirpath) =>
-    fs.readdir(dirpath).then((names) => {
-        const filepaths = names.map((name) => path.join(dirpath, name));
+  fs.readdir(dirpath).then((names) => {
+    const filepaths = names.map((name) => path.join(dirpath, name));
 
-        const promises = filepaths.map((filepath) =>
-            fs.stat(filepath).then((stat) => stat)
-        );
+    const promises = filepaths.map((filepath) => fs.stat(filepath).then((stat) => stat));
 
-        return Promise.all(promises).then((stats) => {
-            const onlyFilesStats = stats.filter((stat) => stat.isFile());
+    return Promise.all(promises).then((stats) => {
+      const onlyFilesStats = stats.filter((stat) => stat.isFile());
 
-            return _.sumBy(onlyFilesStats, 'size');
-        });
+      return _.sumBy(onlyFilesStats, 'size');
     });
+  });
 
 export const getDirectorySize2 = (dirpath) =>
-    fs.readdir(dirpath).then((names) =>
-        Promise.all(
-            names
-                .map((name) => path.join(dirpath, name))
-                .map((filepath) => fs.stat(filepath).then((stat) => stat))
-        ).then((stats) => {
-            const onlyFilesStats = stats.filter((stat) => stat.isFile());
-            return _.sumBy(onlyFilesStats, 'size');
-        })
-    );
+  fs.readdir(dirpath).then((names) =>
+    Promise.all(
+      names.map((name) => path.join(dirpath, name)).map((filepath) => fs.stat(filepath).then((stat) => stat))
+    ).then((stats) => {
+      const onlyFilesStats = stats.filter((stat) => stat.isFile());
+      return _.sumBy(onlyFilesStats, 'size');
+    })
+  );
 
 export const getDirectorySize = (dirpath) => {
-    const promise = fs.readdir(dirpath).then((filenames) => {
-        const filepaths = filenames.map((name) => path.join(dirpath, name));
-        const promises = filepaths.map(fs.stat);
+  const promise = fs.readdir(dirpath).then((filenames) => {
+    const filepaths = filenames.map((name) => path.join(dirpath, name));
+    const promises = filepaths.map(fs.stat);
 
-        return Promise.all(promises);
-    });
+    return Promise.all(promises);
+  });
 
-    return promise.then((stats) => {
-        const onlyFilesStats = stats.filter((stat) => stat.isFile());
+  return promise.then((stats) => {
+    const onlyFilesStats = stats.filter((stat) => stat.isFile());
 
-        return _.sumBy(onlyFilesStats, 'size');
-    });
+    return _.sumBy(onlyFilesStats, 'size');
+  });
 };
 // END

@@ -57,23 +57,20 @@
 
 // export default
 async (port, callback = () => {}) => {
-    const data = await fs.readFile(path.resolve(__dirname, 'phonebook.txt'));
+  const data = await fs.readFile(path.resolve(__dirname, 'phonebook.txt'));
 
-    // BEGIN (write your solution here)
-    const records = data
-        .toString()
-        .trim()
-        .split('\n');
-    const users = Object.fromEntries(
-        records.map((record) => {
-            const [id, name, phone] = record.split(' | ');
-            return [id, { name, phone }];
-        })
-    );
-    // END
+  // BEGIN (write your solution here)
+  const records = data.toString().trim().split('\n');
+  const users = Object.fromEntries(
+    records.map((record) => {
+      const [id, name, phone] = record.split(' | ');
+      return [id, { name, phone }];
+    })
+  );
+  // END
 
-    const server = makeServer(users);
-    server.listen(port, () => callback(server));
+  const server = makeServer(users);
+  server.listen(port, () => callback(server));
 };
 
 // server.js
@@ -81,31 +78,26 @@ async (port, callback = () => {}) => {
 // import url from 'url';
 
 export default (usersById) =>
-    http.createServer((request, response) => {
-        request.on('end', () => {
-            if (request.url === '/') {
-                const messages = [
-                    'Welcome to The Phonebook',
-                    `Records count: ${Object.keys(usersById).length}`,
-                ];
-                response.end(messages.join('\n'));
-            } else if (request.url.startsWith('/search')) {
-                // BEGIN (write your solution here)
-                const queryObj = url.parse(request.url, true);
-                if (!('q' in queryObj.query)) {
-                    response.end();
-                    return;
-                }
-                const query = queryObj.query.q.toLowerCase();
+  http.createServer((request, response) => {
+    request.on('end', () => {
+      if (request.url === '/') {
+        const messages = ['Welcome to The Phonebook', `Records count: ${Object.keys(usersById).length}`];
+        response.end(messages.join('\n'));
+      } else if (request.url.startsWith('/search')) {
+        // BEGIN (write your solution here)
+        const queryObj = url.parse(request.url, true);
+        if (!('q' in queryObj.query)) {
+          response.end();
+          return;
+        }
+        const query = queryObj.query.q.toLowerCase();
 
-                const filtered = Object.values(usersById).filter((user) =>
-                    user.name.toLowerCase().includes(query)
-                );
-                const messages = filtered.map((user) => Object.values(user).join(', '));
-                response.end(messages.join('\n'));
-                // END
-            }
-        });
-
-        request.resume();
+        const filtered = Object.values(usersById).filter((user) => user.name.toLowerCase().includes(query));
+        const messages = filtered.map((user) => Object.values(user).join(', '));
+        response.end(messages.join('\n'));
+        // END
+      }
     });
+
+    request.resume();
+  });

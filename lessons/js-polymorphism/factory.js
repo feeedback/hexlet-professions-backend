@@ -28,19 +28,19 @@ import Config from './Config.js';
 
 // BEGIN (write your solution here)
 const mappingParser = {
-    '.json': JsonParser,
-    '.yaml': YamlParser,
-    '.yml': YamlParser,
+  '.json': JsonParser,
+  '.yaml': YamlParser,
+  '.yml': YamlParser,
 };
 
 export default class ConfigFactory {
-    static factory(filePath) {
-        const ext = path.extname(filePath);
-        const rawData = fs.readFileSync(filePath, 'utf-8');
-        const data = mappingParser[ext].parse(rawData);
+  static factory(filePath) {
+    const ext = path.extname(filePath);
+    const rawData = fs.readFileSync(filePath, 'utf-8');
+    const data = mappingParser[ext].parse(rawData);
 
-        return new Config(data);
-    }
+    return new Config(data);
+  }
 }
 // END
 
@@ -51,9 +51,9 @@ export default class ConfigFactory {
 
 // BEGIN (write your solution here)
 export default class JsonParser {
-    static parse(data) {
-        return JSON.parse(data);
-    }
+  static parse(data) {
+    return JSON.parse(data);
+  }
 }
 // END
 
@@ -67,8 +67,8 @@ export default class JsonParser {
 
 // BEGIN (write your solution here)
 export default class YamlParser {
-    static parse(data) {
-        return yaml.safeLoad(data);
-    }
+  static parse(data) {
+    return yaml.safeLoad(data);
+  }
 }
 // END

@@ -17,6 +17,6 @@ import fs from 'fs';
 
 // BEGIN (write your solution here) (write your solution here)
 export default (path) => {
-    fs.readFile(path, 'utf-8', (error, data) => console.log(error || data));
+  fs.readFile(path, 'utf-8', (error, data) => console.log(error || data));
 };
 // END

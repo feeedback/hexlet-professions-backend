@@ -10,7 +10,7 @@
 // структуры.
 
 const getJsonFileData = () => ({
-    common: { files: ['src/objects.js'] },
-    config: { outdir: '/dist' },
+  common: { files: ['src/objects.js'] },
+  config: { outdir: '/dist' },
 });
 export default getJsonFileData;

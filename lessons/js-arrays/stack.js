@@ -12,23 +12,23 @@
 // скобок: круглые — (), квадратные — [], фигурные — {} и угловые — <>.
 
 const f = (str) => {
-    const stack = [];
-    const dict = new Map([
-        ['(', ')'],
-        ['[', ']'],
-        ['{', '}'],
-        ['<', '>'],
-    ]);
-    const isOpeningSymbol = (symbol) => dict.has(symbol);
-    const getClosingSymbolFor = (symbol) => dict.get(symbol);
+  const stack = [];
+  const dict = new Map([
+    ['(', ')'],
+    ['[', ']'],
+    ['{', '}'],
+    ['<', '>'],
+  ]);
+  const isOpeningSymbol = (symbol) => dict.has(symbol);
+  const getClosingSymbolFor = (symbol) => dict.get(symbol);
 
-    for (const symbol of str) {
-        if (isOpeningSymbol(symbol)) {
-            stack.push(symbol);
-        } else if (symbol !== getClosingSymbolFor(stack.pop())) {
-            return false;
-        }
+  for (const symbol of str) {
+    if (isOpeningSymbol(symbol)) {
+      stack.push(symbol);
+    } else if (symbol !== getClosingSymbolFor(stack.pop())) {
+      return false;
     }
-    return !stack.length;
+  }
+  return !stack.length;
 };
 console.log(f('()'));

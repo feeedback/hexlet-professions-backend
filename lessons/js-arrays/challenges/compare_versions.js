@@ -16,9 +16,9 @@
 
 const split = (version) => version.split('.').map(Number);
 const compareVersion = (v1, v2) => {
-    const [maj1, min1] = split(v1);
-    const [maj2, min2] = split(v2);
-    const comparedMajor = Math.sign(maj1 - maj2);
-    return comparedMajor !== 0 ? comparedMajor : Math.sign(min1 - min2);
+  const [maj1, min1] = split(v1);
+  const [maj2, min2] = split(v2);
+  const comparedMajor = Math.sign(maj1 - maj2);
+  return comparedMajor !== 0 ? comparedMajor : Math.sign(min1 - min2);
 };
 export default compareVersion;

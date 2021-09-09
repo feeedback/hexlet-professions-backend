@@ -120,132 +120,124 @@ import update from 'immutability-helper';
 import routes from './routes.js';
 
 const Item = ({ task, onClick }) => {
-    const taskLink = (
-      <a href="#" className="todo-task" onClick={onClick}>
-        {task.text}
-      </a>
-    );
-    const taskEl = task.state === 'finished' ? <s>{taskLink}</s> : taskLink;
-    return (
-      <div className="row">
-        <div className="col-1">{task.id}</div>
-        <div className="col">{taskEl}</div>
-      </div>
-    );
+  const taskLink = (
+    <a href="#" className="todo-task" onClick={onClick}>
+      {task.text}
+    </a>
+  );
+  const taskEl = task.state === 'finished' ? <s>{taskLink}</s> : taskLink;
+  return (
+    <div className="row">
+      <div className="col-1">{task.id}</div>
+      <div className="col">{taskEl}</div>
+    </div>
+  );
 };
 // export default Item;
 
 // BEGIN (write your solution here)
 export default class TodoBox extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { newTaskValue: '', tasks: [] };
-    }
+  constructor(props) {
+    super(props);
+    this.state = { newTaskValue: '', tasks: [] };
+  }
 
-    componentDidMount() {
-        this.fetchTasks();
-    }
+  componentDidMount() {
+    this.fetchTasks();
+  }
 
-    fetchTasks = async () => {
-        const response = await axios.get(routes.tasksPath());
-        this.setState({ tasks: response.data });
-    };
+  fetchTasks = async () => {
+    const response = await axios.get(routes.tasksPath());
+    this.setState({ tasks: response.data });
+  };
 
-    handleChangeValue = (event) => {
-        const { value: newTaskValue } = event.target;
-        this.setState({ newTaskValue });
-    };
+  handleChangeValue = (event) => {
+    const { value: newTaskValue } = event.target;
+    this.setState({ newTaskValue });
+  };
 
-    handleAddNewTask = async (event) => {
-        event.preventDefault();
-        const { newTaskValue } = this.state;
-        const response = await axios.post(routes.tasksPath(), { text: newTaskValue });
-        const { tasks } = this.state;
-        this.setState({ newTaskValue: '', tasks: [response.data, ...tasks] });
-    };
+  handleAddNewTask = async (event) => {
+    event.preventDefault();
+    const { newTaskValue } = this.state;
+    const response = await axios.post(routes.tasksPath(), { text: newTaskValue });
+    const { tasks } = this.state;
+    this.setState({ newTaskValue: '', tasks: [response.data, ...tasks] });
+  };
 
-    changeTaskState = (id, taskNewState) => {
-        const { tasks } = this.state;
-        const taskIndex = tasks.findIndex((item) => item.id === id);
-        const updatedTasks = update(tasks, {
-            [taskIndex]: { $merge: { state: taskNewState } },
-        });
-        this.setState({ tasks: updatedTasks });
-    };
+  changeTaskState = (id, taskNewState) => {
+    const { tasks } = this.state;
+    const taskIndex = tasks.findIndex((item) => item.id === id);
+    const updatedTasks = update(tasks, {
+      [taskIndex]: { $merge: { state: taskNewState } },
+    });
+    this.setState({ tasks: updatedTasks });
+  };
 
-    handleCompleteTask = (id) => () => {
-        this.changeTaskState(id, 'finished');
-        axios.patch(routes.finishTaskPath(id));
-    };
+  handleCompleteTask = (id) => () => {
+    this.changeTaskState(id, 'finished');
+    axios.patch(routes.finishTaskPath(id));
+  };
 
-    handleReactiveTask = (id) => () => {
-        this.changeTaskState(id, 'active');
-        axios.patch(routes.activateTaskPath(id));
-    };
+  handleReactiveTask = (id) => () => {
+    this.changeTaskState(id, 'active');
+    axios.patch(routes.activateTaskPath(id));
+  };
 
-    renderActiveTasks(tasks) {
-        return (
-          <div className="todo-active-tasks">
-            {tasks.map((task) => (
-              <Item
-                key={task.id}
-                task={task}
-                onClick={this.handleCompleteTask(task.id)}
-              />
-            ))}
-          </div>
-        );
-    }
+  renderActiveTasks(tasks) {
+    return (
+      <div className="todo-active-tasks">
+        {tasks.map((task) => (
+          <Item key={task.id} task={task} onClick={this.handleCompleteTask(task.id)} />
+        ))}
+      </div>
+    );
+  }
 
-    renderFinishedTasks(tasks) {
-        return (
-          <div className="todo-finished-tasks">
-            {tasks.map((task) => (
-              <Item
-                key={task.id}
-                task={task}
-                onClick={this.handleReactiveTask(task.id)}
-              />
-            ))}
-          </div>
-        );
-    }
+  renderFinishedTasks(tasks) {
+    return (
+      <div className="todo-finished-tasks">
+        {tasks.map((task) => (
+          <Item key={task.id} task={task} onClick={this.handleReactiveTask(task.id)} />
+        ))}
+      </div>
+    );
+  }
 
-    renderForm() {
-        const { newTaskValue } = this.state;
+  renderForm() {
+    const { newTaskValue } = this.state;
 
-        return (
-          <form onSubmit={this.handleAddNewTask} className="todo-form form-inline mx-3">
-            <div className="form-group">
-              <input
-                type="text"
-                value={newTaskValue}
-                required
-                className="form-control mr-3"
-                placeholder="I am going..."
-                onChange={this.handleChangeValue}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              add
-            </button>
-          </form>
-        );
-    }
+    return (
+      <form onSubmit={this.handleAddNewTask} className="todo-form form-inline mx-3">
+        <div className="form-group">
+          <input
+            type="text"
+            value={newTaskValue}
+            required
+            className="form-control mr-3"
+            placeholder="I am going..."
+            onChange={this.handleChangeValue}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          add
+        </button>
+      </form>
+    );
+  }
 
-    render() {
-        const { tasks } = this.state;
-        const activeTasks = tasks.filter((task) => task.state === 'active');
-        const finishedTasks = tasks.filter((task) => task.state === 'finished');
+  render() {
+    const { tasks } = this.state;
+    const activeTasks = tasks.filter((task) => task.state === 'active');
+    const finishedTasks = tasks.filter((task) => task.state === 'finished');
 
-        return (
-          <div>
-            <div className="mb-3">{this.renderForm()}</div>
-            {activeTasks.length ? this.renderActiveTasks(activeTasks) : null}
-            {finishedTasks.length ? this.renderFinishedTasks(finishedTasks) : null}
-          </div>
-        );
-    }
+    return (
+      <div>
+        <div className="mb-3">{this.renderForm()}</div>
+        {activeTasks.length ? this.renderActiveTasks(activeTasks) : null}
+        {finishedTasks.length ? this.renderFinishedTasks(finishedTasks) : null}
+      </div>
+    );
+  }
 }
 // END
 

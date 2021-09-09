@@ -8,11 +8,11 @@
 // чисел. Последовательность из одного числа не может считаться возрастающей.
 
 const isContinuousSequence = (nums) => {
-    for (let i = 0; i < nums.length - 1; i++) {
-        if (nums[i] !== nums[i + 1] - 1) {
-            return false;
-        }
+  for (let i = 0; i < nums.length - 1; i++) {
+    if (nums[i] !== nums[i + 1] - 1) {
+      return false;
     }
-    return nums.length > 1;
+  }
+  return nums.length > 1;
 };
 console.log(isContinuousSequence([1, 2, 3]));

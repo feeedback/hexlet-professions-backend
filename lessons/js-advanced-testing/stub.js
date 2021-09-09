@@ -26,15 +26,13 @@
 // Структура этого класса описывает только ту часть,
 // которая необходима для вызова await client.repos.listForOrg(...)
 export default class OctokitFake {
-    constructor(data) {
-        this.data = data;
-    }
+  constructor(data) {
+    this.data = data;
+  }
 
-    repos = {
-        listForUser: () => {
-            return Promise.resolve({ data: this.data });
-        },
-    };
+  repos = {
+    listForUser: () => Promise.resolve({ data: this.data }),
+  };
 }
 // END
 
@@ -45,20 +43,20 @@ export default class OctokitFake {
 
 // BEGIN (write your solution here)
 test('getUserMainLanguage first found', async () => {
-    const data = [
-        { language: 'javascript' },
-        { language: 'php' },
-        { language: 'javascript' },
-        { language: 'php' },
-    ];
-    const client = new OctokitFake(data);
-    const mainLanguage = await getUserMainLanguage('', client);
-    expect(mainLanguage).toEqual('javascript');
+  const data = [
+    { language: 'javascript' },
+    { language: 'php' },
+    { language: 'javascript' },
+    { language: 'php' },
+  ];
+  const client = new OctokitFake(data);
+  const mainLanguage = await getUserMainLanguage('', client);
+  expect(mainLanguage).toEqual('javascript');
 });
 
 test('getUserMainLanguage when empty', async () => {
-    const client = new OctokitFake([]);
-    const mainLanguage = await getUserMainLanguage('user-without-repos', client);
-    expect(mainLanguage).toBeNull();
+  const client = new OctokitFake([]);
+  const mainLanguage = await getUserMainLanguage('user-without-repos', client);
+  expect(mainLanguage).toBeNull();
 });
 // END

@@ -12,17 +12,17 @@
 // включая любые спецсимволы(без пробелов).
 
 const makeCensored0 = (string, stopWords) => {
-    const escapeRegExp = (str) => str.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
-    const stopStr = stopWords.map(escapeRegExp).join('|');
-    const stopWordsRegExp = new RegExp(`^${stopStr}$`, 'g');
-    return string
-        .split(' ')
-        .map((word) => word.replace(stopWordsRegExp, '$#%!'))
-        .join(' ');
+  const escapeRegExp = (str) => str.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+  const stopStr = stopWords.map(escapeRegExp).join('|');
+  const stopWordsRegExp = new RegExp(`^${stopStr}$`, 'g');
+  return string
+    .split(' ')
+    .map((word) => word.replace(stopWordsRegExp, '$#%!'))
+    .join(' ');
 };
 
 const makeCensored = (string, stopWords) =>
-    string
-        .split(' ')
-        .map((word) => (stopWords.includes(word) ? '$#%!' : word))
-        .join(' ');
+  string
+    .split(' ')
+    .map((word) => (stopWords.includes(word) ? '$#%!' : word))
+    .join(' ');

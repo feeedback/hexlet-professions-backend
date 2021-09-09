@@ -47,38 +47,38 @@
 
 // BEGIN (write your solution here)
 export default class Node {
-    constructor(key = null, left = null, right = null) {
-        this.key = key;
-        this.left = left;
-        this.right = right;
+  constructor(key = null, left = null, right = null) {
+    this.key = key;
+    this.left = left;
+    this.right = right;
+  }
+
+  getKey() {
+    return this.key;
+  }
+
+  getLeft() {
+    return this.left;
+  }
+
+  getRight() {
+    return this.right;
+  }
+
+  search(key) {
+    if (this.key === key) {
+      return this;
     }
 
-    getKey() {
-        return this.key;
+    if (key < this.key && this.left !== null) {
+      return this.left.search(key);
     }
 
-    getLeft() {
-        return this.left;
+    if (key > this.key && this.right !== null) {
+      return this.right.search(key);
     }
 
-    getRight() {
-        return this.right;
-    }
-
-    search(key) {
-        if (this.key === key) {
-            return this;
-        }
-
-        if (key < this.key && this.left !== null) {
-            return this.left.search(key);
-        }
-
-        if (key > this.key && this.right !== null) {
-            return this.right.search(key);
-        }
-
-        return null;
-    }
+    return null;
+  }
 }
 // END

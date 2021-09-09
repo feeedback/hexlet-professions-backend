@@ -30,9 +30,9 @@ import { camelCase } from 'lodash';
 
 // BEGIN (write your solution here)
 export default (document) => {
-    const replaceClass = (el) => (cls) => el.classList.replace(cls, camelCase(cls));
+  const replaceClass = (el) => (cls) => el.classList.replace(cls, camelCase(cls));
 
-    const allElements = document.body.getElementsByTagName('*');
-    allElements.forEach((el) => el.classList.forEach(replaceClass(el)));
+  const allElements = document.body.getElementsByTagName('*');
+  allElements.forEach((el) => el.classList.forEach(replaceClass(el)));
 };
 // END

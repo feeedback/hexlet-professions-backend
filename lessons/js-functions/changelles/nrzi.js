@@ -21,16 +21,16 @@
 // следующем такте, будет изменён на противоположный по сравнению с предыдущим.
 
 export default (signal) => {
-    const binary = signal.replace(/\|(¯|_)/g, 1).replace(/¯|_/g, 0);
-    return /^[01]*$/g.test(binary) ? binary : '';
+  const binary = signal.replace(/\|(¯|_)/g, 1).replace(/¯|_/g, 0);
+  return /^[01]*$/g.test(binary) ? binary : '';
 };
 export const nrzi = (str) =>
-    str
-        .split('')
-        .map((e, i, arr) => {
-            if (e === '|') {
-                return '';
-            }
-            return arr[i - 1] === '|' ? 1 : 0;
-        })
-        .join('');
+  str
+    .split('')
+    .map((e, i, arr) => {
+      if (e === '|') {
+        return '';
+      }
+      return arr[i - 1] === '|' ? 1 : 0;
+    })
+    .join('');

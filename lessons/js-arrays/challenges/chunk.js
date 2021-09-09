@@ -7,18 +7,18 @@
 // указанной размерности.
 
 const chunkRecursive = (arr, size) => {
-    if (size > arr.length) {
-        return arr.length ? [arr] : arr;
-    }
-    const head = arr.slice(0, size);
-    const tail = arr.slice(size);
-    return [head, ...chunk(tail, size)];
+  if (size > arr.length) {
+    return arr.length ? [arr] : arr;
+  }
+  const head = arr.slice(0, size);
+  const tail = arr.slice(size);
+  return [head, ...chunk(tail, size)];
 };
 const chunk = (arr, size) => {
-    const nArr = [];
-    for (let i = 0; i < arr.length; i += size) {
-        nArr.push(arr.slice(i, i + size));
-    }
-    return nArr;
+  const nArr = [];
+  for (let i = 0; i < arr.length; i += size) {
+    nArr.push(arr.slice(i, i + size));
+  }
+  return nArr;
 };
 console.log(chunk(['a', 'b', 'c', 'd', 'e'], 2));

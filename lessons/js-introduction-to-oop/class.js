@@ -18,23 +18,23 @@
 import _ from 'lodash';
 
 export default class Cart {
-    constructor() {
-        this.basket = [];
-    }
+  constructor() {
+    this.basket = [];
+  }
 
-    addItem(good, count) {
-        this.basket.push({ good, count });
-    }
+  addItem(good, count) {
+    this.basket.push({ good, count });
+  }
 
-    getItems() {
-        return this.basket;
-    }
+  getItems() {
+    return this.basket;
+  }
 
-    getCount() {
-        return _.sumBy(this.basket, (item) => item.count);
-    }
+  getCount() {
+    return _.sumBy(this.basket, (item) => item.count);
+  }
 
-    getCost() {
-        return _.sumBy(this.basket, (item) => item.good.price * item.count);
-    }
+  getCost() {
+    return _.sumBy(this.basket, (item) => item.good.price * item.count);
+  }
 }

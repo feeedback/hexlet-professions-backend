@@ -7,32 +7,32 @@
 // матрицы. Для простоты условимся, что матрица всегда имеет чётное количество столбцов и количество
 // столбцов всегда равно количеству строк.
 const getMirrorMatrixMutate = (matrix) => {
-    const { length } = matrix[0];
-    for (let y = 0; y < matrix.length; y++) {
-        for (let x = 0; x < length / 2; x++) {
-            matrix[y][length - 1 - x] = matrix[y][x];
-        }
+  const { length } = matrix[0];
+  for (let y = 0; y < matrix.length; y++) {
+    for (let x = 0; x < length / 2; x++) {
+      matrix[y][length - 1 - x] = matrix[y][x];
     }
-    return matrix;
+  }
+  return matrix;
 };
 const getMirrorRow = (row) => {
-    const size = row.length;
-    const mirrored = [];
+  const size = row.length;
+  const mirrored = [];
 
-    for (let i = 0; i < size / 2; i += 1) {
-        mirrored[i] = row[i];
-        mirrored[size - i - 1] = row[i];
-    }
+  for (let i = 0; i < size / 2; i += 1) {
+    mirrored[i] = row[i];
+    mirrored[size - i - 1] = row[i];
+  }
 
-    return mirrored;
+  return mirrored;
 };
 const getMirrorMatrix = (matrix) => {
-    const mirroredMatrix = [];
-    for (const row of matrix) {
-        const mirroredRow = getMirrorRow(row);
-        mirroredMatrix.push(mirroredRow);
-    }
+  const mirroredMatrix = [];
+  for (const row of matrix) {
+    const mirroredRow = getMirrorRow(row);
+    mirroredMatrix.push(mirroredRow);
+  }
 
-    return mirroredMatrix;
+  return mirroredMatrix;
 };
 export default getMirrorMatrix;

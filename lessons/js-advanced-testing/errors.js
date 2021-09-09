@@ -16,7 +16,7 @@
 
 // BEGIN
 test('read', () => {
-    expect(() => read('/undefined')).toThrow();
-    expect(() => read('/etc')).toThrow();
+  expect(() => read('/undefined')).toThrow();
+  expect(() => read('/etc')).toThrow();
 });
 // END

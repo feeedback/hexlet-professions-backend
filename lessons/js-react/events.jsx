@@ -49,60 +49,70 @@ import _ from 'lodash';
 
 // BEGIN (write your solution here)
 export default class Carousel extends React.Component {
-    constructor(props) {
-        super(props);
-        const { images } = props;
-        this.state = { length: images.length, activeImageIndex: 0 };
-    }
+  constructor(props) {
+    super(props);
+    const { images } = props;
+    this.state = { length: images.length, activeImageIndex: 0 };
+  }
 
-    setNewImage = (direction) => (e) => {
-        e.preventDefault();
+  setNewImage = (direction) => (e) => {
+    e.preventDefault();
 
-        const { length, activeImageIndex } = this.state;
-        const directionMap = {
-            'prev': (activeImageIndex + (length - 1)) % length,
-            'next': (activeImageIndex + 1) % length
-        }
-        const next = directionMap[direction];
-        this.setState({ activeImageIndex: next });
+    const { length, activeImageIndex } = this.state;
+    const directionMap = {
+      prev: (activeImageIndex + (length - 1)) % length,
+      next: (activeImageIndex + 1) % length,
     };
+    const next = directionMap[direction];
+    this.setState({ activeImageIndex: next });
+  };
 
-    renderCarouselItems() {
-        const { images } = this.props;
-        const { activeImageIndex: activeImage } = this.state;
+  renderCarouselItems() {
+    const { images } = this.props;
+    const { activeImageIndex: activeImage } = this.state;
 
-        return images.map((src, index) => {
-            const active = (index === activeImage);
-            console.log(activeImage, active);
-            const classCarouselItem = cn({
-                'carousel-item': true,
-                active
-            });
-            return (
-              <div key={_.uniqueId()} className={classCarouselItem}>
-                <img alt="" className="d-block w-100" src={src} />
-              </div>
-            )
-        })
-    }
+    return images.map((src, index) => {
+      const active = index === activeImage;
+      console.log(activeImage, active);
+      const classCarouselItem = cn({
+        'carousel-item': true,
+        active,
+      });
+      return (
+        <div key={_.uniqueId()} className={classCarouselItem}>
+          <img alt="" className="d-block w-100" src={src} />
+        </div>
+      );
+    });
+  }
 
-    render() {
-        return (
-          <div id="carousel" className="carousel slide" data-ride="carousel">
-            <div className="carousel-inner">
-              {this.renderCarouselItems()}
-            </div>
-                
-            <a className="carousel-control-prev" href="#carousel" role="button" data-slide="prev" onClick={this.setNewImage('prev')}>
-              <span className="carousel-control-prev-icon" />
-              <span className="sr-only">Previous</span>
-            </a>
-            <a className="carousel-control-next" href="#carousel" role="button" data-slide="next" onClick={this.setNewImage('next')}>
-              <span className="carousel-control-next-icon" />
-              <span className="sr-only">Next</span>
-            </a>
-          </div>
-        );
-    }
+  render() {
+    return (
+      <div id="carousel" className="carousel slide" data-ride="carousel">
+        <div className="carousel-inner">{this.renderCarouselItems()}</div>
+
+        <a
+          className="carousel-control-prev"
+          href="#carousel"
+          role="button"
+          data-slide="prev"
+          onClick={this.setNewImage('prev')}
+        >
+          <span className="carousel-control-prev-icon" />
+          <span className="sr-only">Previous</span>
+        </a>
+        <a
+          className="carousel-control-next"
+          href="#carousel"
+          role="button"
+          data-slide="next"
+          onClick={this.setNewImage('next')}
+        >
+          <span className="carousel-control-next-icon" />
+          <span className="sr-only">Next</span>
+        </a>
+      </div>
+    );
+  }
 }
 // END

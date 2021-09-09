@@ -19,30 +19,30 @@
 
 // BEGIN (write your solution here)
 test('getUserMainLanguage', async () => {
-    const user = 'hexlet';
-    const data = [
-        { language: 'javascript' },
-        { language: 'php' },
-        { language: 'javascript' },
-        { language: 'php' },
-    ];
-    nock(/api\.github\.com/)
-        .get(`/users/${user}/repos`)
-        .reply(200, data);
+  const user = 'hexlet';
+  const data = [
+    { language: 'javascript' },
+    { language: 'php' },
+    { language: 'javascript' },
+    { language: 'php' },
+  ];
+  nock(/api\.github\.com/)
+    .get(`/users/${user}/repos`)
+    .reply(200, data);
 
-    const mainLanguage = await getUserMainLanguage(user);
-    expect(mainLanguage).toEqual('javascript');
+  const mainLanguage = await getUserMainLanguage(user);
+  expect(mainLanguage).toEqual('javascript');
 });
 
 test('getUserMainLanguage when empty', async () => {
-    const user = 'user-without-repos';
-    const data = [];
-    nock(/api\.github\.com/)
-        .get(`/users/${user}/repos`)
-        .reply(200, data);
+  const user = 'user-without-repos';
+  const data = [];
+  nock(/api\.github\.com/)
+    .get(`/users/${user}/repos`)
+    .reply(200, data);
 
-    const mainLanguage = await getUserMainLanguage(user);
-    expect(mainLanguage).toBeNull();
+  const mainLanguage = await getUserMainLanguage(user);
+  expect(mainLanguage).toBeNull();
 });
 // END
 

@@ -21,11 +21,11 @@
 
 // BEGIN (write your solution here)
 test('getFilesCount', () => {
-    const directoryPath = getFixturePath('nested');
-    const callback = jest.fn();
+  const directoryPath = getFixturePath('nested');
+  const callback = jest.fn();
 
-    getFilesCount(directoryPath, callback);
-    expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith('Go!');
+  getFilesCount(directoryPath, callback);
+  expect(callback).toHaveBeenCalledTimes(1);
+  expect(callback).toHaveBeenCalledWith('Go!');
 });
 // END

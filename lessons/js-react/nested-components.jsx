@@ -68,65 +68,65 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 export default class TodoBox extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { currentTaskText: '', tasks: [] };
-    }
+  constructor(props) {
+    super(props);
+    this.state = { currentTaskText: '', tasks: [] };
+  }
 
-    handleAddTask = (event) => {
-        event.preventDefault();
-        const { currentTaskText, tasks } = this.state;
+  handleAddTask = (event) => {
+    event.preventDefault();
+    const { currentTaskText, tasks } = this.state;
 
-        const newTask = { id: uniqueId(), text: currentTaskText };
-        this.setState({ currentTaskText: '', tasks: [newTask, ...tasks] });
-    };
+    const newTask = { id: uniqueId(), text: currentTaskText };
+    this.setState({ currentTaskText: '', tasks: [newTask, ...tasks] });
+  };
 
-    handleRemoveTask = (id) => () => {
-        const { tasks } = this.state;
-        this.setState({ tasks: tasks.filter((item) => item.id !== id) });
-    };
+  handleRemoveTask = (id) => () => {
+    const { tasks } = this.state;
+    this.setState({ tasks: tasks.filter((item) => item.id !== id) });
+  };
 
-    handleChangeTask = (event) => {
-        const { value } = event.target;
-        this.setState({ currentTaskText: value });
-    };
+  handleChangeTask = (event) => {
+    const { value } = event.target;
+    this.setState({ currentTaskText: value });
+  };
 
-    renderForm() {
-        const { currentTaskText } = this.state;
-        return (
-          <form onSubmit={this.handleAddTask} className="todo-form form-inline mx-3">
-            <div className="form-group">
-              <input
-                type="text"
-                value={currentTaskText}
-                required
-                className="form-control mr-3"
-                placeholder="I am going..."
-                onChange={this.handleChangeTask}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              add
-            </button>
-          </form>
-        );
-    }
+  renderForm() {
+    const { currentTaskText } = this.state;
+    return (
+      <form onSubmit={this.handleAddTask} className="todo-form form-inline mx-3">
+        <div className="form-group">
+          <input
+            type="text"
+            value={currentTaskText}
+            required
+            className="form-control mr-3"
+            placeholder="I am going..."
+            onChange={this.handleChangeTask}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          add
+        </button>
+      </form>
+    );
+  }
 
-    render() {
-        const { tasks } = this.state;
+  render() {
+    const { tasks } = this.state;
 
-        return (
-          <div>
-            <div className="mb-3">{this.renderForm()}</div>
-            {tasks.map((task) => (
-              <div key={task.id}>
-                <Item task={task} onRemove={this.handleRemoveTask(task.id)} />
-                <hr />
-              </div>
-                ))}
+    return (
+      <div>
+        <div className="mb-3">{this.renderForm()}</div>
+        {tasks.map((task) => (
+          <div key={task.id}>
+            <Item task={task} onRemove={this.handleRemoveTask(task.id)} />
+            <hr />
           </div>
-        );
-    }
+        ))}
+      </div>
+    );
+  }
 }
 // END
 
@@ -136,24 +136,20 @@ export default class TodoBox extends React.Component {
 
 // BEGIN (write your solution here)
 class Item extends React.Component {
-    render() {
-        const { task, onRemove } = this.props;
+  render() {
+    const { task, onRemove } = this.props;
 
-        return (
-          <div className="row">
-            <div>
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={onRemove}
-              >
-                -
-              </button>
-            </div>
-            <div className="col-10">{task.text}</div>
-          </div>
-        );
-    }
+    return (
+      <div className="row">
+        <div>
+          <button type="button" className="btn btn-primary btn-sm" onClick={onRemove}>
+            -
+          </button>
+        </div>
+        <div className="col-10">{task.text}</div>
+      </div>
+    );
+  }
 }
 // export default Item;
 // END

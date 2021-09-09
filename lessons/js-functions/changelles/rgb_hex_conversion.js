@@ -23,19 +23,19 @@ const decToHex = (num) => num.toString(16);
 const hexToDec = (num) => parseInt(num, 16);
 
 export const rgbToHex = (...rgb) => {
-    const hex = rgb.map((num) => decToHex(num).padStart(2, '0'));
-    return `#${hex.join('')}`;
+  const hex = rgb.map((num) => decToHex(num).padStart(2, '0'));
+  return `#${hex.join('')}`;
 };
 export const hexToRgb = (hex) => {
-    const rgb = ['r', 'g', 'b'];
-    const hexNums = chunk(hex.slice(1), 2);
-    const decNums = hexNums.map((num, i) => [rgb[i], hexToDec(num.join(''))]);
-    return Object.fromEntries(decNums);
+  const rgb = ['r', 'g', 'b'];
+  const hexNums = chunk(hex.slice(1), 2);
+  const decNums = hexNums.map((num, i) => [rgb[i], hexToDec(num.join(''))]);
+  return Object.fromEntries(decNums);
 };
 
 // second variant
 const chunkStr = (str, n) => str.match(new RegExp(`.{1,${n}}`, 'g'));
 export const hexToRgb2 = (hex) => {
-    const [r, g, b] = chunkStr(hex.slice(1), 2);
-    return { r: hexToDec(r), g: hexToDec(g), b: hexToDec(b) };
+  const [r, g, b] = chunkStr(hex.slice(1), 2);
+  return { r: hexToDec(r), g: hexToDec(g), b: hexToDec(b) };
 };

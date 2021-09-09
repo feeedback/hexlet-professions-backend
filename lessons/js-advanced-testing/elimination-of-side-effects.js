@@ -26,9 +26,9 @@ const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name
 const fakeLogger = (args) => _.noop;
 
 test('getFilesCount', () => {
-    // flat можно не тестировать так как nested покрывает и flat тоже
-    const directoryPath = getFixturePath('nested');
-    const filesCount = getFilesCount(directoryPath, fakeLogger);
-    expect(filesCount).toBe(4);
+  // flat можно не тестировать так как nested покрывает и flat тоже
+  const directoryPath = getFixturePath('nested');
+  const filesCount = getFilesCount(directoryPath, fakeLogger);
+  expect(filesCount).toBe(4);
 });
 // END

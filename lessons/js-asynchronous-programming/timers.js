@@ -31,25 +31,25 @@ import fs from 'fs';
 
 // BEGIN (write your solution here)
 export default (filepath, interval, callback) => {
-    let lastModificationTime = Date.now();
+  let lastModificationTime = Date.now();
 
-    const checkFileM = (id) => {
-        fs.stat(filepath, (error, stat) => {
-            if (error) {
-                clearInterval(id);
-                callback(error);
-                return;
-            }
-            const { mtimeMs } = stat;
-            if (mtimeMs > lastModificationTime) {
-                callback(null);
-            }
-            lastModificationTime = mtimeMs;
-        });
-    };
+  const checkFileM = (id) => {
+    fs.stat(filepath, (error, stat) => {
+      if (error) {
+        clearInterval(id);
+        callback(error);
+        return;
+      }
+      const { mtimeMs } = stat;
+      if (mtimeMs > lastModificationTime) {
+        callback(null);
+      }
+      lastModificationTime = mtimeMs;
+    });
+  };
 
-    const intervalId = setInterval(() => checkFileM(intervalId), interval);
-    return intervalId;
+  const intervalId = setInterval(() => checkFileM(intervalId), interval);
+  return intervalId;
 };
 // END
 

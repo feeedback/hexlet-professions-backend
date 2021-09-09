@@ -11,13 +11,13 @@ import { countBy } from 'lodash';
 const freeEmailDomains = ['gmail.com', 'yandex.ru', 'hotmail.com'];
 
 const getFreeDomainsCount = (emails) => {
-    const freeDomains = emails
-        .map((email) => {
-            const [, domain] = email.split('@');
-            return domain;
-        })
-        .filter((domain) => freeEmailDomains.includes(domain));
+  const freeDomains = emails
+    .map((email) => {
+      const [, domain] = email.split('@');
+      return domain;
+    })
+    .filter((domain) => freeEmailDomains.includes(domain));
 
-    return countBy(freeDomains);
+  return countBy(freeDomains);
 };
 export default getFreeDomainsCount;

@@ -41,18 +41,18 @@ import fs from 'fs';
 
 // BEGIN (write your solution here)
 export const move = (path, newPath, callback) => {
-    fs.readFile(path, 'utf-8', (error1, data1) => {
-        if (error1) {
-            callback(error1);
-            return;
-        }
-        fs.writeFile(newPath, data1, 'utf-8', (error2) => {
-            if (error2) {
-                callback(error2);
-                return;
-            }
-            fs.unlink(path, callback);
-        });
+  fs.readFile(path, 'utf-8', (error1, data1) => {
+    if (error1) {
+      callback(error1);
+      return;
+    }
+    fs.writeFile(newPath, data1, 'utf-8', (error2) => {
+      if (error2) {
+        callback(error2);
+        return;
+      }
+      fs.unlink(path, callback);
     });
+  });
 };
 // END

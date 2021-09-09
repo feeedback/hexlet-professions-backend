@@ -32,13 +32,13 @@ import _ from 'lodash';
 
 // BEGIN (write your solution here)
 const getNodesCount = (tree) => {
-    if (isFile(tree)) {
-        return getName(tree).startsWith('.') ? 1 : 0;
-    }
+  if (isFile(tree)) {
+    return getName(tree).startsWith('.') ? 1 : 0;
+  }
 
-    const children = getChildren(tree);
-    const descendantCounts = children.map(getNodesCount);
-    return _.sum(descendantCounts);
+  const children = getChildren(tree);
+  const descendantCounts = children.map(getNodesCount);
+  return _.sum(descendantCounts);
 };
 export default getNodesCount;
 // END

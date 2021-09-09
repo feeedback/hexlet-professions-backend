@@ -21,24 +21,24 @@
 // import $ from 'jquery';
 
 export default () => {
-    // BEGIN (write your solution here)
-    const mapDirections = {
-        prev: { inc: 'previousElementSibling', out: 'lastElementChild' },
-        next: { inc: 'nextElementSibling', out: 'firstElementChild' },
-    };
-    const carouselButtons = document.querySelectorAll('a[class^=carousel-control]');
-    carouselButtons.forEach((a) =>
-        a.addEventListener('click', (event) => {
-            event.preventDefault();
-            const wrapper = document.querySelector(event.target.hash);
-            const active = wrapper.querySelector('.carousel-item.active');
-            active.classList.remove('active');
+  // BEGIN (write your solution here)
+  const mapDirections = {
+    prev: { inc: 'previousElementSibling', out: 'lastElementChild' },
+    next: { inc: 'nextElementSibling', out: 'firstElementChild' },
+  };
+  const carouselButtons = document.querySelectorAll('a[class^=carousel-control]');
+  carouselButtons.forEach((a) =>
+    a.addEventListener('click', (event) => {
+      event.preventDefault();
+      const wrapper = document.querySelector(event.target.hash);
+      const active = wrapper.querySelector('.carousel-item.active');
+      active.classList.remove('active');
 
-            const direction = mapDirections[a.dataset.slide];
+      const direction = mapDirections[a.dataset.slide];
 
-            const next = active[direction.inc] ?? active.parentNode[direction.out];
-            next.classList.add('active');
-        })
-    );
-    // END
+      const next = active[direction.inc] ?? active.parentNode[direction.out];
+      next.classList.add('active');
+    })
+  );
+  // END
 };

@@ -56,17 +56,17 @@
 // import generator from 'generate-password';
 
 export default class PasswordGeneratorAdapter {
-    // BEGIN (write your solution here)
-    constructor() {
-        this.defaultOptions = { uppercase: false };
-    }
+  // BEGIN (write your solution here)
+  constructor() {
+    this.defaultOptions = { uppercase: false };
+  }
 
-    generatePassword(length, options) {
-        const preparedOptions = Object.fromEntries(options.map((o) => [o, true]));
-        const optionsObj = { ...this.defaultOptions, ...preparedOptions, length };
+  generatePassword(length, options) {
+    const preparedOptions = Object.fromEntries(options.map((o) => [o, true]));
+    const optionsObj = { ...this.defaultOptions, ...preparedOptions, length };
 
-        const password = generator.generate(optionsObj);
-        return password;
-    }
-    // END
+    const password = generator.generate(optionsObj);
+    return password;
+  }
+  // END
 }

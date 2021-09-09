@@ -9,13 +9,13 @@
 // нужно отсортировать).
 
 export default (data) =>
-    Object.entries(data)
-        .sort()
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
+  Object.entries(data)
+    .sort()
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
 
 export const buildQueryString = (data) => {
-    const entries = Object.entries(data).sort();
-    const query = entries.map(([key, value]) => `${key}=${value}`).join('&');
-    return query;
+  const entries = Object.entries(data).sort();
+  const query = entries.map(([key, value]) => `${key}=${value}`).join('&');
+  return query;
 };

@@ -26,7 +26,6 @@
 // <button class="btn btn-success m-1" type="button">1</button>
 // <button class="btn btn-primary m-1" type="button">2</button>
 
-
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
 // import React from 'react';
@@ -38,7 +37,6 @@
 // BEGIN (write your solution here)
 
 // END
-
 
 // Вызываем так в index.jsx
 

@@ -28,45 +28,49 @@ import React from 'react';
 
 // BEGIN (write your solution here)
 export default class BtnGroup extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { active: null };
-    }
+  constructor(props) {
+    super(props);
+    this.state = { active: null };
+  }
 
-    selectLeft = () => this.setActive('left');
+  selectLeft = () => this.setActive('left');
 
-    selectRight = () => this.setActive('right');
+  selectRight = () => this.setActive('right');
 
-    setActive = (active) => {
-        this.setState({ active });
-    }
+  setActive = (active) => {
+    this.setState({ active });
+  };
 
-    render() {
-        const { active } = this.state;
+  render() {
+    const { active } = this.state;
 
-        const sharedClassesObj = {
-            btn: true,
-            'btn-secondary': true,
-        };
+    const sharedClassesObj = {
+      btn: true,
+      'btn-secondary': true,
+    };
 
-        const leftButtonClass = cn({
-            ...sharedClassesObj,
-            left: true,
-            active: active === 'left',
-        });
+    const leftButtonClass = cn({
+      ...sharedClassesObj,
+      left: true,
+      active: active === 'left',
+    });
 
-        const rightButtonClass = cn({
-            ...sharedClassesObj,
-            right: true,
-            active: active === 'right',
-        });
+    const rightButtonClass = cn({
+      ...sharedClassesObj,
+      right: true,
+      active: active === 'right',
+    });
 
-        return (
-          <div className="btn-group" role="group">
-            <button type="button" onClick={this.selectLeft} className={leftButtonClass}>Left</button>
-            <button type="button" onClick={this.selectRight} className={rightButtonClass}>Right</button>
-          </div>
-        );
-    }
+    return (
+      <div className="btn-group" role="group">
+        <button type="button" onClick={this.selectLeft} className={leftButtonClass}>
+          Left
+        </button>
+        <button type="button" onClick={this.selectRight} className={rightButtonClass}>
+          Right
+        </button>
+      </div>
+    );
+  }
 }
 // END
